@@ -14,10 +14,6 @@
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext x='50' y='50' fill='%23fff' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='46' text-anchor='middle' dominant-baseline='central' letter-spacing='-2'%3EMH%3C/text%3E%3C/svg%3E">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-
 <style>
 /* ============================================================
    TOKENS
@@ -367,6 +363,14 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 .legal-body h4{ font-weight:500; font-size:12px; margin-bottom:7px; }
 .legal-body p{ font-size:12px; line-height:1.6; color:var(--ink-2); }
 @media(max-width:860px){ .legal-body .col{ grid-column:1/span 12; margin-bottom:22px; } }
+
+.legal-full{ padding-bottom:30px; max-width:74ch; }
+.legal-full h4{ font-weight:500; font-size:12px; margin:22px 0 7px; color:var(--ink); }
+.legal-full h4:first-child{ margin-top:0; }
+.legal-full p{ font-size:12px; line-height:1.65; color:var(--ink-2); margin-bottom:8px; }
+.legal-full ul{ margin:0 0 8px; padding-left:18px; list-style:disc; }
+.legal-full li{ font-size:12px; line-height:1.65; color:var(--ink-2); margin-bottom:3px; }
+.legal-full a{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
 .colophon{ display:flex; justify-content:space-between; gap:18px; padding-top:18px; border-top:1px solid var(--line); }
 .colophon span{ font-size:11px; color:var(--ink-2); }
 
@@ -955,7 +959,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
   <div class="legal">
     <details>
-      <summary><span>Impressum und Datenschutz</span><span class="sign" aria-hidden="true"></span></summary>
+      <summary><span>Impressum</span><span class="sign" aria-hidden="true"></span></summary>
       <div class="legal-body grid">
         <div class="col">
           <h4>Angaben gemäß § 5 DDG</h4>
@@ -969,6 +973,40 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
           <h4>Bildrechte</h4>
           <p>Alle gezeigten Arbeiten sind urheberrechtlich geschützt; die Nutzungsrechte an Kundenprojekten liegen bei den jeweiligen Auftraggebern.</p>
         </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><span>Datenschutzerklärung</span><span class="sign" aria-hidden="true"></span></summary>
+      <div class="legal-full">
+
+        <h4>Verantwortlicher</h4>
+        <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist Michael J. Hofauer, Einsteinstr. 187, 81677 München, Deutschland, E-Mail: m.hofauer@me.com.</p>
+
+        <h4>Grundsätzliches</h4>
+        <p>Diese Website ist ein rein informatives Online-Portfolio. Sie verwendet kein Kontaktformular, keine Cookies, keine Analyse- oder Trackingdienste und keine Werbe-Einbindungen. Es werden keine personenbezogenen Daten aktiv erhoben, außer den technisch notwendigen Verbindungsdaten, die beim Aufruf jeder Website zwangsläufig anfallen (siehe „Hosting").</p>
+
+        <h4>Hosting</h4>
+        <p>Diese Website wird über GitHub Pages gehostet, einen Dienst der GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (ein Unternehmen der Microsoft Corporation). Beim Aufruf der Seite verarbeitet GitHub automatisch technische Verbindungsdaten (u. a. IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser) in sogenannten Server-Logfiles. Diese Verarbeitung ist zur technischen Bereitstellung der Website erforderlich und erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer funktionsfähigen und sicheren Website). Da GitHub in den USA sitzt, kann es dabei zu einer Datenübermittlung in die USA kommen. GitHub ist nach dem EU-US Data Privacy Framework zertifiziert, das ein angemessenes Datenschutzniveau vorsieht. Weitere Informationen: <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
+
+        <h4>Schriftarten</h4>
+        <p>Diese Website verwendet ausschließlich auf dem jeweiligen Endgerät bereits vorhandene Systemschriften. Es werden keine Schriftarten von externen Anbietern wie Google Fonts nachgeladen, es findet daher in diesem Zusammenhang keine Datenübertragung an Dritte statt.</p>
+
+        <h4>Eingebundene YouTube-Videos</h4>
+        <p>Im Bereich „licht+spiel" sind Videos der Plattform YouTube verlinkt. Diese sind zunächst nur als Vorschaubild eingebunden; es besteht beim Aufruf der Seite keine Verbindung zu YouTube-Servern. Erst wenn Sie aktiv auf ein Vorschaubild klicken, wird der YouTube-Player im datenschutzfreundlichen Modus („youtube-nocookie.com") nachgeladen. Ab diesem Zeitpunkt kann YouTube (betrieben von Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland; Verarbeitung ggf. auch durch die Google LLC, USA) technische Daten wie Ihre IP-Adresse erheben und, sofern Sie bei Google angemeldet sind, dies Ihrem Konto zuordnen. Rechtsgrundlage ist Ihre durch den Klick erteilte Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die Sie jederzeit für die Zukunft widerrufen können, indem Sie die Seite neu laden. Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google-Datenschutzerklärung</a>.</p>
+
+        <h4>Kontaktaufnahme per E-Mail oder Telefon</h4>
+        <p>Wenn Sie mich per E-Mail oder Telefon kontaktieren, werden die von Ihnen mitgeteilten Daten (z. B. Name, Kontaktdaten, Inhalt der Nachricht) ausschließlich zur Bearbeitung Ihrer Anfrage verarbeitet und gespeichert. Rechtsgrundlage hierfür ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Beantwortung Ihrer Anfrage) bzw., sofern die Anfrage auf den Abschluss eines Vertrags abzielt, Art. 6 Abs. 1 lit. b DSGVO. Die Daten werden gelöscht, sobald sie für die Bearbeitung der Anfrage nicht mehr erforderlich sind.</p>
+
+        <h4>Ihre Rechte</h4>
+        <p>Sie haben das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten (Art. 15 DSGVO) sowie auf Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) und Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Wenden Sie sich hierzu an die oben genannte Kontaktadresse.</p>
+
+        <h4>Beschwerderecht</h4>
+        <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Zuständig ist das Bayerische Landesamt für Datenschutzaufsicht (BayLDA), Promenade 27, 91522 Ansbach.</p>
+
+        <h4>Verschlüsselung</h4>
+        <p>Diese Website wird ausschließlich über eine verschlüsselte HTTPS-Verbindung ausgeliefert, erkennbar am Schloss-Symbol in der Adresszeile Ihres Browsers.</p>
+
       </div>
     </details>
   </div>
