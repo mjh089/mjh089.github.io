@@ -236,6 +236,8 @@ ul{ list-style:none; }
 .pair{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gutter); align-items:end; }
 .solo{ grid-column:1/-1; }
 .solo .frame{ aspect-ratio:21/9; }
+.solo-32{ grid-column:1/-1; }
+.solo-32 .frame{ aspect-ratio:3/2; }
 figure.step{ display:flex; flex-direction:column; gap:9px; }
 figure.step figcaption{ font-size:clamp(10.5px,.74vw,12px); color:var(--ink-2); }
 figure.step figcaption b{ font-weight:500; color:var(--ink); }
@@ -673,6 +675,11 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
                onerror="this.onerror=null;this.src='https://picsum.photos/seed/wd-b/1000/1250';"></div>
           <figcaption><b>Detail</b> — Kinosessel als Warenträger</figcaption>
         </figure>
+        <figure class="step solo-32">
+          <div class="frame"><img src="images/windsor-moodboard.jpg" alt="Windsor Pop-up — Moodboard" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/wd-c/1600/1067';"></div>
+          <figcaption><b>Moodboard</b> — Referenz Deutsche Oper Berlin, Grundriss und Materialien</figcaption>
+        </figure>
       </div>
     </div>
   </div>
@@ -703,9 +710,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
           <figcaption><b>Planung</b> — 3D-Voransicht vor dem Bau</figcaption>
         </figure>
         <figure class="step st-b">
-          <div class="frame"><img src="images/fredperry-figur.jpg" alt="Fred Perry Window — Figur" loading="lazy" decoding="async"
+          <div class="frame"><img src="images/fredperry-grundriss.jpg" alt="Fred Perry Window — Grundriss von oben" loading="lazy" decoding="async"
                onerror="this.onerror=null;this.src='https://picsum.photos/seed/fp-b/1000/1250';"></div>
-          <figcaption><b>Figur</b> — solitär vor der Bildwand</figcaption>
+          <figcaption><b>Grundriss</b> — Anordnung im Fenster, Ansicht von oben</figcaption>
         </figure>
       </div>
     </div>
@@ -759,6 +766,18 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
         <img src="images/lichtspiel-hero.jpg" alt="licht+spiel — Ergebnis" loading="lazy" decoding="async"
              onerror="this.onerror=null;this.src='https://picsum.photos/seed/ls-hero/1600/1000';">
       </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/lichtspiel-mapping.jpg" alt="licht+spiel — Projektion über zwei Wände" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/ls-a/1400/933';"></div>
+          <figcaption><b>Mapping</b> — gespiegelte Projektion über die Raumecke</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/lichtspiel-setup.jpg" alt="licht+spiel — Gesichtsprojektion mit Textmotiv" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/ls-b/1000/1250';"></div>
+          <figcaption><b>Motiv</b> — Gesicht und Schriftzug im Layer</figcaption>
+        </figure>
+      </div>
       <div class="pair">
         <div class="video-item vid">
           <div class="frame video-thumb" data-video="2O1iceiNoVI" role="button" tabindex="0" aria-label="Video abspielen: Techno Francais, Harry Klein München, 08.10.2010">
