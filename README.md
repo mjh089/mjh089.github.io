@@ -36,36 +36,29 @@ sieht also nie kaputt aus, auch nicht halb befüllt.
 | `canadagoose-moodboard.jpg` | Moodboard | 3:2 — **liegt bereits im Ordner** |
 | `canadagoose-bau.jpg` | Aufbau mit Studiolicht | 4:5 — **liegt bereits im Ordner** |
 | `tagesbar-hero.jpg` | Tagesbar Tracht, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
-| `tagesbar-plan.jpg` | 3D-Plan von oben | 3:2 — **liegt bereits im Ordner** |
+| `tagesbar-plan.jpg` | 3D-Rendering, ins Raumfoto integriert | 3:2 — **liegt bereits im Ordner** |
 | `tagesbar-detail.jpg` | Trachtenjacken, Detail | 4:5 — **liegt bereits im Ordner** |
 | `lego-hero.jpg` | Freude schenken, Schaufenster | 16:10 — **liegt bereits im Ordner** |
 | `lego-plan.jpg` | Fensterabwicklung | 3:2 — **liegt bereits im Ordner** |
 | `lego-3d.jpg` | Volumenprüfung | 4:5 — **liegt bereits im Ordner** |
 | `fredperry-hero.jpg` | Fred Perry Window, fertiges Fenster | 16:10 — **liegt bereits im Ordner** |
 | `fredperry-planung.jpg` | 3D-Voransicht vor dem Bau | 3:2 — **liegt bereits im Ordner** |
-| `fredperry-figur.jpg` | Solitäre Figur vor der Bildwand | 4:5 — **liegt bereits im Ordner** |
+| `fredperry-grundriss.jpg` | Grundriss von oben, 3D-Rendering | 4:5 — **liegt bereits im Ordner** |
 | `dressler-hero.jpg` | Dressler Window, fertiges Fenster | 16:10 — **liegt bereits im Ordner** |
-| `dressler-moodboard.jpg` | Moodboard, Panoramaformat | 21:9 — **liegt bereits im Ordner** |
+| `dressler-punktc.jpg` | 3D-Voransicht der Leuchtkasten-Konstruktion | 3:2 — **liegt bereits im Ordner** |
 | `windsor-hero.jpg` | Windsor Pop-up, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
 | `windsor-aufbau.jpg` | Sitzreihen mit Ware | 3:2 — **liegt bereits im Ordner** |
 | `windsor-detail.jpg` | Kinosessel als Warenträger | 4:5 — **liegt bereits im Ordner** |
+| `windsor-moodboard.jpg` | Moodboard, Referenz Deutsche Oper Berlin | 3:2 — **liegt bereits im Ordner** |
 | `lichtspiel-hero.jpg` | Projektion auf Architektur | 16:10 — **liegt bereits im Ordner** |
+| `lichtspiel-motiv.jpg` | Gesichtsprojektion mit Textmotiv, Text vollständig lesbar | 3:2 — **liegt bereits im Ordner** |
+| `lichtspiel-mapping.jpg` | Gespiegelte Projektion über die Raumecke | 4:5 — **liegt bereits im Ordner** |
 
 Die beiden Prozessbilder sind entfallen — licht+spiel zeigt jetzt zwei YouTube-Videos
 statt Fotos. Die Videos werden im Code direkt über ihre YouTube-ID eingebunden
 (aktuell `2O1iceiNoVI` und `4aS7LRck3JM`), dafür ist keine lokale Bilddatei nötig.
 Der Vorschau-Thumbnail kommt automatisch von YouTube.
 
-
-### Weitere Arbeiten
-
-| Datei | Inhalt | Format |
-|---|---|---|
-| `polo-eventpunkt.jpg` | Polo Ralph Lauren, Eventpunkt | 4:3 |
-| `lesdeux.jpg` | Les Deux x Hirmer | 4:3 |
-| `canadagoose-eventpunkt.jpg` | Canada Goose, Planzeichnung | 4:3 |
-| `hirmer-muster.jpg` | Musterwelten, Banner | 4:3 |
-| `jubilaeum-3d.jpg` | 110 Jahre Hirmer, Jubiläumsfläche | 4:3 |
 
 ### Person und Teilen
 
