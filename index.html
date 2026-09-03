@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Michael J. Hofauer — Senior Visual Marketing / Creative Ops</title>
+<meta name="description" content="Michael J. Hofauer, Senior Visual Marketing und Creative Ops. Schaufenster, Pop-ups und Retail-Flächen. München.">
+<link rel="canonical" href="https://michaelhofauer.com/">
+<meta property="og:title" content="Michael J. Hofauer — Visual Marketing / Retail Design / Creative Ops">
+<meta property="og:description" content="Schaufenster, Pop-ups und Verkaufsflächen für Mode. München.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://michaelhofauer.com/">
+<meta property="og:image" content="https://michaelhofauer.com/images/og.jpg">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext x='50' y='50' fill='%23fff' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='46' text-anchor='middle' dominant-baseline='central' letter-spacing='-2'%3EMH%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --paper:  #FFFFFF;
+  --band:   #EBEBE8;
+  --ink:    #000000;
+  --ink-2:  #575652;
+  --line:   #D6D5D0;
+
+  --font: "Helvetica Neue", Inter, Helvetica, Arial, sans-serif;
+
+  --gutter: clamp(12px, 1.5vw, 26px);
+  --margin: clamp(18px, 4vw, 64px);
+  --bar-h:  46px;
+
+  --ease: cubic-bezier(.16,1,.3,1);
+}
+
+/* invertierte Abschnitte: nur die Variablen kippen */
+.invert{
+  --paper: #000000;
+  --band:  #0C0C0B;
+  --ink:   #FFFFFF;
+  --ink-2: #8B8A84;
+  --line:  #2B2B27;
+  background:var(--paper);
+  color:var(--ink);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:clamp(14px,.95vw,16px);
+  line-height:1.5;
+  letter-spacing:-0.008em;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+img{ display:block; width:100%; height:100%; object-fit:cover; }
+a{ color:inherit; text-decoration:none; }
+h1,h2,h3,h4,p,dl,dd,dt,figure,ul,li{ margin:0; padding:0; }
+ul{ list-style:none; }
+::selection{ background:currentColor; }
+:focus-visible{ outline:2px solid currentColor; outline-offset:3px; }
+
+/* ============================================================
+   RASTER + TYPO
+   ============================================================ */
+.wrap{ padding-inline:var(--margin); }
+.grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gutter); }
+
+.display{
+  font-weight:800; text-transform:uppercase;
+  font-size:clamp(2.5rem,10.4vw,10.6rem);
+  line-height:.88; letter-spacing:-0.042em;
+}
+.h2{
+  font-weight:800; text-transform:uppercase;
+  font-size:clamp(1.45rem,2.9vw,2.7rem);
+  line-height:.98; letter-spacing:-0.03em;
+}
+.h3{ font-weight:700; font-size:clamp(1rem,1.35vw,1.22rem); line-height:1.2; letter-spacing:-0.022em; }
+.meta{ font-size:clamp(10.5px,.74vw,12px); line-height:1.5; color:var(--ink-2); }
+.lede{ font-size:clamp(1rem,1.4vw,1.3rem); line-height:1.34; letter-spacing:-0.022em; max-width:34ch; }
+.body-sec{ color:var(--ink-2); font-size:clamp(13px,.9vw,15px); max-width:44ch; }
+
+/* ============================================================
+   LAUFENDE KOPFLEISTE
+   ============================================================ */
+.bar{
+  position:fixed; inset:0 0 auto 0; z-index:90;
+  display:flex; align-items:center; justify-content:space-between;
+  height:var(--bar-h); padding-inline:var(--margin);
+  background:rgba(255,255,255,.85);
+  backdrop-filter:saturate(140%) blur(12px);
+  -webkit-backdrop-filter:saturate(140%) blur(12px);
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+  transform:translateY(-101%);
+  transition:transform .5s var(--ease), background-color .45s ease, border-color .45s ease, color .45s ease;
+}
+.bar[data-visible="true"]{ transform:translateY(0); }
+.bar[data-dark="true"]{
+  background:rgba(0,0,0,.8);
+  color:#fff; border-color:#2B2B27;
+}
+.bar[data-dark="true"] .bar-right a{ color:#8B8A84; }
+.bar[data-dark="true"] .bar-right a:hover{ color:#fff; }
+.bar b{ font-weight:700; font-size:12.5px; letter-spacing:-0.015em; }
+.bar-right{ display:flex; align-items:center; gap:clamp(14px,2.4vw,34px); }
+.bar-right a{ font-size:12.5px; color:var(--ink-2); transition:color .25s ease; }
+.bar-right a:hover{ color:var(--ink); }
+.counter{ font-weight:700; font-size:12.5px; font-variant-numeric:tabular-nums; min-width:9.4em; text-align:right; }
+.counter span{ display:inline-block; transition:opacity .26s ease, transform .26s var(--ease); }
+.counter.swap span{ opacity:0; transform:translateY(-.34em); }
+@media(max-width:720px){ .bar-right a{ display:none; } }
+
+/* ============================================================
+   BILDER
+   ============================================================ */
+.frame{ position:relative; overflow:hidden; background:var(--band); }
+.frame img{
+  clip-path:inset(0 0 100% 0);
+  transform:scale(1.07);
+  transition:clip-path 1.15s var(--ease), transform 1.5s var(--ease);
+  will-change:clip-path,transform;
+}
+.frame.in img{ clip-path:inset(0 0 0 0); transform:scale(1); }
+.frame.in:hover img{ transform:scale(1.03); transition:transform 1.1s var(--ease); }
+
+/* ============================================================
+   KOPFBEREICH
+   ============================================================ */
+.hero{ padding-top:clamp(20px,4vh,40px); }
+.hero-type{ align-items:end; }
+.hero-type h1{ grid-column:1/span 9; }
+.hero-type .role{ grid-column:10/span 3; padding-bottom:.7em; }
+@media(max-width:860px){
+  .hero-type h1{ grid-column:1/span 12; }
+  .hero-type .role{ grid-column:1/span 12; padding-bottom:0; margin-top:16px; }
+}
+
+.hero-shot{
+  margin-top:clamp(22px,3.6vh,42px);
+  height:clamp(320px,72vh,760px);
+  overflow:hidden; position:relative;
+}
+.hero-shot img{
+  transform-origin:50% 42%;
+  clip-path:none;
+  transform:scale(1.16);
+}
+.hero-shot.in img{ clip-path:none; }
+.hero-shot.in:hover img{ transform:scale(1.16); }
+
+/* ============================================================
+   INDEX — die Signaturstelle
+   ============================================================ */
+.index{ padding-block:clamp(56px,9vh,120px); }
+.index-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(20px,3vh,34px); }
+.index-head span{ font-size:clamp(11px,.8vw,13px); font-weight:700; }
+
+.idx-list{ border-bottom:1px solid var(--line); }
+.idx-row{
+  display:grid; grid-template-columns:4.6em 1fr auto;
+  align-items:center; gap:clamp(10px,2vw,30px);
+  padding-block:clamp(14px,2.4vh,26px);
+  border-top:1px solid var(--line);
+  transition:opacity .4s var(--ease);
+}
+.idx-list:hover .idx-row{ opacity:.32; }
+.idx-list .idx-row:hover{ opacity:1; }
+.idx-num{ font-size:clamp(10.5px,.78vw,12.5px); font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink-2); }
+.idx-name{
+  font-weight:800; text-transform:uppercase;
+  font-size:clamp(1.35rem,4.6vw,4.2rem);
+  line-height:.96; letter-spacing:-0.038em;
+  transition:transform .55s var(--ease);
+}
+.idx-row:hover .idx-name{ transform:translateX(clamp(8px,1.6vw,26px)); }
+.idx-year{ font-size:clamp(10.5px,.78vw,12.5px); color:var(--ink-2); white-space:nowrap; }
+
+.idx-thumb{ display:none; width:52px; height:66px; overflow:hidden; background:var(--band); }
+@media (hover:none),(pointer:coarse){
+  .idx-row{ grid-template-columns:3.4em 1fr auto; }
+  .idx-list:hover .idx-row{ opacity:1; }
+  .idx-thumb{ display:block; }
+  .idx-year{ display:none; }
+}
+
+/* Vorschau folgt dem Zeiger */
+.peek{
+  position:fixed; top:0; left:0; z-index:70;
+  width:clamp(180px,15vw,270px); aspect-ratio:3/4;
+  overflow:hidden; pointer-events:none;
+  opacity:0; transform:translate3d(-50%,-50%,0) scale(.94);
+  transition:opacity .35s ease, transform .5s var(--ease);
+}
+.peek.on{ opacity:1; transform:translate3d(-50%,-50%,0) scale(1); }
+.peek img{ clip-path:none; transform:none; }
+@media (hover:none),(pointer:coarse){ .peek{ display:none; } }
+
+/* ============================================================
+   CASES
+   ============================================================ */
+.case{ padding-block:clamp(38px,6vh,72px) clamp(56px,9vh,116px); }
+.case.tinted{ background:var(--band); }
+
+.runner{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding-bottom:11px; margin-bottom:clamp(26px,4vh,50px);
+  border-bottom:1px solid var(--line);
+  font-size:clamp(11px,.8vw,13px); font-weight:700; letter-spacing:-0.015em;
+}
+.runner .num{ font-variant-numeric:tabular-nums; }
+
+.case-left{ grid-column:1/span 3; position:sticky; top:calc(var(--bar-h) + 26px); align-self:start; }
+.case-left .h2{ margin-bottom:14px; }
+.case-left .body-sec{ margin-bottom:20px; }
+.case-facts{ display:grid; grid-template-columns:auto 1fr; gap:3px 14px; }
+.case-facts dt{ color:var(--ink-2); font-size:clamp(10.5px,.74vw,12px); }
+.case-facts dd{ font-size:clamp(10.5px,.74vw,12px); }
+.case-right{ grid-column:5/span 8; display:grid; gap:var(--gutter); }
+@media(max-width:860px){
+  .case-left{ grid-column:1/span 12; position:static; margin-bottom:28px; }
+  .case-right{ grid-column:1/span 12; }
+}
+
+.shot-main .frame{ aspect-ratio:16/10; }
+.pair{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gutter); align-items:end; }
+.solo{ grid-column:1/-1; }
+.solo .frame{ aspect-ratio:21/9; }
+figure.step{ display:flex; flex-direction:column; gap:9px; }
+figure.step figcaption{ font-size:clamp(10.5px,.74vw,12px); color:var(--ink-2); }
+figure.step figcaption b{ font-weight:500; color:var(--ink); }
+.st-a{ grid-column:1/span 7; }  .st-a .frame{ aspect-ratio:3/2; }
+
+/* Videos: klickbare Vorschau, Player erst nach Klick */
+.vid{ grid-column:span 6; }
+.vid .frame{ aspect-ratio:16/9; }
+@media(max-width:640px){ .vid{ grid-column:1/span 12; } }
+.video-thumb{ position:relative; cursor:pointer; }
+.video-thumb iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.play-btn{
+  position:absolute; inset:0; margin:auto; width:56px; height:56px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%; background:rgba(0,0,0,.6); color:#fff;
+  font-size:18px; padding-left:3px; pointer-events:none;
+  transition:transform .3s var(--ease), background .3s ease;
+}
+.video-thumb:hover .play-btn{ transform:scale(1.08); background:rgba(0,0,0,.78); }
+
+.st-b{ grid-column:8/span 5; }  .st-b .frame{ aspect-ratio:4/5; }
+.st-c{ grid-column:1/span 4; }  .st-c .frame{ aspect-ratio:4/5; }
+.st-d{ grid-column:5/span 8; }  .st-d .frame{ aspect-ratio:3/2; }
+@media(max-width:640px){
+  .st-a,.st-b,.st-c,.st-d{ grid-column:1/span 12; }
+  .st-a .frame,.st-d .frame{ aspect-ratio:3/2; }
+  .st-b .frame,.st-c .frame{ aspect-ratio:4/5; }
+  .pair{ row-gap:26px; }
+}
+
+/* Zahlen im Projektkopf */
+.stats{ margin-top:16px; padding-top:12px; border-top:1px solid var(--line); display:grid; gap:3px; }
+.stats li{ display:flex; justify-content:space-between; gap:12px; font-size:clamp(10.5px,.74vw,12px); }
+.stats li span{ color:var(--ink-2); }
+.stats li b{ font-weight:500; font-variant-numeric:tabular-nums; }
+
+/* Weitere Arbeiten */
+.more{ padding-block:clamp(38px,6vh,72px) clamp(56px,9vh,116px); }
+.more-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,2.4vw,38px) var(--gutter); }
+.more-item .frame{ aspect-ratio:4/3; margin-bottom:10px; }
+.more-item h3{ font-size:clamp(12px,.9vw,14px); font-weight:500; }
+.more-item p{ font-size:clamp(10.5px,.74vw,12px); color:var(--ink-2); }
+@media(max-width:860px){ .more-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .more-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   PROFIL
+   ============================================================ */
+.profile{ padding-block:clamp(52px,8vh,104px); }
+.prof-top{ align-items:start; }
+.portrait{ grid-column:1/span 4; }
+.portrait .frame{ aspect-ratio:3/4; }
+.prof-lede{ grid-column:6/span 7; }
+.prof-lede .lede{ margin-bottom:clamp(26px,4vh,44px); }
+.now{ border-top:1px solid var(--ink); padding-top:14px; }
+.now h3{ margin-bottom:3px; }
+.now .where{ font-size:clamp(12px,.86vw,13.5px); color:var(--ink-2); margin-bottom:14px; }
+.duties{ display:grid; gap:7px; max-width:44ch; }
+.duties li{ position:relative; padding-left:15px; font-size:clamp(12px,.86vw,13.5px); line-height:1.42; }
+.duties li::before{ content:""; position:absolute; left:0; top:.62em; width:7px; height:1px; background:currentColor; }
+
+.prof-cols{ margin-top:clamp(44px,7vh,84px); }
+.track{ grid-column:1/span 7; }
+.side{ grid-column:9/span 4; }
+@media(max-width:860px){
+  .portrait{ grid-column:1/span 12; margin-bottom:30px; }
+  .prof-lede{ grid-column:1/span 12; }
+  .track{ grid-column:1/span 12; }
+  .side{ grid-column:1/span 12; margin-top:44px; }
+}
+.cv-head{ font-weight:700; font-size:clamp(.95rem,1.15vw,1.1rem); letter-spacing:-0.02em; margin-bottom:10px; }
+.cv-head.second{ margin-top:38px; }
+.cv-list li{
+  display:grid; grid-template-columns:8.6em 1fr; gap:4px 16px;
+  padding-block:11px; border-top:1px solid var(--line);
+}
+.cv-list li:first-child{ border-top:1px solid var(--ink); }
+.cv-list .when{ font-size:clamp(10.5px,.74vw,12px); color:var(--ink-2); font-variant-numeric:tabular-nums; padding-top:.15em; }
+.cv-list .role{ font-size:clamp(12px,.86vw,13.5px); font-weight:500; }
+.cv-list .where{ font-size:clamp(11px,.78vw,12.5px); color:var(--ink-2); }
+@media(max-width:520px){
+  .cv-list li{ grid-template-columns:1fr; }
+  .cv-list .when{ order:2; }
+}
+.skills{ display:grid; gap:5px; }
+.skills li{ font-size:clamp(12px,.86vw,13.5px); }
+.skills li span{ color:var(--ink-2); }
+
+/* ============================================================
+   FUSS
+   ============================================================ */
+.footer{ padding-block:clamp(52px,8vh,100px) 30px; }
+.foot-block{ margin-bottom:clamp(26px,4vh,48px); }
+.big-line{ display:inline-block; font-weight:800; letter-spacing:-0.035em; line-height:1.02; font-size:clamp(1.4rem,4vw,3.2rem); }
+a.big-line{
+  background-image:linear-gradient(currentColor,currentColor);
+  background-repeat:no-repeat; background-position:0 96%; background-size:0% 2px;
+  transition:background-size .55s var(--ease);
+}
+a.big-line:hover{ background-size:100% 2px; }
+.foot-left{ grid-column:1/span 7; }
+.foot-right{ grid-column:9/span 4; }
+.foot-right .frame{ aspect-ratio:3/4; }
+.social{ display:flex; gap:22px; margin-top:6px; }
+.social a{ font-size:13px; font-weight:500; color:var(--ink-2); transition:color .25s ease; }
+.social a:hover{ color:var(--ink); }
+@media(max-width:860px){
+  .foot-left{ grid-column:1/span 12; }
+  .foot-right{ grid-column:1/span 12; margin-top:40px; }
+}
+.legal{ margin-top:clamp(44px,7vh,84px); border-top:1px solid var(--ink); }
+details summary{
+  list-style:none; cursor:pointer; padding-block:15px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:12.5px; font-weight:500;
+}
+details summary::-webkit-details-marker{ display:none; }
+.sign{ position:relative; width:11px; height:11px; flex:none; }
+.sign::before,.sign::after{ content:""; position:absolute; background:currentColor; left:50%; top:50%; transform:translate(-50%,-50%); }
+.sign::before{ width:11px; height:1px; }
+.sign::after{ width:1px; height:11px; transition:transform .4s var(--ease); }
+details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
+.legal-body{ padding-bottom:30px; }
+.legal-body .col{ grid-column:span 4; }
+.legal-body h4{ font-weight:500; font-size:12px; margin-bottom:7px; }
+.legal-body p{ font-size:12px; line-height:1.6; color:var(--ink-2); }
+@media(max-width:860px){ .legal-body .col{ grid-column:1/span 12; margin-bottom:22px; } }
+.colophon{ display:flex; justify-content:space-between; gap:18px; padding-top:18px; border-top:1px solid var(--line); }
+.colophon span{ font-size:11px; color:var(--ink-2); }
+
+/* ============================================================
+   LADESEQUENZ
+   ============================================================ */
+.mask{ overflow:hidden; display:block; }
+.mask > *{ display:block; transform:translateY(103%); transition:transform 1.05s var(--ease); }
+.loaded .mask > *{ transform:translateY(0); }
+.d1{ transition-delay:.04s; } .d2{ transition-delay:.12s; } .d3{ transition-delay:.22s; }
+
+/* ============================================================
+   BEWEGUNG AUS
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ transition-duration:.01ms !important; animation-duration:.01ms !important; }
+  .mask > *{ transform:none; }
+  .frame img{ clip-path:none; transform:none; }
+  .hero-shot img{ transform:none; }
+  .bar{ transform:translateY(0); }
+  .peek{ display:none; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="bar" id="bar">
+  <b>Michael J. Hofauer</b>
+  <div class="bar-right">
+    <a href="#index">Index</a>
+    <a href="#profil">Profil</a>
+    <a href="#kontakt">Kontakt</a>
+    <div class="counter" id="counter"><span>Index</span></div>
+  </div>
+</header>
+
+<!-- Vorschaubild, folgt dem Zeiger im Index -->
+<div class="peek" id="peek" aria-hidden="true"><img id="peek-img" src="" alt=""></div>
+
+<main>
+
+<!-- ========================= KOPF (schwarz) ========================= -->
+<section class="invert" id="start">
+  <div class="hero wrap">
+    <div class="hero-type grid">
+      <h1 class="display">
+        <span class="mask"><span class="d1">Michael J.</span></span>
+        <span class="mask"><span class="d2">Hofauer</span></span>
+      </h1>
+      <div class="role">
+        <span class="mask"><p class="meta d3">Visual Marketing / Retail Design / Creative Ops.</p></span>
+        <span class="mask"><p class="meta d3">München.</p></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame hero-shot" id="heroShot">
+    <img src="images/start-01.jpg" alt="Schaufenster bei Nacht" decoding="async"
+         onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-hero/2200/1200';">
+  </div>
+
+  <!-- ---------- INDEX ---------- -->
+  <div class="index wrap" id="index">
+    <div class="index-head">
+      <span>Ausgewählte Arbeiten</span>
+      <span>2023 – 2024</span>
+    </div>
+
+    <div class="idx-list" id="idxList">
+      <a class="idx-row" href="#case-001" data-img="images/spring-hero.jpg" data-fb="https://picsum.photos/seed/sp-hero/900/1200">
+        <span class="idx-num">001</span>
+        <span class="idx-name">Spring Inside</span>
+        <span class="idx-year">Frühjahr 2023</span>
+        <span class="idx-thumb"><img src="images/spring-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/sp-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-002" data-img="images/canadagoose-hero.jpg" data-fb="https://picsum.photos/seed/cg-hero/900/1200">
+        <span class="idx-num">002</span>
+        <span class="idx-name">Backstage Nature</span>
+        <span class="idx-year">Fall 2023</span>
+        <span class="idx-thumb"><img src="images/canadagoose-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/cg-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-003" data-img="images/tagesbar-hero.jpg" data-fb="https://picsum.photos/seed/tb-hero/900/1200">
+        <span class="idx-num">003</span>
+        <span class="idx-name">Tagesbar — Tracht</span>
+        <span class="idx-year">Herbst 2025</span>
+        <span class="idx-thumb"><img src="images/tagesbar-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/tb-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-004" data-img="images/lego-hero.jpg" data-fb="https://picsum.photos/seed/lg-hero/900/1200">
+        <span class="idx-num">004</span>
+        <span class="idx-name">Freude schenken</span>
+        <span class="idx-year">Weihnachten 2022</span>
+        <span class="idx-thumb"><img src="images/lego-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/lg-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-005" data-img="images/windsor-hero.jpg" data-fb="https://picsum.photos/seed/wd-hero/900/1200">
+        <span class="idx-num">005</span>
+        <span class="idx-name">Windsor Pop-up</span>
+        <span class="idx-year">Herbst 2023</span>
+        <span class="idx-thumb"><img src="images/windsor-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/wd-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-006" data-img="images/fredperry-hero.jpg" data-fb="https://picsum.photos/seed/fp-hero/900/1200">
+        <span class="idx-num">006</span>
+        <span class="idx-name">Fred Perry Window</span>
+        <span class="idx-year">Fall 2024</span>
+        <span class="idx-thumb"><img src="images/fredperry-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/fp-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-007" data-img="images/dressler-hero.jpg" data-fb="https://picsum.photos/seed/dr-hero/900/1200">
+        <span class="idx-num">007</span>
+        <span class="idx-name">Dressler Window</span>
+        <span class="idx-year">Summer 2024</span>
+        <span class="idx-thumb"><img src="images/dressler-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/dr-hero/200/260';"></span>
+      </a>
+      <a class="idx-row" href="#case-008" data-img="images/lichtspiel-hero.jpg" data-fb="https://picsum.photos/seed/ls-hero/900/1200">
+        <span class="idx-num">008</span>
+        <span class="idx-name">licht+spiel</span>
+        <span class="idx-year">2007 – 2017</span>
+        <span class="idx-thumb"><img src="images/lichtspiel-hero.jpg" alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/ls-hero/200/260';"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= CASES (hell) ========================= -->
+<section class="case wrap" id="case-001" data-num="001">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 001</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Spring<br>Inside</h2>
+      <p class="body-sec">Eine ganze Etage wird zur Almwiese. Die Herausforderung lag nicht im Entwurf, sondern in der Statik der Abhängung und darin, dass die Blumen acht Wochen halten mussten.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Hirmer</dd>
+        <dt>Saison</dt><dd>Frühjahr 2023</dd>
+        <dt>Fläche</dt><dd>Schaufensterfront und Verkaufsfläche</dd>
+        <dt>Rolle</dt><dd>Konzept, Planung, Umsetzung</dd>
+      </dl>
+      <ul class="stats">
+        <li><span>Blumen</span><b>50.000</b></li>
+        <li><span>Draht</span><b>20.000 m</b></li>
+        <li><span>Almwiese</span><b>1.000 m²</b></li>
+        <li><span>Arbeitsstunden</span><b>800</b></li>
+      </ul>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/spring-hero.jpg" alt="Spring Inside — Ergebnis" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/sp-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/spring-plan.jpg" alt="Spring Inside — Plan" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/sp-a/1400/933';"></div>
+          <figcaption><b>Plan</b> — Aufbauzeichnung mit Maßen und Lichtschiene</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/spring-detail.jpg" alt="Spring Inside — Fläche" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/sp-b/1000/1250';"></div>
+          <figcaption><b>Fläche</b> — Blumenabhängung über der Auslage</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case tinted wrap" id="case-002" data-num="002">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 002</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Backstage<br>Nature</h2>
+      <p class="body-sec">Ein Fotostudio als Verkaufsfläche: Schiefer, Findlinge und Studiolicht mitten im Haus. Das Moodboard war hier kein Beiwerk, sondern die Bauanleitung.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Canada Goose</dd>
+        <dt>Saison</dt><dd>Fall 2023</dd>
+        <dt>Fläche</dt><dd>Pop-up</dd>
+        <dt>Rolle</dt><dd>Konzept, Grafik, Aufbau</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/canadagoose-hero.jpg" alt="Backstage Nature — Ergebnis" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/cg-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/canadagoose-moodboard.jpg" alt="Backstage Nature — Moodboard" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/cg-a/1400/933';"></div>
+          <figcaption><b>Moodboard</b> — Material, Licht und Location vorab festgelegt</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/canadagoose-bau.jpg" alt="Backstage Nature — Aufbau" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/cg-b/1000/1250';"></div>
+          <figcaption><b>Aufbau</b> — Schotter, Findlinge und Blitzanlage im Verkaufsraum</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case wrap" id="case-003" data-num="003">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 003</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Tagesbar<br>Tracht</h2>
+      <p class="body-sec">Die Tagesbar im dritten Stock wird saisonal neu bespielt. Im Herbst 2025 stand sie unter dem Thema Tracht — vom 3D-Plan bis zur Umsetzung mit Kunstrasen, Lederhosen und Wiesn-Bezug.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Hirmer</dd>
+        <dt>Saison</dt><dd>Herbst 2025</dd>
+        <dt>Fläche</dt><dd>Tagesbar, 3. Obergeschoss</dd>
+        <dt>Rolle</dt><dd>Konzept, 3D-Planung, Umsetzung</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/tagesbar-hero.jpg" alt="Tagesbar Tracht — fertige Fläche" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/tb-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/tagesbar-plan.jpg" alt="Tagesbar Tracht — 3D-Plan von oben" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/tb-a/1400/933';"></div>
+          <figcaption><b>Plan</b> — 3D-Vogelperspektive vor dem Aufbau</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/tagesbar-detail.jpg" alt="Tagesbar Tracht — Detail" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/tb-b/1000/1250';"></div>
+          <figcaption><b>Detail</b> — Trachtenjacken zwischen Kunstbäumen</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case tinted wrap" id="case-004" data-num="004">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 004</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Freude<br>schenken</h2>
+      <p class="body-sec">Ein Weihnachtsbaum aus Bausteinen, gerastert wie ein Pixelbild. Jede Reihe war vorher gezeichnet, sonst hätte die Farbkante im Fenster nicht gesessen.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Hirmer</dd>
+        <dt>Saison</dt><dd>Weihnachten 2022</dd>
+        <dt>Fläche</dt><dd>Schaufensterfront</dd>
+        <dt>Rolle</dt><dd>Konzept, Konstruktion, Aufbau</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/lego-hero.jpg" alt="Freude schenken — Ergebnis" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/lg-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/lego-plan.jpg" alt="Freude schenken — Konstruktion" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/lg-a/1400/933';"></div>
+          <figcaption><b>Konstruktion</b> — Fensterabwicklung, Reihe für Reihe gerastert</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/lego-3d.jpg" alt="Freude schenken — Volumen" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/lg-b/1000/1250';"></div>
+          <figcaption><b>Volumen</b> — Räumliche Prüfung vor dem Bau</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case wrap" id="case-005" data-num="005">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 005</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Windsor<br>Pop-up</h2>
+      <p class="body-sec">Ein Wartebereich wird zum Kinosaal: alte Kinosessel als Warenträger, das Logo als Leinwand-Motiv im Hintergrund. Die Ware liegt nicht auf dem Tisch, sondern auf dem Platz, auf dem man sich sonst hinsetzt.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Windsor</dd>
+        <dt>Saison</dt><dd>Herbst 2023</dd>
+        <dt>Fläche</dt><dd>Pop-up im Erdgeschoss</dd>
+        <dt>Rolle</dt><dd>Konzept, Requisite, Aufbau</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/windsor-hero.jpg" alt="Windsor Pop-up — fertige Fläche" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/wd-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/windsor-aufbau.jpg" alt="Windsor Pop-up — Aufbau" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/wd-a/1400/933';"></div>
+          <figcaption><b>Aufbau</b> — Sitzreihen mit gefalteter Ware</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/windsor-detail.jpg" alt="Windsor Pop-up — Detail" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/wd-b/1000/1250';"></div>
+          <figcaption><b>Detail</b> — Kinosessel als Warenträger</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case tinted wrap" id="case-006" data-num="006">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 006</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Fred Perry<br>Window</h2>
+      <p class="body-sec">Nur Produktfotos aus dem Onlineshop, keine räumliche Vorlage — daraus musste ein Fenster werden. Die Bilder liefen im Raster auf einem Leuchtkasten, davor stand eine einzelne Figur im exakt gleichen Outfit, dazu das Logo als Folienplot in Gold auf der Scheibe.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Fred Perry</dd>
+        <dt>Saison</dt><dd>Fall 2024</dd>
+        <dt>Fläche</dt><dd>Schaufenster</dd>
+        <dt>Rolle</dt><dd>Konzept, Leuchtkasten-Gestaltung, Umsetzung</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/fredperry-hero.jpg" alt="Fred Perry Window — fertiges Schaufenster" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/fp-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step st-a">
+          <div class="frame"><img src="images/fredperry-planung.jpg" alt="Fred Perry Window — 3D-Planung" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/fp-a/1400/933';"></div>
+          <figcaption><b>Planung</b> — 3D-Voransicht vor dem Bau</figcaption>
+        </figure>
+        <figure class="step st-b">
+          <div class="frame"><img src="images/fredperry-figur.jpg" alt="Fred Perry Window — Figur" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/fp-b/1000/1250';"></div>
+          <figcaption><b>Figur</b> — solitär vor der Bildwand</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case wrap" id="case-007" data-num="007">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 007</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">Dressler<br>Window</h2>
+      <p class="body-sec">Fünf Sakkos schweben an Nylonfäden vor einem zweiteiligen, golden hinterlegten Leuchtkasten. Die Konstruktion sollte genau das zeigen, was die Kollektion ausmacht: dass die Sakkos ungewöhnlich leicht sind.</p>
+      <dl class="case-facts">
+        <dt>Marke</dt><dd>Dressler</dd>
+        <dt>Saison</dt><dd>Summer 2024</dd>
+        <dt>Fläche</dt><dd>Schaufenster</dd>
+        <dt>Rolle</dt><dd>Konzept, Grafik, Umsetzung</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/dressler-hero.jpg" alt="Dressler Window — fertiges Schaufenster" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/dr-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <figure class="step solo">
+          <div class="frame"><img src="images/dressler-moodboard.jpg" alt="Dressler Window — Moodboard" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='https://picsum.photos/seed/dr-a/1800/771';"></div>
+          <figcaption><b>Moodboard</b> — Materialproben, 3D-Voransicht und Sakko vorab festgelegt</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case tinted wrap" id="case-008" data-num="008">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Portfolio // 008</span></div>
+  <div class="grid">
+    <div class="case-left">
+      <h2 class="h2">licht+<br>spiel</h2>
+      <p class="body-sec">Zehn Jahre Live-Visuals und Projection Mapping — Bild auf Architektur statt auf Papier. Die Arbeit an Fläche, Licht und Timing kommt heute in jedem Schaufenster wieder vor.</p>
+      <dl class="case-facts">
+        <dt>Projekt</dt><dd>licht+spiel, Medienkunst</dd>
+        <dt>Zeitraum</dt><dd>2007 – 2017</dd>
+        <dt>Format</dt><dd>Live-Visuals, Mapping, Installation</dd>
+        <dt>Rolle</dt><dd>Creative Director und VJ</dd>
+      </dl>
+    </div>
+    <div class="case-right">
+      <div class="shot-main"><div class="frame">
+        <img src="images/lichtspiel-hero.jpg" alt="licht+spiel — Ergebnis" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/ls-hero/1600/1000';">
+      </div></div>
+      <div class="pair">
+        <div class="video-item vid">
+          <div class="frame video-thumb" data-video="2O1iceiNoVI" role="button" tabindex="0" aria-label="Video abspielen: Techno Francais, Harry Klein München, 08.10.2010">
+            <img src="https://img.youtube.com/vi/2O1iceiNoVI/hqdefault.jpg" alt="licht+spiel — Auftritt, Video" loading="lazy" decoding="async">
+            <span class="play-btn" aria-hidden="true">▶</span>
+          </div>
+          <figcaption><b>Video</b> — Techno Francais, Harry Klein München, 08.10.2010</figcaption>
+        </div>
+        <div class="video-item vid">
+          <div class="frame video-thumb" data-video="4aS7LRck3JM" role="button" tabindex="0" aria-label="Video abspielen: Cargo Edition Night, Harry Klein München, 10.07.2010">
+            <img src="https://img.youtube.com/vi/4aS7LRck3JM/hqdefault.jpg" alt="licht+spiel — Auftritt, Video" loading="lazy" decoding="async">
+            <span class="play-btn" aria-hidden="true">▶</span>
+          </div>
+          <figcaption><b>Video</b> — Cargo Edition Night, Harry Klein München, 10.07.2010</figcaption>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="more wrap" id="weitere">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Weitere Arbeiten</span></div>
+  <div class="more-grid">
+      <div class="more-item">
+        <div class="frame"><img src="images/polo-eventpunkt.jpg" alt="Polo Ralph Lauren" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/po/1200/900';"></div>
+        <h3>Polo Ralph Lauren</h3>
+        <p>Eventpunkt, Planung und Aufbau</p>
+      </div>
+      <div class="more-item">
+        <div class="frame"><img src="images/lesdeux.jpg" alt="Les Deux x Hirmer" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/ld/1200/900';"></div>
+        <h3>Les Deux x Hirmer</h3>
+        <p>Flächengestaltung, erstes Obergeschoss</p>
+      </div>
+      <div class="more-item">
+        <div class="frame"><img src="images/canadagoose-eventpunkt.jpg" alt="Canada Goose" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/ce/1200/900';"></div>
+        <h3>Canada Goose</h3>
+        <p>Eventpunkt, technische Planung</p>
+      </div>
+      <div class="more-item">
+        <div class="frame"><img src="images/hirmer-muster.jpg" alt="Hirmer Musterwelten" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/hm/1200/900';"></div>
+        <h3>Hirmer Musterwelten</h3>
+        <p>Bannergrafik für das Sommerfest</p>
+      </div>
+      <div class="more-item">
+        <div class="frame"><img src="images/jubilaeum-3d.jpg" alt="110 Jahre Hirmer, Jubiläumsfläche" loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='https://picsum.photos/seed/jb/1200/900';"></div>
+        <h3>110 Jahre Hirmer</h3>
+        <p>3D-Entwurf der Jubiläumsfläche, 2024</p>
+      </div>
+  </div>
+</section>
+
+<!-- ========================= PROFIL ========================= -->
+<section class="profile wrap" id="profil">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Profil</span></div>
+
+  <div class="prof-top grid">
+    <div class="portrait"><div class="frame">
+      <img src="images/portrait.jpg" alt="Porträt Michael J. Hofauer" loading="lazy" decoding="async"
+           onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-portrait/900/1200?grayscale';">
+    </div></div>
+
+    <div class="prof-lede">
+      <p class="lede">Ich gestalte Verkaufsflächen für Mode — vom Saisonkonzept bis zur montierten Fläche. Dazu gehört die Grafik genauso wie die Frage, wie ein Aufbau in vierzig Filialen gleich aussieht.</p>
+
+      <div class="now">
+        <p class="meta">06.2022 – heute</p>
+        <h3 class="h3">Senior Visual Marketing / Creative Ops</h3>
+        <p class="where">Hirmer GmbH &amp; Co. KG, München</p>
+        <ul class="duties">
+          <li>Datengestützte VM-Saisonkonzepte und POS-Kampagnen</li>
+          <li>Prozessoptimierung und eigene Werkzeuge (Google Apps Script, InDesign)</li>
+          <li>Fotorealistische 3D-Mockups in Substance 3D</li>
+          <li>Digital Signage und LED-Ticker am POS</li>
+          <li>Fachliche Führung und Mentoring von Junior-Mitarbeitern</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="prof-cols grid">
+    <div class="track">
+      <h3 class="cv-head">Projekte und Gründungen</h3>
+      <ul class="cv-list">
+        <li><p class="when">09.2020 – 04.2024</p><div>
+          <p class="role">Geschäftsführer und Gründer</p>
+          <p class="where">Whatthetaste GmbH, München — Geschäftsentwicklung, B2B- und B2C-Events, volle operative Verantwortung</p></div></li>
+        <li><p class="when">07.2007 – 04.2017</p><div>
+          <p class="role">Creative Director und VJ</p>
+          <p class="where">licht+spiel, Medienkunst — Live-Visuals (Harry Klein, international), Projection Mapping, Installationen</p></div></li>
+      </ul>
+
+      <h3 class="cv-head second">Grafik und Produktion</h3>
+      <ul class="cv-list">
+        <li><p class="when">11.2014 – 04.2017</p><div>
+          <p class="role">Grafiker und Automation</p>
+          <p class="where">Kolb Digital, Oberschleißheim — automatisierte InDesign-Ausleitungen, CMS-Workflows</p></div></li>
+        <li><p class="when">08.2013 – 10.2014</p><div>
+          <p class="role">Media Producer</p>
+          <p class="where">FTI Touristik GmbH, München — Katalogproduktionssysteme, Einhaltung des Corporate Design</p></div></li>
+        <li><p class="when">08.2012 – 08.2013</p><div>
+          <p class="role">Mediengestalter und AV-Techniker</p>
+          <p class="where">tm studios, Fürth — Druckvorstufe, Retusche, Videoschnitt, Tontechnik</p></div></li>
+      </ul>
+
+      <h3 class="cv-head second">Operations</h3>
+      <ul class="cv-list">
+        <li><p class="when">04.2019 – 05.2020</p><div>
+          <p class="role">Brand Ambassador Fratelli Branca (D/A)</p>
+          <p class="where">Reidemeister &amp; Ulrichs GmbH — Markenschulung, Events, Produktion des Marken-Podcasts</p></div></li>
+        <li><p class="when">10.2017 – 03.2019</p><div>
+          <p class="role">Senior Bartender</p>
+          <p class="where">25hours Hotel The Royal Bavarian, Boilerman Bar — Bar-Operations, Team-Schulung</p></div></li>
+        <li><p class="when">05.2017 – 09.2017</p><div>
+          <p class="role">Bartender</p>
+          <p class="where">Hotel Vier Jahreszeiten Kempinski München, Schwarzreiter Tagesbar</p></div></li>
+      </ul>
+    </div>
+
+    <div class="side">
+      <h3 class="cv-head">Ausbildung</h3>
+      <ul class="cv-list">
+        <li><p class="when">09.2010 – 07.2012</p><div>
+          <p class="role">Mediengestalter Digital und Print</p>
+          <p class="where">Werbung + Druck Baumgartner, Altötting</p></div></li>
+        <li><p class="when">10.2007 – 06.2009</p><div>
+          <p class="role">Theaterwissenschaft</p>
+          <p class="where">LMU München, Nebenfach Soziologie und Neuere deutsche Literatur</p></div></li>
+        <li><p class="when">07.2007</p><div>
+          <p class="role">Abitur</p>
+          <p class="where">Maria-Ward-Gymnasium, Altötting</p></div></li>
+      </ul>
+
+      <h3 class="cv-head second">Werkzeuge</h3>
+      <ul class="skills">
+        <li>Adobe Creative Cloud <span>— Expert</span></li>
+        <li>Substance 3D <span>— Mockups und Materialien</span></li>
+        <li>Google Apps Script <span>— Automation</span></li>
+        <li>Prompt Engineering</li>
+        <li>POS-Entwicklung und Druckproduktion</li>
+        <li>Hardware-Prototyping</li>
+      </ul>
+
+      <h3 class="cv-head second">Engagement</h3>
+      <ul class="skills">
+        <li>Schöffe am Amtsgericht München <span>— 2024 bis 2029</span></li>
+        <li>Ersthelfer bei Hirmer</li>
+        <li>Führungskräftetraining <span>— Hirmer, 2023 bis 2024</span></li>
+      </ul>
+
+      <h3 class="cv-head second">Sprachen</h3>
+      <ul class="skills">
+        <li>Deutsch <span>— Muttersprache</span></li>
+        <li>Englisch <span>— fließend</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========================= FUSS (schwarz) ========================= -->
+<footer class="footer invert wrap" id="kontakt">
+  <div class="runner"><span>Michael J. Hofauer</span><span class="num">Kontakt</span></div>
+
+  <div class="grid">
+    <div class="foot-left">
+      <div class="foot-block">
+        <p class="meta">Adresse</p>
+        <p class="big-line">Einsteinstr. 187<br>81677 München</p>
+      </div>
+      <div class="foot-block">
+        <p class="meta">Telefon</p>
+        <a class="big-line" href="tel:+4915125696567">+49 151 25 69 65 67</a>
+      </div>
+      <div class="foot-block">
+        <p class="meta">E-Mail</p>
+        <a class="big-line" href="mailto:m.hofauer@me.com">m.hofauer@me.com</a>
+      </div>
+      <div>
+        <p class="meta">Social</p>
+        <div class="social">
+          <a href="#" rel="me">Instagram</a>
+          <a href="https://www.linkedin.com/in/michael-j-hofauer-011858112/" rel="me" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-right"><div class="frame">
+      <img src="images/portrait.jpg" alt="Michael J. Hofauer" loading="lazy" decoding="async"
+           onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-portrait/900/1200';">
+    </div></div>
+  </div>
+
+  <div class="legal">
+    <details>
+      <summary><span>Impressum und Datenschutz</span><span class="sign" aria-hidden="true"></span></summary>
+      <div class="legal-body grid">
+        <div class="col">
+          <h4>Angaben gemäß § 5 DDG</h4>
+          <p>Michael J. Hofauer<br>Einsteinstr. 187<br>81677 München<br>Deutschland</p>
+        </div>
+        <div class="col">
+          <h4>Kontakt</h4>
+          <p>Telefon: +49 151 25 69 65 67<br>E-Mail: m.hofauer@me.com</p>
+        </div>
+        <div class="col">
+          <h4>Bildrechte</h4>
+          <p>Alle gezeigten Arbeiten sind urheberrechtlich geschützt; die Nutzungsrechte an Kundenprojekten liegen bei den jeweiligen Auftraggebern.</p>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="colophon"><span>© 2026 Michael J. Hofauer</span><span>München</span></div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Ladesequenz */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ document.body.classList.add('loaded'); });
+  });
+
+  /* Bilder: Vorhang-Reveal */
+  var frames = document.querySelectorAll('.frame');
+  if(reduce || !('IntersectionObserver' in window)){
+    frames.forEach(function(f){ f.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin:'0px 0px -8% 0px', threshold:0.05 });
+    frames.forEach(function(f){ io.observe(f); });
+  }
+
+  /* Kopfleiste: sichtbar + Farbe je nach Abschnitt */
+  var bar   = document.getElementById('bar');
+  var start = document.getElementById('start');
+  var darkSections = document.querySelectorAll('.invert');
+
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      bar.dataset.visible = entries[0].intersectionRatio > .12 ? 'false' : 'true';
+    }, { threshold:[0,.12,1] }).observe(start);
+  }
+
+  /* Zähler in der Kopfleiste */
+  var counter = document.getElementById('counter');
+  var label   = counter.querySelector('span');
+  var marks   = document.querySelectorAll('.case, #index, #weitere, #profil, #kontakt');
+  var current = '';
+  function textFor(el){
+    if(el.id === 'index')   return 'Index';
+    if(el.id === 'weitere') return 'Weitere Arbeiten';
+    if(el.id === 'profil')  return 'Profil';
+    if(el.id === 'kontakt') return 'Kontakt';
+    return 'Portfolio // ' + el.dataset.num;
+  }
+  function setLabel(t){
+    if(t === current) return;
+    current = t;
+    if(reduce){ label.textContent = t; return; }
+    counter.classList.add('swap');
+    setTimeout(function(){ label.textContent = t; counter.classList.remove('swap'); }, 260);
+  }
+  if('IntersectionObserver' in window && marks.length){
+    var io2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) setLabel(textFor(e.target)); });
+    }, { rootMargin:'-46px 0px -60% 0px', threshold:0 });
+    marks.forEach(function(m){ io2.observe(m); });
+  }
+
+  /* Index: Vorschaubild folgt dem Zeiger */
+  var peek    = document.getElementById('peek');
+  var peekImg = document.getElementById('peek-img');
+  var rows    = document.querySelectorAll('.idx-row');
+  var fine    = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var tx=0, ty=0, cx=0, cy=0, peeking=false;
+
+  if(fine && !reduce){
+    rows.forEach(function(r){
+      r.addEventListener('mouseenter', function(){
+        var src = r.dataset.img, fb = r.dataset.fb;
+        peekImg.onerror = function(){ peekImg.onerror=null; peekImg.src = fb; };
+        peekImg.src = src;
+        peek.classList.add('on'); peeking = true;
+      });
+      r.addEventListener('mouseleave', function(){
+        peek.classList.remove('on'); peeking = false;
+      });
+    });
+    window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; }, {passive:true});
+  }
+
+  /* Ein einziger Ticker für Zeiger und Kopfbild */
+  var heroShot = document.getElementById('heroShot');
+  var heroImg  = heroShot ? heroShot.querySelector('img') : null;
+
+  function tick(){
+    /* Vorschau weich nachziehen */
+    if(peeking){
+      cx += (tx - cx) * .14;
+      cy += (ty - cy) * .14;
+      peek.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) translate(-50%,-50%) scale(1)';
+    }
+    /* Kopfbild zoomt beim Scrollen aus */
+    if(heroImg && !reduce){
+      var r = heroShot.getBoundingClientRect();
+      var p = Math.min(Math.max(-r.top / (r.height || 1), 0), 1);
+      heroImg.style.transform = 'scale(' + (1.16 - p * 0.16).toFixed(4) + ')';
+    }
+    /* Kopfleiste umfärben, wenn sie über einem dunklen Abschnitt steht */
+    var dark = false;
+    darkSections.forEach(function(s){
+      var b = s.getBoundingClientRect();
+      if(b.top <= 23 && b.bottom >= 23) dark = true;
+    });
+    bar.dataset.dark = dark ? 'true' : 'false';
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  /* Videos: erst beim Klick laden, keine Cookies vorher */
+  document.querySelectorAll('.video-thumb').forEach(function(el){
+    function load(){
+      var id = el.dataset.video;
+      el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id +
+        '?autoplay=1&rel=0" title="YouTube Video" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    }
+    el.addEventListener('click', load);
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); load(); }
+    });
+  });
+
+  /* Weiches Scrollen zu Ankern */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var t = document.querySelector(a.getAttribute('href'));
+      if(!t) return;
+      e.preventDefault();
+      var y = t.getBoundingClientRect().top + window.pageYOffset - 46;
+      window.scrollTo({ top:y, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
