@@ -160,16 +160,7 @@ ul{ list-style:none; }
 }
 
 /* ---------- Projekt ---------- */
-.project{ padding-block:clamp(40px,7vh,84px); border-top:1px solid var(--ink); position:relative; overflow:hidden; }
-.p-num-giant{
-  position:absolute; inset-inline:0; top:0; z-index:1; text-align:center;
-  font-weight:800; color:var(--red); line-height:.78; letter-spacing:-0.04em;
-  font-size:clamp(5rem,26vw,17rem); opacity:.85; transform:scale(1) translateY(0);
-  transition:opacity 1s var(--ease), transform 1s var(--ease);
-  pointer-events:none; user-select:none; will-change:opacity,transform;
-}
-.p-num-giant.fired{ opacity:0; transform:scale(.5) translateY(-6%); }
-@media(prefers-reduced-motion:reduce){ .p-num-giant{ display:none; } }
+.project{ padding-block:clamp(40px,7vh,84px); border-top:1px solid var(--ink); }
 .p-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(18px,3vh,30px); font-size:12px; color:var(--grey); }
 .p-head .p-num{ color:var(--red); font-weight:700; margin-left:-0.02em; }
 
@@ -276,7 +267,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 .colophon span{ font-size:11px; color:var(--grey); }
 
 @media print{
-  .bar,#gridOverlay,#scrollProgress,.cursor-ring,.play-btn,.p-num-giant{ display:none !important; }
+  .bar,#gridOverlay,#scrollProgress,.cursor-ring,.play-btn{ display:none !important; }
   html,html[data-theme="dark"]{ --paper:#fff !important; --ink:#000 !important; --grey:#555 !important; --line:#ccc !important; }
   body{ cursor:auto !important; }
   a{ text-decoration:underline; }
@@ -339,7 +330,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 01 SPRING INSIDE ========================= -->
 <section class="project wrap" id="p1">
-  <span class="p-num-giant" aria-hidden="true">01</span>
   <div class="p-head"><span class="p-num">01</span><span data-i18n="p1.kicker">Hirmer — Frühjahr 2023</span></div>
   <div class="grid">
     <div class="p-image" style="background:#545a58"><img src="images/spring-hero.jpg" width="2000" height="1249" alt="Spring Inside" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1/900/620?grayscale';"></div>
@@ -369,7 +359,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 02 BACKSTAGE NATURE ========================= -->
 <section class="project wrap" id="p2">
-  <span class="p-num-giant" aria-hidden="true">02</span>
   <div class="p-head"><span class="p-num">02</span><span>Canada Goose — Fall 2023</span></div>
   <div class="grid">
     <div class="p-image" style="background:#736e68"><img src="images/canadagoose-hero.jpg" width="2000" height="1250" alt="Backstage Nature" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2/900/620?grayscale';"></div>
@@ -393,7 +382,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 03 TAGESBAR TRACHT ========================= -->
 <section class="project wrap" id="p3">
-  <span class="p-num-giant" aria-hidden="true">03</span>
   <div class="p-head"><span class="p-num">03</span><span data-i18n="p3.kicker">Hirmer — Herbst 2025</span></div>
   <div class="grid">
     <div class="p-image" style="background:#6a6255"><img src="images/tagesbar-hero.jpg" width="2000" height="1250" alt="Tagesbar Tracht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3/900/620?grayscale';"></div>
@@ -417,7 +405,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 04 FREUDE SCHENKEN ========================= -->
 <section class="project wrap" id="p4">
-  <span class="p-num-giant" aria-hidden="true">04</span>
   <div class="p-head"><span class="p-num">04</span><span data-i18n="p4.kicker">Hirmer × LEGO — Weihnachten 2023</span></div>
   <div class="grid">
     <div class="p-image" style="background:#8a8985"><img src="images/lego-treppenhaus.jpg" width="2000" height="1250" alt="Freude schenken" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4/900/620?grayscale';"></div>
@@ -449,7 +436,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 05 WINDSOR ========================= -->
 <section class="project wrap" id="p5">
-  <span class="p-num-giant" aria-hidden="true">05</span>
   <div class="p-head"><span class="p-num">05</span><span data-i18n="p5.kicker">Windsor — Herbst 2023</span></div>
   <div class="grid">
     <div class="p-image" style="background:#6b5e55"><img src="images/windsor-hero.jpg" width="2000" height="1250" alt="Windsor Pop-up" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5/900/620?grayscale';"></div>
@@ -475,7 +461,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 06 FRED PERRY ========================= -->
 <section class="project wrap" id="p6">
-  <span class="p-num-giant" aria-hidden="true">06</span>
   <div class="p-head"><span class="p-num">06</span><span>Fred Perry — Fall 2024</span></div>
   <div class="grid">
     <div class="p-image" style="background:#787066"><img src="images/fredperry-hero.jpg" width="1131" height="706" alt="Fred Perry Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6/900/620?grayscale';"></div>
@@ -499,7 +484,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 07 DRESSLER ========================= -->
 <section class="project wrap" id="p7">
-  <span class="p-num-giant" aria-hidden="true">07</span>
   <div class="p-head"><span class="p-num">07</span><span>Dressler — Summer 2024</span></div>
   <div class="grid">
     <div class="p-image" style="background:#7b7b7b"><img src="images/dressler-hero.jpg" width="2000" height="1250" alt="Dressler Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7/900/620?grayscale';"></div>
@@ -521,7 +505,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 08 LICHT+SPIEL ========================= -->
 <section class="project wrap" id="p8">
-  <span class="p-num-giant" aria-hidden="true">08</span>
   <div class="p-head"><span class="p-num">08</span><span data-i18n="p8.kicker">Medienkunst — 2007–2017</span></div>
   <div class="grid">
     <div class="p-image" style="background:#6e492e"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8/900/620?grayscale';"></div>
@@ -730,18 +713,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       });
     }, { rootMargin:'-48% 0px -48% 0px', threshold:0 });
     projectSections.forEach(function(s){ wayfinder.observe(s); });
-  }
-
-  /* ---------- Monumentale Ziffer beim Betreten eines Projekts ---------- */
-  if(!reduce && 'IntersectionObserver' in window){
-    var giantObserver = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(!entry.isIntersecting) return;
-        entry.target.classList.add('fired');
-        giantObserver.unobserve(entry.target);
-      });
-    }, { threshold:0.4 });
-    document.querySelectorAll('.p-num-giant').forEach(function(el){ giantObserver.observe(el); });
   }
 
   /* ---------- Dark Mode ---------- */
