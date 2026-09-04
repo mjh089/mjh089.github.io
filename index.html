@@ -234,8 +234,36 @@ ul{ list-style:none; }
 
 .shot-main .frame{ aspect-ratio:16/10; }
 .pair{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gutter); align-items:end; }
-.solo{ grid-column:1/-1; }
-.solo .frame{ aspect-ratio:21/9; }
+/* Scroll-Fortschritt */
+#scrollProgress{
+  position:fixed; top:0; left:0; z-index:100;
+  height:2px; width:100%;
+  transform-origin:0 50%; transform:scaleX(0);
+  background:#fff; mix-blend-mode:difference;
+  pointer-events:none;
+}
+
+html{ scrollbar-width:thin; scrollbar-color:#8a8a86 transparent; }
+::-webkit-scrollbar{ width:9px; height:9px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:#8a8a86; border-radius:5px; border:2px solid transparent; background-clip:padding-box; }
+::-webkit-scrollbar-thumb:hover{ background:#a9a9a5; background-clip:padding-box; }
+
+/* Eigener Cursor — nur auf Ger\u00e4ten mit echter Maus, kehrt sich per Farbmischung automatisch um */
+@media (hover:hover) and (pointer:fine){
+  a, button, .video-thumb, summary, [role="button"]{ cursor:none; }
+  body{ cursor:none; }
+  .cursor-ring{
+    position:fixed; top:0; left:0; z-index:200;
+    width:22px; height:22px; margin:-11px 0 0 -11px;
+    border-radius:50%; background:#fff; mix-blend-mode:difference;
+    pointer-events:none; opacity:0;
+    transition:opacity .25s ease, transform .18s var(--ease);
+  }
+  .cursor-ring.on{ opacity:1; }
+  .cursor-ring.big{ transform:scale(1.7); }
+}
+
 .solo-32{ grid-column:1/-1; }
 .solo-32 .frame{ aspect-ratio:3/2; }
 figure.step{ display:flex; flex-direction:column; gap:9px; }
@@ -387,6 +415,22 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 /* ============================================================
    BEWEGUNG AUS
    ============================================================ */
+/* Druckansicht */
+@media print{
+  .bar, .peek, .cursor-ring, #scrollProgress, .play-btn{ display:none !important; }
+  *{ animation:none !important; transition:none !important; }
+  body{ background:#fff !important; color:#000 !important; cursor:auto !important; }
+  .invert{ --paper:#fff; --band:#f2f2f0; --ink:#000; --ink-2:#555; background:#fff !important; color:#000 !important; }
+  .frame img{ clip-path:none !important; transform:none !important; opacity:1 !important; }
+  .case, .profile, .footer, .more{ break-inside:avoid; page-break-inside:avoid; }
+  a{ color:#000; text-decoration:underline; }
+  a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:.7em; color:#555; }
+  details:not([open]) > *:not(summary){ display:block !important; }
+  .sign{ display:none; }
+  .video-thumb iframe{ display:none; }
+  .display, .h2{ letter-spacing:-0.02em; }
+}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{ transition-duration:.01ms !important; animation-duration:.01ms !important; }
   .mask > *{ transform:none; }
@@ -411,7 +455,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 </header>
 
 <!-- Vorschaubild, folgt dem Zeiger im Index -->
+<div id="scrollProgress" aria-hidden="true"></div>
 <div class="peek" id="peek" aria-hidden="true"><img id="peek-img" src="" alt=""></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
 <main>
 
@@ -1073,9 +1119,26 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; }, {passive:true});
   }
 
+  /* Eigener Cursor-Ring */
+  var ring = document.getElementById('cursorRing');
+  if(fine && !reduce && ring){
+    var ringOn = false;
+    document.addEventListener('mousemove', function(){
+      if(!ringOn){ ring.classList.add('on'); ringOn = true; }
+    }, {passive:true});
+    document.addEventListener('mouseleave', function(){ ring.classList.remove('on'); ringOn = false; });
+    var bigTargets = 'a, button, .video-thumb, summary, [role="button"]';
+    document.addEventListener('mouseover', function(e){
+      if(e.target.closest(bigTargets)) ring.classList.add('big');
+    });
+    document.addEventListener('mouseout', function(e){
+      if(e.target.closest(bigTargets)) ring.classList.remove('big');
+    });
+  }
+
   /* Ein einziger Ticker für Zeiger und Kopfbild */
-  var heroShot = document.getElementById('heroShot');
-  var heroImg  = heroShot ? heroShot.querySelector('img') : null;
+  var rx=0, ry=0, ringInit=false;
+  var progress = document.getElementById('scrollProgress');
 
   function tick(){
     /* Vorschau weich nachziehen */
@@ -1084,13 +1147,19 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       cy += (ty - cy) * .14;
       peek.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) translate(-50%,-50%) scale(1)';
     }
-    /* Kopfbild zoomt beim Scrollen aus */
-    if(heroImg && !reduce){
-      var r = heroShot.getBoundingClientRect();
-      var p = Math.min(Math.max(-r.top / (r.height || 1), 0), 1);
-      heroImg.style.transform = 'scale(' + (1.16 - p * 0.16).toFixed(4) + ')';
+    /* Cursor-Ring folgt straffer als die Vorschau */
+    if(ring){
+      if(!ringInit){ rx = tx; ry = ty; ringInit = true; }
+      rx += (tx - rx) * .35;
+      ry += (ty - ry) * .35;
+      ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
     }
     /* Kopfleiste umfärben, wenn sie über einem dunklen Abschnitt steht */
+    if(progress){
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - doc.clientHeight) || 1;
+      progress.style.transform = 'scaleX(' + Math.min(window.scrollY / max, 1).toFixed(4) + ')';
+    }
     var dark = false;
     darkSections.forEach(function(s){
       var b = s.getBoundingClientRect();
