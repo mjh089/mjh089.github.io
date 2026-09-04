@@ -38,9 +38,10 @@ sieht also nie kaputt aus, auch nicht halb befüllt.
 | `tagesbar-hero.jpg` | Tagesbar Tracht, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
 | `tagesbar-plan.jpg` | 3D-Rendering, ins Raumfoto integriert | 3:2 — **liegt bereits im Ordner** |
 | `tagesbar-detail.jpg` | Trachtenjacken, Detail | 4:5 — **liegt bereits im Ordner** |
-| `lego-hero.jpg` | Freude schenken, Schaufenster | 16:10 — **liegt bereits im Ordner** |
-| `lego-plan.jpg` | Fensterabwicklung | 3:2 — **liegt bereits im Ordner** |
-| `lego-3d.jpg` | Volumenprüfung | 4:5 — **liegt bereits im Ordner** |
+| `lego-treppenhaus.jpg` | Installation im Treppenhaus | 16:10 — **liegt bereits im Ordner** |
+| `lego-plan.jpg` | Planung, Fensterabwicklung | 3:2 — **liegt bereits im Ordner** |
+| `lego-fenster.jpg` | Umgesetztes Schaufenster (Hochformat) | 4:5 — **liegt bereits im Ordner** |
+| `lego-flaeche.jpg` | Rückwand, LEGO-Modell und Warenpräsentation | 3:2 — **liegt bereits im Ordner** |
 | `fredperry-hero.jpg` | Fred Perry Window, fertiges Fenster | 16:10 — **liegt bereits im Ordner** |
 | `fredperry-planung.jpg` | 3D-Voransicht vor dem Bau | 3:2 — **liegt bereits im Ordner** |
 | `fredperry-grundriss.jpg` | Grundriss von oben, 3D-Rendering | 4:5 — **liegt bereits im Ordner** |
