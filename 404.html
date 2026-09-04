@@ -6,41 +6,45 @@
 <title>Seite nicht gefunden — Michael J. Hofauer</title>
 <meta name="robots" content="noindex">
 <style>
-  html{ scrollbar-width:thin; scrollbar-color:#8a8a86 transparent; }
+  html{ scrollbar-width:thin; scrollbar-color:#aaa transparent; }
   ::-webkit-scrollbar{ width:9px; }
   ::-webkit-scrollbar-track{ background:transparent; }
-  ::-webkit-scrollbar-thumb{ background:#8a8a86; border-radius:5px; }
+  ::-webkit-scrollbar-thumb{ background:#aaa; border-radius:5px; }
   *{ box-sizing:border-box; }
+  :root{
+    --paper:#FFFFFF; --ink:#0A0A0A; --red:#E1000F; --grey:#6E6E6E;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#0A0A0A; --ink:#F2F1EE; --grey:#9C9C97; }
+  }
   body{
     margin:0; min-height:100svh;
     display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
     padding:8vh clamp(20px,6vw,72px);
-    background:#000; color:#F2F1EE;
+    background:var(--paper); color:var(--ink);
     font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing:antialiased;
   }
   .num{
-    font-weight:800; letter-spacing:-0.045em; line-height:.85;
-    font-size:clamp(4rem,16vw,11rem);
-    margin:0 0 clamp(20px,3vh,32px);
+    font-weight:700; letter-spacing:-0.03em; line-height:.9;
+    font-size:clamp(4rem,16vw,10rem);
+    margin:0 0 clamp(16px,2.6vh,26px);
   }
+  .num span{ color:var(--red); }
   p{
-    font-size:clamp(1rem,1.6vw,1.25rem);
-    line-height:1.5; color:#A9A296;
-    max-width:34ch; margin:0 0 clamp(28px,4vh,44px);
+    font-size:clamp(1rem,1.6vw,1.2rem);
+    line-height:1.5; color:var(--grey);
+    max-width:34ch; margin:0 0 clamp(26px,4vh,40px);
   }
   a{
-    color:#F2F1EE; font-size:14px; font-weight:500;
-    text-decoration:none;
-    background-image:linear-gradient(#F2F1EE,#F2F1EE);
-    background-repeat:no-repeat; background-position:0 100%; background-size:100% 1px;
-    padding-bottom:2px;
+    color:var(--ink); font-size:14px; font-weight:700;
+    text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:2px;
   }
-  a:hover{ color:#A9A296; background-image:linear-gradient(#A9A296,#A9A296); }
+  a:hover{ color:var(--red); border-color:var(--red); }
 </style>
 </head>
 <body>
-  <p class="num">404</p>
+  <p class="num">4<span>0</span>4</p>
   <p>Diese Seite gibt es nicht — oder nicht mehr. Vielleicht ist der Link veraltet.</p>
   <a href="/">Zurück zur Startseite ↓</a>
 </body>
