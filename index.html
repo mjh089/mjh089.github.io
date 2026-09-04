@@ -368,15 +368,12 @@ a.big-line{
   transition:background-size .55s var(--ease);
 }
 a.big-line:hover{ background-size:100% 2px; }
-.foot-left{ grid-column:1/span 7; }
-.foot-right{ grid-column:9/span 4; }
-.foot-right .frame{ aspect-ratio:3/4; }
+.foot-left{ grid-column:1/span 12; max-width:52ch; }
 .social{ display:flex; gap:22px; margin-top:6px; }
 .social a{ font-size:13px; font-weight:500; color:var(--ink-2); transition:color .25s ease; }
 .social a:hover{ color:var(--ink); }
 @media(max-width:860px){
   .foot-left{ grid-column:1/span 12; }
-  .foot-right{ grid-column:1/span 12; margin-top:40px; }
 }
 .legal{ margin-top:clamp(44px,7vh,84px); border-top:1px solid var(--ink); }
 details summary{
@@ -988,11 +985,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
         </div>
       </div>
     </div>
-
-    <div class="foot-right"><div class="frame">
-      <img src="images/portrait.jpg" alt="Michael J. Hofauer" loading="lazy" decoding="async"
-           onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-portrait/900/1200';">
-    </div></div>
   </div>
 
   <div class="legal">
