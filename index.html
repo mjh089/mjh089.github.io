@@ -226,6 +226,8 @@ ul{ list-style:none; }
 .case-facts{ display:grid; grid-template-columns:auto 1fr; gap:3px 14px; }
 .case-facts dt{ color:var(--ink-2); font-size:clamp(10.5px,.74vw,12px); }
 .case-facts dd{ font-size:clamp(10.5px,.74vw,12px); }
+.case-facts dd a{ text-decoration:underline; text-underline-offset:2px; }
+.case-facts dd a:hover{ color:var(--ink-2); }
 .case-right{ grid-column:5/span 8; display:grid; gap:var(--gutter); }
 @media(max-width:860px){
   .case-left{ grid-column:1/span 12; position:static; margin-bottom:28px; }
@@ -658,13 +660,19 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
   <div class="grid">
     <div class="case-left">
       <h2 class="h2">Freude<br>schenken</h2>
-      <p class="body-sec">Ein Weihnachtsbaum aus Bausteinen, gerastert wie ein Pixelbild. Jede Reihe war vorher gezeichnet, sonst hätte die Farbkante im Fenster nicht gesessen.</p>
+      <p class="body-sec">Das Fenster war nur der sichtbarste Teil einer zwölfwöchigen Umgestaltung des kompletten Stammhauses zur Weihnachtskooperation mit LEGO. Mein Teil war das Schaufenster: ein Weihnachtsbaum aus Bausteinen, gerastert wie ein Pixelbild — jede Reihe vorher gezeichnet, sonst hätte die Farbkante nicht gesessen.</p>
       <dl class="case-facts">
-        <dt>Marke</dt><dd>Hirmer</dd>
+        <dt>Marke</dt><dd>Hirmer x LEGO</dd>
         <dt>Saison</dt><dd>Weihnachten 2023</dd>
         <dt>Fläche</dt><dd>Schaufensterfront</dd>
         <dt>Rolle</dt><dd>Konzept, Konstruktion, Aufbau</dd>
+        <dt>Presse</dt><dd><a href="https://de.fashionnetwork.com/news/Hirmer-sorgt-mit-lego-fur-weihnachtliche-shopping-stimmung,1577829.html" target="_blank" rel="noopener">FashionNetwork, 21.11.2023</a></dd>
       </dl>
+      <ul class="stats">
+        <li><span>Bausteine, ganze Kampagne</span><b>&gt; 800.000</b></li>
+        <li><span>Rentierschlitten (Foyer)</span><b>240.000 Steine</b></li>
+        <li><span>Treppenhaus-Welt</span><b>30.000 Steine</b></li>
+      </ul>
     </div>
     <div class="case-right">
       <div class="shot-main"><div class="frame">
