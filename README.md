@@ -1,72 +1,74 @@
 # michaelhofauer.com
 
-Statische Seite, ein File. Kein Build, keine Abhängigkeiten außer der Schrift von Google Fonts.
+Statische One-Page-Site, zwei Dateien (`index.html`, `404.html`). Kein Build,
+keine externen Abhängigkeiten — auch keine Google Fonts, nur der
+System-Schriftstack (`Helvetica Neue`, Helvetica, Arial, sans-serif).
+
+Design: Swiss-Grid-System (12-Spalten-Raster, Rasterschalter, Hell/Dunkel-
+Umschalter, DE/EN), inspiriert von Josef Müller-Brockmann / Karl Gerstner.
 
 ## Ordnerstruktur
 
 ```
 /
 ├── index.html
+├── 404.html
 ├── CNAME          → enthält: michaelhofauer.com
-├── .nojekyll      → verhindert, dass GitHub die Dateien durch Jekyll schickt
 └── images/
 ```
 
 ## Bilder, die die Seite erwartet
 
-Dateinamen exakt so, alles klein geschrieben. GitHub Pages unterscheidet Groß- und
-Kleinschreibung — `Fredperry-Hero.JPG` wird nicht gefunden, `fredperry-hero.jpg` schon.
-Solange eine Datei fehlt, springt der `onerror`-Fallback auf picsum ein; die Seite
-sieht also nie kaputt aus, auch nicht halb befüllt.
-
-### Kopf
-
-| Datei | Inhalt | Format |
-|---|---|---|
-| `start-01.jpg` | Kopfbild, volle Breite | quer, 2400 px |
+Dateinamen exakt so, alles klein geschrieben. GitHub Pages unterscheidet Groß-
+und Kleinschreibung — `Fredperry-Hero.JPG` wird nicht gefunden,
+`fredperry-hero.jpg` schon. Solange eine Datei fehlt, springt der
+`onerror`-Fallback auf picsum ein; die Seite sieht also nie kaputt aus, auch
+nicht halb befüllt.
 
 ### Projekte
 
 | Datei | Inhalt | Format |
 |---|---|---|
-| `spring-hero.jpg` | Spring Inside, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
-| `spring-plan.jpg` | Elevation mit Maßen | 3:2 — **liegt bereits im Ordner** |
-| `spring-detail.jpg` | Blumenaufhängung, Farbcodierung | 4:5 — **liegt bereits im Ordner** |
-| `canadagoose-hero.jpg` | Backstage Nature, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
-| `canadagoose-moodboard.jpg` | Moodboard | 3:2 — **liegt bereits im Ordner** |
-| `canadagoose-bau.jpg` | Aufbau mit Studiolicht | 4:5 — **liegt bereits im Ordner** |
-| `tagesbar-hero.jpg` | Tagesbar Tracht, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
-| `tagesbar-plan.jpg` | 3D-Rendering, ins Raumfoto integriert | 3:2 — **liegt bereits im Ordner** |
-| `tagesbar-detail.jpg` | Trachtenjacken, Detail | 4:5 — **liegt bereits im Ordner** |
-| `lego-treppenhaus.jpg` | Installation im Treppenhaus | 16:10 — **liegt bereits im Ordner** |
-| `lego-plan.jpg` | Planung, Fensterabwicklung | 3:2 — **liegt bereits im Ordner** |
-| `lego-fenster.jpg` | Umgesetztes Schaufenster (Hochformat) | 4:5 — **liegt bereits im Ordner** |
-| `lego-flaeche.jpg` | Rückwand, LEGO-Modell und Warenpräsentation | 3:2 — **liegt bereits im Ordner** |
-| `fredperry-hero.jpg` | Fred Perry Window, fertiges Fenster | 16:10 — **liegt bereits im Ordner** |
-| `fredperry-planung.jpg` | 3D-Voransicht vor dem Bau | 3:2 — **liegt bereits im Ordner** |
-| `fredperry-grundriss.jpg` | Grundriss von oben, 3D-Rendering | 4:5 — **liegt bereits im Ordner** |
-| `dressler-hero.jpg` | Dressler Window, fertiges Fenster | 16:10 — **liegt bereits im Ordner** |
-| `dressler-punktc.jpg` | 3D-Voransicht der Leuchtkasten-Konstruktion | 3:2 — **liegt bereits im Ordner** |
-| `windsor-hero.jpg` | Windsor Pop-up, fertige Fläche | 16:10 — **liegt bereits im Ordner** |
-| `windsor-aufbau.jpg` | Sitzreihen mit Ware | 3:2 — **liegt bereits im Ordner** |
-| `windsor-detail.jpg` | Kinosessel als Warenträger | 4:5 — **liegt bereits im Ordner** |
-| `windsor-moodboard.jpg` | Moodboard, Referenz Deutsche Oper Berlin | 3:2 — **liegt bereits im Ordner** |
-| `lichtspiel-hero.jpg` | Projektion auf Architektur | 16:10 — **liegt bereits im Ordner** |
-| `lichtspiel-motiv.jpg` | Gesichtsprojektion mit Textmotiv, Text vollständig lesbar | 3:2 — **liegt bereits im Ordner** |
-| `lichtspiel-mapping.jpg` | Gespiegelte Projektion über die Raumecke | 4:5 — **liegt bereits im Ordner** |
+| `spring-hero.jpg` | Spring Inside, fertige Fläche | 16:10 |
+| `spring-plan.jpg` | Elevation mit Maßen | 3:2 |
+| `spring-detail.jpg` | Blumenaufhängung, Farbcodierung | 4:5 |
+| `canadagoose-hero.jpg` | Backstage Nature, fertige Fläche | 16:10 |
+| `canadagoose-moodboard.jpg` | Moodboard | 3:2 |
+| `canadagoose-bau.jpg` | Aufbau mit Studiolicht | 4:5 |
+| `tagesbar-hero.jpg` | Tagesbar Tracht, fertige Fläche | 16:10 |
+| `tagesbar-plan.jpg` | 3D-Rendering, ins Raumfoto integriert | 3:2 |
+| `tagesbar-detail.jpg` | Trachtenjacken, Detail | 4:5 |
+| `lego-treppenhaus.jpg` | Installation im Treppenhaus | 16:10 |
+| `lego-plan.jpg` | Planung, Fensterabwicklung | 3:2 |
+| `lego-fenster.jpg` | Umgesetztes Schaufenster (Hochformat) | 4:5 |
+| `lego-flaeche.jpg` | Rückwand, LEGO-Modell und Warenpräsentation | 3:2 |
+| `fredperry-hero.jpg` | Fred Perry Window, fertiges Fenster | 16:10 |
+| `fredperry-planung.jpg` | 3D-Voransicht vor dem Bau | 3:2 |
+| `fredperry-grundriss.jpg` | Grundriss von oben, 3D-Rendering | 4:5 |
+| `dressler-hero.jpg` | Dressler Window, fertiges Fenster | 16:10 |
+| `dressler-punktc.jpg` | 3D-Voransicht der Leuchtkasten-Konstruktion | 3:2 |
+| `windsor-hero.jpg` | Windsor Pop-up, fertige Fläche | 16:10 |
+| `windsor-aufbau.jpg` | Sitzreihen mit Ware | 3:2 |
+| `windsor-detail.jpg` | Kinosessel als Warenträger | 4:5 |
+| `windsor-moodboard.jpg` | Moodboard, Referenz Deutsche Oper Berlin | 3:2 |
+| `lichtspiel-hero.jpg` | Projektion auf Architektur | 16:10 |
+| `lichtspiel-motiv.jpg` | Gesichtsprojektion mit Textmotiv, Text vollständig lesbar | 3:2 |
+| `lichtspiel-mapping.jpg` | Gespiegelte Projektion über die Raumecke | 4:5 |
 
-Die beiden Prozessbilder sind entfallen — licht+spiel zeigt jetzt zwei YouTube-Videos
-statt Fotos. Die Videos werden im Code direkt über ihre YouTube-ID eingebunden
-(aktuell `2O1iceiNoVI` und `4aS7LRck3JM`), dafür ist keine lokale Bilddatei nötig.
-Der Vorschau-Thumbnail kommt automatisch von YouTube.
+Die Prozessbilder mit landschaftlichem Format (3:2) laufen in der
+Prozessreihe per `object-fit:contain` — sie werden nicht beschnitten, sondern
+zeigen das komplette Bild auf grauem Grund (`--thumb-bg`).
 
+Zwei licht+spiel-Prozessbilder sind entfallen — es werden stattdessen zwei
+YouTube-Videos eingebunden (IDs `2O1iceiNoVI` und `4aS7LRck3JM`), über
+`youtube-nocookie.com`, geladen erst nach Klick.
 
 ### Person und Teilen
 
 | Datei | Inhalt | Format |
 |---|---|---|
-| `portrait.jpg` | Porträt, wird für Profil und Footer verwendet | 3:4 — **liegt bereits im Ordner** |
-| `og.jpg` | Vorschaubild beim Teilen | 1200 × 630 |
+| `portrait.jpg` | Porträt, einmalig im Profilbereich verwendet | 3:4 |
+| `og.jpg` | Vorschaubild beim Teilen | 1200 × 630 — **fehlt noch** |
 
 ## Veröffentlichen
 
@@ -75,21 +77,30 @@ Der Vorschau-Thumbnail kommt automatisch von YouTube.
 3. Settings → Pages → Custom domain: `michaelhofauer.com`, „Enforce HTTPS" anhaken.
 4. Beim Domain-Anbieter setzen:
    - `A` auf `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - `AAAA` auf die passende GitHub-Pages-IPv6-Adresse
    - `CNAME` für `www` auf `<dein-github-name>.github.io`
 
 Das Zertifikat braucht nach dem DNS-Eintrag meist 15 Minuten bis eine Stunde.
 
-## Farbschema umstellen
+Deployment ist manuell: Dateien über die GitHub-Weboberfläche hochladen
+(Add file → Upload files → Commit changes). `index.html`/`404.html` ins
+Repository-Root, Bilder in `images/`. Browser-Cache beim Prüfen unzuverlässig
+— im Inkognito-Fenster gegenchecken.
 
-Die hellen Projektabschnitte lassen sich einzeln auf Schwarz drehen. Dafür genügt
-`class="invert"` an der jeweiligen Sektion:
+## Farbschema
 
-```html
-<section class="case invert wrap" id="case-001" data-num="001">
-```
+Hell/Dunkel wird global über `data-theme="dark"|"light"` auf `<html>`
+gesteuert (Schalter `#themeToggle`, oben rechts). Die Farbwerte stecken als
+CSS-Variablen in `:root` und `html[data-theme="dark"]`. Auswahl wird in
+`localStorage['mjh-theme']` gemerkt, respektiert beim ersten Besuch
+`prefers-color-scheme`. Rot (`#E1000F`) bleibt in beiden Modi identisch.
 
-Die Farbwerte stecken als CSS-Variablen im Block `.invert` ganz oben. Die Kopfleiste
-erkennt selbst, ob sie gerade über einem dunklen Abschnitt steht, und färbt sich um.
+## Sprache
+
+Deutsch ist der Grundzustand im HTML. `#langToggle` schaltet per
+`data-i18n`-Attributen auf Englisch um (Dictionary `i18n.en` im Script-Block).
+Zurück auf Deutsch löst einfach `location.reload()` aus. Auswahl wird in
+`localStorage['mjh-lang']` gemerkt.
 
 ## Bildexport
 
@@ -104,8 +115,7 @@ erkennt selbst, ob sie gerade über einem dunklen Abschnitt steht, und färbt si
 
 | Rolle | Breite | Qualität |
 |---|---|---|
-| Kopfbild `start-01.jpg` | 2400 px | 75 |
 | Heldenbilder der Projekte | 2000 px | 75 |
 | Prozessbilder | 1400 px | 75 |
-| Porträts | 1200 px | 80 |
+| Porträt | 1200 px | 80 |
 | `og.jpg` | 1200 × 630 px | 80 |
