@@ -103,7 +103,8 @@ ul{ list-style:none; }
 }
 #gridOverlay.on{ display:grid; }
 #gridOverlay{ grid-template-columns:repeat(12,1fr); gap:var(--gutter); }
-#gridOverlay span{ background:rgba(225,0,15,.07); border-inline:1px solid rgba(225,0,15,.3); }
+#gridOverlay span{ background:rgba(225,0,15,.07); border-inline:1px solid rgba(225,0,15,.3); transition:background .5s var(--ease); }
+#gridOverlay span.active{ background:rgba(225,0,15,.24); }
 
 /* ---------- Fortschritt & Cursor ---------- */
 #scrollProgress{
@@ -150,7 +151,7 @@ ul{ list-style:none; }
 .index-section:hover .index-row{ opacity:.4; }
 .index-row:hover{ opacity:1 !important; }
 .index-row:last-child{ border-bottom:1px solid var(--line); }
-.idx-num{ grid-column:1/span 2; color:var(--red); font-weight:700; font-size:clamp(1rem,1.8vw,1.3rem); font-variant-numeric:tabular-nums; }
+.idx-num{ grid-column:1/span 2; color:var(--red); font-weight:700; font-size:clamp(1rem,1.8vw,1.3rem); font-variant-numeric:tabular-nums; margin-left:-0.03em; }
 .idx-name{ grid-column:3/span 7; font-weight:700; letter-spacing:-0.01em; font-size:clamp(1.1rem,2.6vw,1.9rem); }
 .idx-year{ grid-column:11/span 2; text-align:right; font-size:12px; color:var(--grey); }
 @media(max-width:800px){
@@ -159,9 +160,18 @@ ul{ list-style:none; }
 }
 
 /* ---------- Projekt ---------- */
-.project{ padding-block:clamp(40px,7vh,84px); border-top:1px solid var(--ink); }
+.project{ padding-block:clamp(40px,7vh,84px); border-top:1px solid var(--ink); position:relative; overflow:hidden; }
+.p-num-giant{
+  position:absolute; inset-inline:0; top:0; z-index:1; text-align:center;
+  font-weight:800; color:var(--red); line-height:.78; letter-spacing:-0.04em;
+  font-size:clamp(5rem,26vw,17rem); opacity:.85; transform:scale(1) translateY(0);
+  transition:opacity 1s var(--ease), transform 1s var(--ease);
+  pointer-events:none; user-select:none; will-change:opacity,transform;
+}
+.p-num-giant.fired{ opacity:0; transform:scale(.5) translateY(-6%); }
+@media(prefers-reduced-motion:reduce){ .p-num-giant{ display:none; } }
 .p-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(18px,3vh,30px); font-size:12px; color:var(--grey); }
-.p-head .p-num{ color:var(--red); font-weight:700; }
+.p-head .p-num{ color:var(--red); font-weight:700; margin-left:-0.02em; }
 
 .p-image{ grid-column:1/span 7; aspect-ratio:16/11; background:var(--thumb-bg); overflow:hidden; }
 .p-data{ grid-column:9/span 4; }
@@ -182,7 +192,7 @@ ul{ list-style:none; }
 .strip-item .thumb{ aspect-ratio:4/5; background:var(--thumb-bg); overflow:hidden; margin-bottom:8px; }
 .strip-item .thumb img{ object-fit:contain; }
 .strip-item .label{ display:flex; gap:8px; align-items:baseline; }
-.strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; }
+.strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; margin-left:-0.02em; }
 .strip-item .cap{ font-size:11.5px; color:var(--grey); }
 .strip-full{ grid-column:1/-1; }
 .strip-full .thumb{ aspect-ratio:21/9; }
@@ -266,7 +276,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 .colophon span{ font-size:11px; color:var(--grey); }
 
 @media print{
-  .bar,#gridOverlay,#scrollProgress,.cursor-ring,.play-btn{ display:none !important; }
+  .bar,#gridOverlay,#scrollProgress,.cursor-ring,.play-btn,.p-num-giant{ display:none !important; }
   html,html[data-theme="dark"]{ --paper:#fff !important; --ink:#000 !important; --grey:#555 !important; --line:#ccc !important; }
   body{ cursor:auto !important; }
   a{ text-decoration:underline; }
@@ -329,9 +339,10 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 01 SPRING INSIDE ========================= -->
 <section class="project wrap" id="p1">
+  <span class="p-num-giant" aria-hidden="true">01</span>
   <div class="p-head"><span class="p-num">01</span><span data-i18n="p1.kicker">Hirmer — Frühjahr 2023</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/spring-hero.jpg" width="2000" height="1249" alt="Spring Inside" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#545a58"><img src="images/spring-hero.jpg" width="2000" height="1249" alt="Spring Inside" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>Spring Inside</h3>
       <p class="body-sec" data-i18n="p1.desc">Das ganze Haus wird zur Almwiese. Meine Rolle war die Visualisierung — erst auf deren Basis ließen sich die Mengen berechnen, und dass die Blumen acht Wochen halten mussten, war von Anfang an gesetzt.</p>
@@ -341,26 +352,27 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
         <dt data-i18n="lbl.rolle">Rolle</dt><dd data-i18n="p1.rolle">Konzept, Visualisierung</dd>
       </dl>
       <ul class="p-stats">
-        <li><span data-i18n="p1.stat1">Blumen</span><b>50.000</b></li>
-        <li><span data-i18n="p1.stat2">Draht</span><b>20.000 m</b></li>
-        <li><span data-i18n="p1.stat3">Almwiese</span><b>1.000 m²</b></li>
+        <li><span data-i18n="p1.stat1">Blumen</span><b data-i18n="p1.stat1val">50.000</b></li>
+        <li><span data-i18n="p1.stat2">Draht</span><b data-i18n="p1.stat2val">20.000 m</b></li>
+        <li><span data-i18n="p1.stat3">Almwiese</span><b data-i18n="p1.stat3val">1.000 m²</b></li>
         <li><span data-i18n="p1.stat4">Arbeitsstunden VM-Team</span><b>800</b></li>
       </ul>
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb"><img src="images/spring-plan.jpg" width="1400" height="933" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1a/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#bfb7a3"><img src="images/spring-plan.jpg" width="1400" height="933" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p1.stripA">Aufbauzeichnung mit Maßen</span></div></div>
-    <div class="strip-item n2"><div class="thumb"><img src="images/spring-detail.jpg" width="1000" height="1250" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1b/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#e8e5de"><img src="images/spring-detail.jpg" width="1000" height="1250" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p1.stripB">Blumenabhängung über der Auslage</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 02 BACKSTAGE NATURE ========================= -->
 <section class="project wrap" id="p2">
+  <span class="p-num-giant" aria-hidden="true">02</span>
   <div class="p-head"><span class="p-num">02</span><span>Canada Goose — Fall 2023</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/canadagoose-hero.jpg" width="2000" height="1250" alt="Backstage Nature" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#736e68"><img src="images/canadagoose-hero.jpg" width="2000" height="1250" alt="Backstage Nature" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>Backstage Nature</h3>
       <p class="body-sec" data-i18n="p2.desc">Ein Fotostudio als Verkaufsfläche: Schiefer, Findlinge und Studiolicht mitten im Haus. Das Moodboard war hier kein Beiwerk, sondern die Bauanleitung.</p>
@@ -372,18 +384,19 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb"><img src="images/canadagoose-moodboard.jpg" width="1400" height="933" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2a/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#b4b3b1"><img src="images/canadagoose-moodboard.jpg" width="1400" height="933" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p2.stripA">Material, Licht, Location vorab festgelegt</span></div></div>
-    <div class="strip-item n2"><div class="thumb"><img src="images/canadagoose-bau.jpg" width="1000" height="1249" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2b/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#7c786d"><img src="images/canadagoose-bau.jpg" width="1000" height="1249" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p2.stripB">Schotter, Findlinge, Blitzanlage</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 03 TAGESBAR TRACHT ========================= -->
 <section class="project wrap" id="p3">
+  <span class="p-num-giant" aria-hidden="true">03</span>
   <div class="p-head"><span class="p-num">03</span><span data-i18n="p3.kicker">Hirmer — Herbst 2025</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/tagesbar-hero.jpg" width="2000" height="1250" alt="Tagesbar Tracht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#6a6255"><img src="images/tagesbar-hero.jpg" width="2000" height="1250" alt="Tagesbar Tracht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>Tagesbar Tracht</h3>
       <p class="body-sec" data-i18n="p3.desc">Die Tagesbar im dritten Stock wird saisonal neu bespielt. Im Herbst 2025 stand sie unter dem Thema Tracht — von meinem 3D-Plan bis zur fertigen Fläche, umgesetzt vom VM-Team.</p>
@@ -395,18 +408,19 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb"><img src="images/tagesbar-plan.jpg" width="1266" height="844" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3a/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#807967"><img src="images/tagesbar-plan.jpg" width="1266" height="844" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p3.stripA">3D-Voransicht, ins Raumfoto integriert</span></div></div>
-    <div class="strip-item n2"><div class="thumb"><img src="images/tagesbar-detail.jpg" width="1000" height="750" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3b/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#716b51"><img src="images/tagesbar-detail.jpg" width="1000" height="750" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p3.stripB">Trachtenjacken zwischen Kunstbäumen</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 04 FREUDE SCHENKEN ========================= -->
 <section class="project wrap" id="p4">
+  <span class="p-num-giant" aria-hidden="true">04</span>
   <div class="p-head"><span class="p-num">04</span><span data-i18n="p4.kicker">Hirmer × LEGO — Weihnachten 2023</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/lego-treppenhaus.jpg" width="2000" height="1250" alt="Freude schenken" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#8a8985"><img src="images/lego-treppenhaus.jpg" width="2000" height="1250" alt="Freude schenken" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4/900/620?grayscale';"></div>
     <div class="p-data">
       <h3 data-i18n="p4.title">Freude schenken</h3>
       <p class="body-sec" data-i18n="p4.desc">Diese Weihnachtskooperation mit LEGO habe ich in Abstimmung mit meinem Vorgesetzten für das ganze Haus mitgeplant. Visualisiert und in Fensterabwicklungen übersetzt habe ich das selbst; gebaut hat es das VM-Team.</p>
@@ -417,27 +431,28 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
         <dt data-i18n="lbl.presse">Presse</dt><dd><a href="https://de.fashionnetwork.com/news/Hirmer-sorgt-mit-lego-fur-weihnachtliche-shopping-stimmung,1577829.html" target="_blank" rel="noopener">FashionNetwork, 21.11.2023</a></dd>
       </dl>
       <ul class="p-stats">
-        <li><span data-i18n="p4.stat1">Bausteine, ganze Kampagne</span><b>&gt; 800.000</b></li>
+        <li><span data-i18n="p4.stat1">Bausteine, ganze Kampagne</span><b data-i18n="p4.stat1val">&gt; 800.000</b></li>
         <li><span data-i18n="p4.stat2">Rentierschlitten</span><b data-i18n="p4.stat2val">240.000 Steine</b></li>
         <li><span data-i18n="p4.stat3">Treppenhaus-Welt</span><b data-i18n="p4.stat3val">30.000 Steine</b></li>
       </ul>
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n3"><div class="thumb"><img src="images/lego-plan.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4a/600/750?grayscale';"></div>
+    <div class="strip-item n3"><div class="thumb" style="background:#c7bbbf"><img src="images/lego-plan.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p4.stripA">Fensterabwicklung, visualisiert</span></div></div>
-    <div class="strip-item n3"><div class="thumb"><img src="images/lego-fenster.jpg" width="990" height="1238" alt="Ergebnis" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4b/600/750?grayscale';"></div>
+    <div class="strip-item n3"><div class="thumb" style="background:#5f4e3c"><img src="images/lego-fenster.jpg" width="990" height="1238" alt="Ergebnis" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p4.stripB">Vom VM-Team umgesetzt</span></div></div>
-    <div class="strip-item n3"><div class="thumb"><img src="images/lego-flaeche.jpg" width="1600" height="1066" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4c/600/750?grayscale';"></div>
+    <div class="strip-item n3"><div class="thumb" style="background:#745340"><img src="images/lego-flaeche.jpg" width="1600" height="1066" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4c/600/750?grayscale';"></div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p4.stripC">Rückwand, Modell, Warenpräsentation</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 05 WINDSOR ========================= -->
 <section class="project wrap" id="p5">
+  <span class="p-num-giant" aria-hidden="true">05</span>
   <div class="p-head"><span class="p-num">05</span><span data-i18n="p5.kicker">Windsor — Herbst 2023</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/windsor-hero.jpg" width="2000" height="1250" alt="Windsor Pop-up" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#6b5e55"><img src="images/windsor-hero.jpg" width="2000" height="1250" alt="Windsor Pop-up" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>Windsor Pop-up</h3>
       <p class="body-sec" data-i18n="p5.desc">Ein Wartebereich wird zum Kinosaal: alte Kinosessel als Warenträger, das Logo als Leinwand-Motiv im Hintergrund. Die Ware liegt auf dem Platz, auf dem man sich sonst hinsetzt.</p>
@@ -449,20 +464,21 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n3"><div class="thumb"><img src="images/windsor-aufbau.jpg" width="1400" height="933" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5a/600/750?grayscale';"></div>
+    <div class="strip-item n3"><div class="thumb" style="background:#6e5748"><img src="images/windsor-aufbau.jpg" width="1400" height="933" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p5.stripA">Sitzreihen mit gefalteter Ware</span></div></div>
-    <div class="strip-item n3"><div class="thumb"><img src="images/windsor-detail.jpg" width="1000" height="1250" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5b/600/750?grayscale';"></div>
+    <div class="strip-item n3"><div class="thumb" style="background:#736155"><img src="images/windsor-detail.jpg" width="1000" height="1250" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p5.stripB">Kinosessel als Warenträger</span></div></div>
-    <div class="strip-item n3"><div class="thumb"><img src="images/windsor-moodboard.jpg" width="1247" height="831" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5c/600/750?grayscale';"></div>
+    <div class="strip-item n3"><div class="thumb" style="background:#9b9192"><img src="images/windsor-moodboard.jpg" width="1247" height="831" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5c/600/750?grayscale';"></div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p5.stripC">Referenz Deutsche Oper Berlin</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 06 FRED PERRY ========================= -->
 <section class="project wrap" id="p6">
+  <span class="p-num-giant" aria-hidden="true">06</span>
   <div class="p-head"><span class="p-num">06</span><span>Fred Perry — Fall 2024</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/fredperry-hero.jpg" width="1131" height="706" alt="Fred Perry Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#787066"><img src="images/fredperry-hero.jpg" width="1131" height="706" alt="Fred Perry Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>Fred Perry Window</h3>
       <p class="body-sec" data-i18n="p6.desc">Nur Produktfotos aus dem Onlineshop, keine räumliche Vorlage. Die Bilder liefen im Raster auf einem Leuchtkasten, davor eine Figur im exakt gleichen Outfit, dazu das Logo als Folienplot in Gold.</p>
@@ -474,18 +490,19 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb"><img src="images/fredperry-planung.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6a/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#bbb6b3"><img src="images/fredperry-planung.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p6.stripA">3D-Voransicht vor dem Bau</span></div></div>
-    <div class="strip-item n2"><div class="thumb"><img src="images/fredperry-grundriss.jpg" width="704" height="881" alt="Grundriss" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6b/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#95908a"><img src="images/fredperry-grundriss.jpg" width="704" height="881" alt="Grundriss" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p6.stripB">Grundriss, Ansicht von oben</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 07 DRESSLER ========================= -->
 <section class="project wrap" id="p7">
+  <span class="p-num-giant" aria-hidden="true">07</span>
   <div class="p-head"><span class="p-num">07</span><span>Dressler — Summer 2024</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/dressler-hero.jpg" width="2000" height="1250" alt="Dressler Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#7b7b7b"><img src="images/dressler-hero.jpg" width="2000" height="1250" alt="Dressler Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>Dressler Window</h3>
       <p class="body-sec" data-i18n="p7.desc">Fünf Sakkos schweben an Nylonfäden vor einem zweiteiligen, golden hinterlegten Leuchtkasten. Die Idee dahinter: zeigen, dass die Sakkos ungewöhnlich leicht sind.</p>
@@ -497,16 +514,17 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item strip-full"><div class="thumb"><img src="images/dressler-punktc.jpg" width="1600" height="1066" alt="3D-Voransicht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7a/1600/700?grayscale';"></div>
+    <div class="strip-item strip-full"><div class="thumb" style="background:#bebcbd"><img src="images/dressler-punktc.jpg" width="1600" height="1066" alt="3D-Voransicht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7a/1600/700?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p7.stripA">3D-Voransicht der Leuchtkasten-Konstruktion</span></div></div>
   </div>
 </section>
 
 <!-- ========================= 08 LICHT+SPIEL ========================= -->
 <section class="project wrap" id="p8">
+  <span class="p-num-giant" aria-hidden="true">08</span>
   <div class="p-head"><span class="p-num">08</span><span data-i18n="p8.kicker">Medienkunst — 2007–2017</span></div>
   <div class="grid">
-    <div class="p-image"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#6e492e"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>licht+spiel</h3>
       <p class="body-sec" data-i18n="p8.desc">Zehn Jahre Live-Visuals und Projection Mapping. 2010 zeigte licht+spiel im Rathaus Altötting eine erste Retrospektive mit drei Jahren Archivmaterial, eröffnet vom Bürgermeister persönlich.</p>
@@ -519,9 +537,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb"><img src="images/lichtspiel-motiv.jpg" width="1400" height="933" alt="Motiv" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8a/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#362a50"><img src="images/lichtspiel-motiv.jpg" width="1400" height="933" alt="Motiv" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p8.stripA">Gesicht und Schriftzug im Layer</span></div></div>
-    <div class="strip-item n2"><div class="thumb"><img src="images/lichtspiel-mapping.jpg" width="1000" height="1250" alt="Mapping" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8b/600/750?grayscale';"></div>
+    <div class="strip-item n2"><div class="thumb" style="background:#502342"><img src="images/lichtspiel-mapping.jpg" width="1000" height="1250" alt="Mapping" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p8.stripB">Projektion über die Raumecke</span></div></div>
   </div>
   <div class="strip">
@@ -546,7 +564,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 <section class="profile wrap" id="profil">
   <div class="p-head"><span></span><span data-i18n="nav.profil">Profil</span></div>
   <div class="grid">
-    <div class="portrait"><img src="images/portrait.jpg" width="1200" height="1600" alt="Porträt Michael J. Hofauer" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-portrait/900/1200?grayscale';"></div>
+    <div class="portrait" style="background:#777a7f"><img src="images/portrait.jpg" width="1200" height="1600" alt="Porträt Michael J. Hofauer" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-portrait/900/1200?grayscale';"></div>
     <div class="prof-lede">
       <p class="lede" data-i18n="prof.lede">Ich arbeite an der Schnittstelle von Handwerk und Technologie — vom Saisonkonzept über die 3D-Visualisierung bis zur montierten Fläche. Bei Hirmer habe ich 3D-Rendering als festen Planungsstandard etabliert und frühzeitig Workflows für generative KI in den Gestaltungs- und Planungsprozess integriert.</p>
       <div class="now">
@@ -691,6 +709,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
   var gridBtn = document.getElementById('gridToggle');
   gridBtn.addEventListener('click', function(){
     document.getElementById('gridOverlay').classList.toggle('on');
+    requestAnimationFrame(computeColEdges);
   });
   document.addEventListener('keydown', function(e){
     if(e.key.toLowerCase()!=='g' || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -698,6 +717,32 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     if(tag==='input' || tag==='textarea' || e.target.isContentEditable) return;
     gridBtn.click();
   });
+
+  /* ---------- Raster als Wegweiser: aktive Spalte = aktuelles Projekt ---------- */
+  var gridSpans = document.querySelectorAll('#gridOverlay span');
+  var projectSections = document.querySelectorAll('.project');
+  if(projectSections.length && gridSpans.length && 'IntersectionObserver' in window){
+    var wayfinder = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        var idx = Array.prototype.indexOf.call(projectSections, entry.target);
+        gridSpans.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+      });
+    }, { rootMargin:'-48% 0px -48% 0px', threshold:0 });
+    projectSections.forEach(function(s){ wayfinder.observe(s); });
+  }
+
+  /* ---------- Monumentale Ziffer beim Betreten eines Projekts ---------- */
+  if(!reduce && 'IntersectionObserver' in window){
+    var giantObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        entry.target.classList.add('fired');
+        giantObserver.unobserve(entry.target);
+      });
+    }, { threshold:0.4 });
+    document.querySelectorAll('.p-num-giant').forEach(function(el){ giantObserver.observe(el); });
+  }
 
   /* ---------- Dark Mode ---------- */
   var root = document.documentElement;
@@ -718,6 +763,19 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
   var progress = document.getElementById('scrollProgress');
   var tx=0, ty=0, rx=0, ry=0, init=false;
 
+  /* Magnetischer Cursor: bei aktivem Raster zu den Spaltenkanten hinziehen */
+  var gridOverlayEl = document.getElementById('gridOverlay');
+  var colEdges = [];
+  function computeColEdges(){
+    colEdges = [];
+    if(!gridOverlayEl.classList.contains('on')) return;
+    document.querySelectorAll('#gridOverlay span').forEach(function(s){
+      var r = s.getBoundingClientRect();
+      colEdges.push(r.left, r.right);
+    });
+  }
+  window.addEventListener('resize', computeColEdges);
+
   if(fine && !reduce && ring){
     var on=false;
     document.addEventListener('mousemove', function(e){
@@ -733,7 +791,16 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
   function tick(){
     if(ring && fine && !reduce){
       if(!init){ rx=tx; ry=ty; init=true; }
-      rx += (tx-rx)*.35; ry += (ty-ry)*.35;
+      var targetX = tx;
+      if(gridOverlayEl.classList.contains('on') && colEdges.length){
+        var nearest=null, minD=18;
+        for(var i=0;i<colEdges.length;i++){
+          var d = Math.abs(tx-colEdges[i]);
+          if(d<minD){ minD=d; nearest=colEdges[i]; }
+        }
+        if(nearest!==null) targetX = nearest;
+      }
+      rx += (targetX-rx)*.35; ry += (ty-ry)*.35;
       ring.style.transform = 'translate3d('+rx+'px,'+ry+'px,0)';
     }
     if(progress){
@@ -780,6 +847,8 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     en: {
       "nav.index":"Index", "nav.profil":"Profile", "nav.kontakt":"Contact",
       "nav.grid":"Grid", "nav.dark":"Dark",
+      "lbl.marke":"Brand", "lbl.flaeche":"Space", "lbl.rolle":"Role", "lbl.presse":"Press",
+      "lbl.format":"Format", "lbl.quelle":"Source", "lbl.kontakt":"Contact",
       "hero.role1":"Visual Marketing", "hero.role2":"Retail Design", "hero.role3":"Creative Ops",
       "hero.city":"Munich",
       "idx.date1":"Spring 2023", "idx.date3":"Fall 2025", "idx.name4":"Freude schenken", "idx.date4":"Christmas 2023", "idx.date5":"Fall 2023",
@@ -788,6 +857,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "p1.desc":"The whole store becomes an alpine meadow. My part was the visualisation — it was the basis on which quantities could be calculated, and the flowers had to last eight weeks from the start.",
       "p1.flaeche":"Shop window and sales floor", "p1.rolle":"Concept, visualisation",
       "p1.stat1":"Flowers", "p1.stat2":"Wire", "p1.stat3":"Alpine meadow", "p1.stat4":"Work hours, VM team",
+      "p1.stat1val":"50,000", "p1.stat2val":"20,000 m", "p1.stat3val":"1,000 m²",
       "p1.stripA":"Build drawing with measurements", "p1.stripB":"Flower installation above the display",
 
       "p2.desc":"A photo studio as sales floor: slate, boulders and studio lighting in the middle of the store. The moodboard wasn't decoration here — it was the build instructions.",
@@ -801,9 +871,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
       "p4.kicker":"Hirmer × LEGO — Christmas 2023",
       "p4.title":"Freude schenken",
-      "p4.desc":"I co-planned this Christmas collaboration with LEGO for the entire store, in coordination with my supervisor. I did the visualisation and translated it into window layouts myself; the VM team built it, as with every space in the store.",
+      "p4.desc":"I co-planned this Christmas collaboration with LEGO for the entire store, in coordination with my supervisor. I did the visualisation and translated it into window layouts myself; the VM team built it.",
       "p4.flaeche":"Entire store", "p4.rolle":"Concept, planning, coordination",
-      "p4.stat1":"Bricks, whole campaign", "p4.stat2":"Reindeer sleigh", "p4.stat2val":"240,000 bricks",
+      "p4.stat1":"Bricks, whole campaign", "p4.stat1val":"> 800,000", "p4.stat2":"Reindeer sleigh", "p4.stat2val":"240,000 bricks",
       "p4.stat3":"Staircase world", "p4.stat3val":"30,000 bricks",
       "p4.stripA":"Window layout, visualised", "p4.stripB":"Built by the VM team", "p4.stripC":"Back wall, model and merchandising",
 
@@ -812,11 +882,11 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "p5.flaeche":"Ground-floor pop-up", "p5.rolle":"Concept, props, planning",
       "p5.stripA":"Seating rows with folded merchandise", "p5.stripB":"Cinema seats as product displays", "p5.stripC":"Reference: Deutsche Oper Berlin",
 
-      "p6.desc":"Only product photos from the online shop, no spatial template. The images ran in a grid on a lightbox, with a single figure in front wearing the exact same outfit, plus the logo as a gold foil plot on the glass.",
+      "p6.desc":"Only product photos from the online shop, no spatial template. The images ran in a grid on a lightbox, with a single figure in front wearing the exact same outfit, plus the logo as a gold foil plot.",
       "p6.flaeche":"Shop window", "p6.rolle":"Concept, lightbox design, draft",
       "p6.stripA":"3D preview before the build", "p6.stripB":"Floor plan, top view",
 
-      "p7.desc":"Five blazers float on nylon threads in front of a two-part, gold-backed lightbox. The idea was to show exactly what the collection is about: that the blazers are unusually light.",
+      "p7.desc":"Five blazers float on nylon threads in front of a two-part, gold-backed lightbox. The idea behind it: to show that the blazers are unusually light.",
       "p7.flaeche":"Shop window", "p7.rolle":"Concept, graphics, visualisation",
       "p7.stripA":"3D preview of the lightbox construction",
 
@@ -843,7 +913,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "prof.sidehead1":"Education", "prof.sidehead2":"Tools", "prof.sidehead3":"Volunteering",
       "prof.side1role":"Media Designer, Digital/Print", "prof.side2role":"Theatre Studies", "prof.side3role":"A-levels (Abitur)",
       "prof.expert":"— Expert",
-      "prof.eng1":"Lay judge at Altötting District Court",
+      "prof.eng1":"Lay judge at Munich District Court",
       "prof.eng2":"First-aid officer at Hirmer",
 
       "foot.adresse":"Address", "foot.plzort":"81677 Munich", "foot.telefon":"Phone", "foot.email":"Email", "foot.online":"Online",
