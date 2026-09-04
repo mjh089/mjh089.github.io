@@ -361,7 +361,8 @@ figure.step figcaption b{ font-weight:500; color:var(--ink); }
    ============================================================ */
 .footer{ padding-block:clamp(52px,8vh,100px) 30px; }
 .foot-block{ margin-bottom:clamp(26px,4vh,48px); }
-.big-line{ display:inline-block; font-weight:800; letter-spacing:-0.035em; line-height:1.02; font-size:clamp(1.4rem,4vw,3.2rem); }
+.big-line{ display:inline-block; font-weight:800; letter-spacing:-0.035em; line-height:1.02; font-size:clamp(1.3rem,3.4vw,2.3rem); }
+.big-line.contact{ white-space:nowrap; }
 a.big-line{
   background-image:linear-gradient(currentColor,currentColor);
   background-repeat:no-repeat; background-position:0 96%; background-size:0% 2px;
@@ -369,9 +370,10 @@ a.big-line{
 }
 a.big-line:hover{ background-size:100% 2px; }
 .foot-left{ grid-column:1/span 12; max-width:52ch; }
-.social{ display:flex; gap:22px; margin-top:6px; }
-.social a{ font-size:13px; font-weight:500; color:var(--ink-2); transition:color .25s ease; }
-.social a:hover{ color:var(--ink); }
+.social{ display:flex; gap:18px; margin-top:8px; }
+.social a{ display:inline-flex; color:var(--ink-2); transition:color .25s ease, transform .25s var(--ease); }
+.social a:hover{ color:var(--ink); transform:translateY(-2px); }
+.social svg{ width:22px; height:22px; }
 @media(max-width:860px){
   .foot-left{ grid-column:1/span 12; }
 }
@@ -971,17 +973,30 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       </div>
       <div class="foot-block">
         <p class="meta">Telefon</p>
-        <a class="big-line" href="tel:+4915125696567">+49 151 25 69 65 67</a>
+        <a class="big-line contact" href="tel:+4915125696567">+49 151 25 69 65 67</a>
       </div>
       <div class="foot-block">
         <p class="meta">E-Mail</p>
-        <a class="big-line" href="mailto:m.hofauer@me.com">m.hofauer@me.com</a>
+        <a class="big-line contact" href="mailto:m.hofauer@me.com">m.hofauer@me.com</a>
       </div>
       <div>
         <p class="meta">Social</p>
         <div class="social">
-          <a href="#" rel="me">Instagram</a>
-          <a href="https://www.linkedin.com/in/michael-j-hofauer-011858112/" rel="me" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.linkedin.com/in/michael-j-hofauer-011858112/" rel="me" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="3.5"/>
+              <circle cx="7.6" cy="7.6" r="0.9" fill="currentColor" stroke="none"/>
+              <line x1="7.6" y1="10.8" x2="7.6" y2="17"/>
+              <line x1="11.6" y1="10.8" x2="11.6" y2="17"/>
+              <path d="M11.6 13.4c0-1.7 1.1-2.8 2.6-2.8s2.6 1.1 2.6 2.8V17" fill="none"/>
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/@hofi_089" rel="me" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13.5 3.5v11.2a3.3 3.3 0 1 1-3.3-3.3"/>
+              <path d="M13.5 3.5c.3 2.6 2.2 4.6 4.8 4.9"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
