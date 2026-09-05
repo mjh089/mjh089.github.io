@@ -245,7 +245,7 @@ ul{ list-style:none; }
 .cv-list .where{ font-size:11.5px; color:var(--grey); }
 .skills{ display:grid; gap:5px; }
 .skills li{ font-size:12.5px; }
-.skills li span{ color:var(--grey); }
+.skills li .qual{ color:var(--grey); }
 @media(max-width:800px){
   .portrait{ grid-column:1/span 12; margin-bottom:26px; }
   .prof-lede{ grid-column:1/span 12; }
@@ -569,10 +569,10 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       <dl class="p-facts">
         <dt data-i18n="lbl.format">Format</dt><dd data-i18n="p8.format">Live-Visuals, Mapping, Installation</dd>
         <dt data-i18n="lbl.rolle">Rolle</dt><dd data-i18n="p8.rolle">Creative Director und VJ</dd>
-        <dt data-i18n="lbl.residency">Residency</dt><dd><a href="https://harrykleinclub.de/" target="_blank" rel="noopener">Harry Klein</a>, München</dd>
+        <dt data-i18n="lbl.residency">Residency</dt><dd><a href="https://harrykleinclub.de/" target="_blank" rel="noopener">Harry Klein</a><span data-i18n="p8.residencyCity">, München</span></dd>
         <dt data-i18n="lbl.clubs">Clubs</dt><dd><a href="https://www.silo1.de/" target="_blank" rel="noopener">Silo1</a> &amp; <a href="https://www.magazinclub.de/" target="_blank" rel="noopener">magazin</a> (Töging am Inn), SUB CLUB &amp; moloko (Burghausen), Viperroom (Rosenheim), Platinum (Eggenfelden), FUXIS (Burghausen), <a href="https://www.bogaloo.de/" target="_blank" rel="noopener">Bogaloo</a> (Pfarrkirchen), <a href="https://www.der-hirsch.com/disco-club.html" target="_blank" rel="noopener">Hirsch</a> (Nürnberg)</dd>
         <dt data-i18n="lbl.festivals">Festivals</dt><dd>VJ Festival Erlangen (2010) &amp; Nürnberg (2013, Zentralcafé K4), VJ Fest Istanbul (2011), Urban Art Forms Wiener Neustadt (2011), <a href="https://www.facebook.com/PRESSUREfestival/" target="_blank" rel="noopener">Pressure</a> Neumarkt im Hausruck, Playground VJDJ Camp (Sakog, Österreich), Elektrogelände, Utopienwerkstatt (München)</dd>
-        <dt data-i18n="lbl.international">International</dt><dd>mission2beach im Club Magic Life, Kemer (2011)</dd>
+        <dt data-i18n="lbl.international">International</dt><dd data-i18n="p8.international">mission2beach im Club Magic Life, Kemer (2011)</dd>
         <dt data-i18n="lbl.presse">Presse</dt><dd><a href="https://www.altoetting.de/aktuelles/news/kultur-im-rathaus-vj-team-licht-spiel/" target="_blank" rel="noopener" data-i18n="p8.presseVal">Stadt Altötting, 2010</a></dd>
       </dl>
     </div>
@@ -611,7 +611,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       <div class="now">
         <p class="meta" data-i18n="prof.since">06.2022 – heute</p>
         <h3 data-i18n="prof.title">Senior Visual Marketing / Creative Ops</h3>
-        <p class="where" style="font-size:12.5px;color:var(--grey);margin-bottom:14px">Hirmer GmbH &amp; Co. KG, München</p>
+        <p class="where" style="font-size:12.5px;color:var(--grey);margin-bottom:14px" data-i18n="prof.nowwhere">Hirmer GmbH &amp; Co. KG, München</p>
         <ul class="duties">
           <li data-i18n="prof.duty1">Datengestützte VM-Saisonkonzepte und POS-Kampagnen</li>
           <li data-i18n="prof.duty2">Prozessoptimierung und eigene Werkzeuge (Google Apps Script, InDesign)</li>
@@ -634,12 +634,12 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       <h3 class="cv-head second" data-i18n="prof.trackhead2">Grafik und Produktion</h3>
       <ul class="cv-list">
         <li><p class="when">11.2014 – 04.2017</p><div><p class="role" data-i18n="prof.cv3role">Grafiker und Automation</p><p class="where">Kolb Digital, Oberschleißheim</p></div></li>
-        <li><p class="when">08.2013 – 10.2014</p><div><p class="role">Media Producer</p><p class="where">FTI Touristik GmbH, München</p></div></li>
+        <li><p class="when">08.2013 – 10.2014</p><div><p class="role" data-i18n="prof.cv4role">Media Producer</p><p class="where" data-i18n="prof.cv4where">FTI Touristik GmbH, München</p></div></li>
         <li><p class="when">08.2012 – 08.2013</p><div><p class="role" data-i18n="prof.cv5role">Mediengestalter und AV-Techniker</p><p class="where">tm studios, Fürth</p></div></li>
       </ul>
       <h3 class="cv-head second" data-i18n="prof.trackhead3">Operations</h3>
       <ul class="cv-list">
-        <li><p class="when">04.2019 – 05.2020</p><div><p class="role">Brand Ambassador Fratelli Branca</p><p class="where">Reidemeister &amp; Ulrichs GmbH</p></div></li>
+        <li><p class="when">04.2019 – 05.2020</p><div><p class="role" data-i18n="prof.cv6role">Brand Ambassador Fratelli Branca</p><p class="where">Reidemeister &amp; Ulrichs GmbH</p></div></li>
         <li><p class="when">10.2017 – 03.2019</p><div><p class="role" data-i18n="prof.cv7role">Senior Bartender</p><p class="where">25hours Hotel The Royal Bavarian</p></div></li>
         <li><p class="when">05.2017 – 09.2017</p><div><p class="role" data-i18n="prof.cv8role">Bartender</p><p class="where">Hotel Vier Jahreszeiten Kempinski München</p></div></li>
       </ul>
@@ -653,14 +653,14 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       </ul>
       <h3 class="cv-head second" data-i18n="prof.sidehead2">Werkzeuge</h3>
       <ul class="skills">
-        <li>Adobe Creative Cloud <span data-i18n="prof.expert">— Expert</span></li>
+        <li>Adobe Creative Cloud <span class="qual" data-i18n="prof.expert">— Expert</span></li>
         <li>Substance 3D</li>
         <li>Google Apps Script</li>
-        <li>Prompt Engineering</li>
+        <li data-i18n="prof.tool4">Prompt Engineering</li>
       </ul>
       <h3 class="cv-head second" data-i18n="prof.sidehead3">Engagement</h3>
       <ul class="skills">
-        <li data-i18n="prof.eng1">Schöffe am Amtsgericht München <span>— 2024–2029</span></li>
+        <li><span data-i18n="prof.eng1">Schöffe am Amtsgericht München</span> <span class="qual">— 2024–2029</span></li>
         <li data-i18n="prof.eng2">Ersthelfer bei Hirmer</li>
       </ul>
     </div>
@@ -989,7 +989,14 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "prof.cv2role": "クリエイティブディレクター／VJ",
       "prof.cv2where": "licht+spiel、メディアアート — ライブビジュアル、プロジェクションマッピング",
       "prof.cv3role": "グラフィッカー／オートメーション",
-      "prof.cv5role": "メディアデザイナー／AVテクニシャン",
+      "prof.cv4role": "メディアプロデューサー",
+  "prof.cv4where": "FTI Touristik GmbH、ミュンヘン",
+  "prof.cv6role": "ブランドアンバサダー（Fratelli Branca）",
+  "prof.nowwhere": "Hirmer GmbH & Co. KG、ミュンヘン",
+  "prof.tool4": "プロンプトエンジニアリング",
+  "p8.international": "mission2beach（Club Magic Life、ケメル、2011年）",
+  "p8.residencyCity": "、ミュンヘン",
+  "prof.cv5role": "メディアデザイナー／AVテクニシャン",
       "prof.cv7role": "シニアバーテンダー",
       "prof.cv8role": "バーテンダー",
       "prof.sidehead1": "学歴",
@@ -1102,6 +1109,11 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "prof.cv1role":"Managing Director and Founder", "prof.cv1where":"Whatthetaste GmbH, Munich — business development, B2B and B2C events",
       "prof.cv2role":"Creative Director and VJ", "prof.cv2where":"licht+spiel, media art — live visuals, projection mapping",
       "prof.cv3role":"Graphic Designer and Automation",
+      "prof.cv4role":"Media Producer", "prof.cv4where":"FTI Touristik GmbH, Munich",
+      "prof.cv6role":"Brand Ambassador Fratelli Branca",
+      "prof.nowwhere":"Hirmer GmbH & Co. KG, Munich",
+      "prof.tool4":"Prompt Engineering", "p8.residencyCity":", Munich",
+      "p8.international":"mission2beach at Club Magic Life, Kemer (2011)",
       "prof.cv5role":"Media Designer and AV Technician",
       "prof.cv7role":"Senior Bartender", "prof.cv8role":"Bartender",
       "prof.sidehead1":"Education", "prof.sidehead2":"Tools", "prof.sidehead3":"Volunteering",
