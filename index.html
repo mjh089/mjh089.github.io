@@ -178,18 +178,18 @@ ul{ list-style:none; }
 @media(max-width:800px){ .p-image{ grid-column:1/span 12; } .p-data{ grid-column:1/span 12; margin-top:22px; } }
 
 .strip{ margin-top:clamp(18px,3vh,28px); padding-top:clamp(14px,2.4vh,20px); border-top:1px solid var(--line);
-  display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gutter); }
-.strip-item.n2{ grid-column:span 6; }
-.strip-item.n3{ grid-column:span 4; }
-.strip-item .thumb{ aspect-ratio:4/5; background:var(--thumb-bg); overflow:hidden; margin-bottom:8px; }
-.strip-item .thumb img{ object-fit:contain; }
+  display:flex; gap:var(--gutter); align-items:stretch; }
+.strip-item{ flex:var(--ar,1) 1 0; min-width:0; display:flex; flex-direction:column; }
+.strip-item .thumb{ aspect-ratio:var(--ar,4/5); background:var(--thumb-bg); overflow:hidden; margin-bottom:8px; }
+.strip-item .thumb img{ width:100%; height:100%; object-fit:cover; }
 .strip-item .label{ display:flex; gap:8px; align-items:baseline; }
 .strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; margin-left:-0.02em; }
 .strip-item .cap{ font-size:11.5px; color:var(--grey); }
-.strip-full{ grid-column:1/-1; }
-.strip-full .thumb{ aspect-ratio:21/9; }
-@media(max-width:800px){ .strip-item.n2, .strip-item.n3{ grid-column:span 6; } }
-@media(max-width:480px){ .strip-item.n2, .strip-item.n3{ grid-column:1/span 12; } }
+.strip-full{ flex-basis:100%; }
+@media(max-width:640px){
+  .strip{ flex-direction:column; }
+  .strip-item{ flex:none; }
+}
 .strip-item.reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
 .strip-item.reveal.in{ opacity:1; transform:none; }
 
@@ -351,9 +351,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb" style="background:#bfb7a3"><img src="images/spring-plan.jpg" width="1400" height="933" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#bfb7a3"><img src="images/spring-plan.jpg" width="1400" height="933" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p1.stripA">Aufbauzeichnung mit Maßen</span></div></div>
-    <div class="strip-item n2"><div class="thumb" style="background:#e8e5de"><img src="images/spring-detail.jpg" width="1000" height="1250" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.8"><div class="thumb" style="background:#e8e5de"><img src="images/spring-detail.jpg" width="1000" height="1250" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p1.stripB">Blumenabhängung über der Auslage</span></div></div>
   </div>
 </section>
@@ -374,9 +374,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb" style="background:#b4b3b1"><img src="images/canadagoose-moodboard.jpg" width="1400" height="933" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#b4b3b1"><img src="images/canadagoose-moodboard.jpg" width="1400" height="933" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p2.stripA">Material, Licht, Location vorab festgelegt</span></div></div>
-    <div class="strip-item n2"><div class="thumb" style="background:#7c786d"><img src="images/canadagoose-bau.jpg" width="1000" height="1249" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.8006"><div class="thumb" style="background:#7c786d"><img src="images/canadagoose-bau.jpg" width="1000" height="1249" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p2.stripB">Schotter, Findlinge, Blitzanlage</span></div></div>
   </div>
 </section>
@@ -397,9 +397,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb" style="background:#807967"><img src="images/tagesbar-plan.jpg" width="1266" height="844" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5"><div class="thumb" style="background:#807967"><img src="images/tagesbar-plan.jpg" width="1266" height="844" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p3.stripA">3D-Voransicht, ins Raumfoto integriert</span></div></div>
-    <div class="strip-item n2"><div class="thumb" style="background:#716b51"><img src="images/tagesbar-detail.jpg" width="1000" height="750" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.3333"><div class="thumb" style="background:#716b51"><img src="images/tagesbar-detail.jpg" width="1000" height="750" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p3.stripB">Trachtenjacken zwischen Kunstbäumen</span></div></div>
   </div>
 </section>
@@ -426,11 +426,11 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n3"><div class="thumb" style="background:#c7bbbf"><img src="images/lego-plan.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4a/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5005"><div class="thumb" style="background:#c7bbbf"><img src="images/lego-plan.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p4.stripA">Fensterabwicklung, visualisiert</span></div></div>
-    <div class="strip-item n3"><div class="thumb" style="background:#5f4e3c"><img src="images/lego-fenster.jpg" width="990" height="1238" alt="Ergebnis" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4b/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:0.7997"><div class="thumb" style="background:#5f4e3c"><img src="images/lego-fenster.jpg" width="990" height="1238" alt="Ergebnis" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p4.stripB">Vom VM-Team umgesetzt</span></div></div>
-    <div class="strip-item n3"><div class="thumb" style="background:#745340"><img src="images/lego-flaeche.jpg" width="1600" height="1066" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4c/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5009"><div class="thumb" style="background:#745340"><img src="images/lego-flaeche.jpg" width="1600" height="1066" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4c/600/750?grayscale';"></div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p4.stripC">Rückwand, Modell, Warenpräsentation</span></div></div>
   </div>
 </section>
@@ -451,11 +451,11 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n3"><div class="thumb" style="background:#6e5748"><img src="images/windsor-aufbau.jpg" width="1400" height="933" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5a/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5005"><div class="thumb" style="background:#6e5748"><img src="images/windsor-aufbau.jpg" width="1400" height="933" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p5.stripA">Sitzreihen mit gefalteter Ware</span></div></div>
-    <div class="strip-item n3"><div class="thumb" style="background:#736155"><img src="images/windsor-detail.jpg" width="1000" height="1250" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5b/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:0.8"><div class="thumb" style="background:#736155"><img src="images/windsor-detail.jpg" width="1000" height="1250" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p5.stripB">Kinosessel als Warenträger</span></div></div>
-    <div class="strip-item n3"><div class="thumb" style="background:#9b9192"><img src="images/windsor-moodboard.jpg" width="1247" height="831" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5c/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5006"><div class="thumb" style="background:#9b9192"><img src="images/windsor-moodboard.jpg" width="1247" height="831" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5c/600/750?grayscale';"></div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p5.stripC">Referenz Deutsche Oper Berlin</span></div></div>
   </div>
 </section>
@@ -476,9 +476,9 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb" style="background:#bbb6b3"><img src="images/fredperry-planung.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#bbb6b3"><img src="images/fredperry-planung.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p6.stripA">3D-Voransicht vor dem Bau</span></div></div>
-    <div class="strip-item n2"><div class="thumb" style="background:#95908a"><img src="images/fredperry-grundriss.jpg" width="704" height="881" alt="Grundriss" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.7991"><div class="thumb" style="background:#95908a"><img src="images/fredperry-grundriss.jpg" width="704" height="881" alt="Grundriss" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p6.stripB">Grundriss, Ansicht von oben</span></div></div>
   </div>
 </section>
@@ -499,7 +499,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item strip-full"><div class="thumb" style="background:#bebcbd"><img src="images/dressler-punktc.jpg" width="1600" height="1066" alt="3D-Voransicht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7a/1600/700?grayscale';"></div>
+    <div class="strip-item strip-full" style="--ar:1.5009"><div class="thumb" style="background:#bebcbd"><img src="images/dressler-punktc.jpg" width="1600" height="1066" alt="3D-Voransicht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7a/1600/700?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p7.stripA">3D-Voransicht der Leuchtkasten-Konstruktion</span></div></div>
   </div>
 </section>
@@ -511,30 +511,34 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     <div class="p-image" style="background:#6e492e"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8/900/620?grayscale';"></div>
     <div class="p-data">
       <h3>licht+spiel</h3>
-      <p class="body-sec" data-i18n="p8.desc">Zehn Jahre Live-Visuals und Projection Mapping. 2010 zeigte licht+spiel im Rathaus Altötting eine erste Retrospektive mit drei Jahren Archivmaterial, eröffnet vom Bürgermeister persönlich.</p>
+      <p class="body-sec" data-i18n="p8.desc">Zehn Jahre Live-Visuals und Projection Mapping — mit einer Residency im Münchner Harry Klein sowie Auftritten beim VJ Festival in Erlangen (2010) und Nürnberg (2013). Für „Vom Lutschlieserl und der Fräulein Irmi" visualisierte ich das von Anton Leiss-Huber geschriebene und produzierte Hörspiel. 2010 zeigte licht+spiel im Rahmen der Reihe „Kultur im Rathaus" in Altötting eine erste Retrospektive mit drei Jahren Archivmaterial; 2011 folgte eine Einzelausstellung im Artspace der Pratersauna Wien.</p>
       <dl class="p-facts">
         <dt data-i18n="lbl.format">Format</dt><dd data-i18n="p8.format">Live-Visuals, Mapping, Installation</dd>
         <dt data-i18n="lbl.rolle">Rolle</dt><dd data-i18n="p8.rolle">Creative Director und VJ</dd>
+        <dt data-i18n="lbl.residency">Residency</dt><dd><a href="https://harrykleinclub.de/" target="_blank" rel="noopener">Harry Klein</a>, München</dd>
+        <dt data-i18n="lbl.clubs">Clubs</dt><dd><a href="https://www.silo1.de/" target="_blank" rel="noopener">Silo1</a> &amp; <a href="https://www.magazinclub.de/" target="_blank" rel="noopener">magazin</a> (Töging am Inn), SUB CLUB &amp; moloko (Burghausen), Viperroom (Rosenheim), Platinum (Eggenfelden), FUXIS (Burghausen), <a href="https://www.bogaloo.de/" target="_blank" rel="noopener">Bogaloo</a> (Pfarrkirchen), <a href="https://www.der-hirsch.com/disco-club.html" target="_blank" rel="noopener">Hirsch</a> (Nürnberg)</dd>
+        <dt data-i18n="lbl.festivals">Festivals</dt><dd>VJ Festival Erlangen (2010) &amp; Nürnberg (2013, Zentralcafé K4), VJ Fest Istanbul (2011), Urban Art Forms Wiener Neustadt (2011), <a href="https://www.facebook.com/PRESSUREfestival/" target="_blank" rel="noopener">Pressure</a> Neumarkt im Hausruck, Playground VJDJ Camp (Sakog, Österreich), Elektrogelände, Utopienwerkstatt (München)</dd>
+        <dt data-i18n="lbl.international">International</dt><dd>mission2beach im Club Magic Life, Kemer (2011)</dd>
         <dt data-i18n="lbl.quelle">Quelle</dt><dd><a href="https://www.sub-bavaria.de/wiki/Licht%2Bspiel" target="_blank" rel="noopener">sub-bavaria.de</a></dd>
         <dt data-i18n="lbl.presse">Presse</dt><dd><a href="https://www.altoetting.de/aktuelles/news/kultur-im-rathaus-vj-team-licht-spiel/" target="_blank" rel="noopener" data-i18n="p8.presseVal">Stadt Altötting, 2010</a></dd>
       </dl>
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2"><div class="thumb" style="background:#362a50"><img src="images/lichtspiel-motiv.jpg" width="1400" height="933" alt="Motiv" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#362a50"><img src="images/lichtspiel-motiv.jpg" width="1400" height="933" alt="Motiv" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8a/600/750?grayscale';"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p8.stripA">Gesicht und Schriftzug im Layer</span></div></div>
-    <div class="strip-item n2"><div class="thumb" style="background:#502342"><img src="images/lichtspiel-mapping.jpg" width="1000" height="1250" alt="Mapping" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.8"><div class="thumb" style="background:#502342"><img src="images/lichtspiel-mapping.jpg" width="1000" height="1250" alt="Mapping" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8b/600/750?grayscale';"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p8.stripB">Projektion über die Raumecke</span></div></div>
   </div>
   <div class="strip">
-    <div class="strip-item n2">
+    <div class="strip-item n2" style="--ar:1.3333">
       <div class="thumb video-thumb" data-video="2O1iceiNoVI" role="button" tabindex="0" aria-label="Video: Techno Francais">
         <img src="https://img.youtube.com/vi/2O1iceiNoVI/hqdefault.jpg" alt="Video" loading="lazy">
         <span class="play-btn" aria-hidden="true">▶</span>
       </div>
       <div class="label"><span class="letter">c</span><span class="cap">Techno Francais, Harry Klein, 08.10.2010</span></div>
     </div>
-    <div class="strip-item n2">
+    <div class="strip-item n2" style="--ar:1.3333">
       <div class="thumb video-thumb" data-video="4aS7LRck3JM" role="button" tabindex="0" aria-label="Video: Cargo Edition Night">
         <img src="https://img.youtube.com/vi/4aS7LRck3JM/hqdefault.jpg" alt="Video" loading="lazy">
         <span class="play-btn" aria-hidden="true">▶</span>
@@ -822,6 +826,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "nav.grid":"Grid", "nav.dark":"Dark",
       "lbl.marke":"Brand", "lbl.flaeche":"Space", "lbl.rolle":"Role", "lbl.presse":"Press",
       "lbl.format":"Format", "lbl.quelle":"Source", "lbl.kontakt":"Contact",
+      "lbl.residency":"Residency", "lbl.clubs":"Clubs", "lbl.festivals":"Festivals", "lbl.international":"International",
       "hero.role1":"Visual Marketing", "hero.role2":"Retail Design", "hero.role3":"Creative Ops",
       "hero.city":"Munich",
       "idx.date1":"Spring 2023", "idx.date2":"Fall 2023", "idx.date3":"Fall 2025", "idx.name4":"Freude schenken", "idx.date4":"Christmas 2023", "idx.date5":"Fall 2023",
@@ -868,7 +873,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "p7.stripA":"3D preview of the lightbox construction",
 
       "p8.kicker":"Media art — 2007–2017",
-      "p8.desc":"Ten years of live visuals and projection mapping. In 2010, licht+spiel showed a first retrospective with three years of archive material at Altötting town hall, opened by the mayor himself.",
+      "p8.desc":"Ten years of live visuals and projection mapping — with a residency at Munich's Harry Klein plus performances at the VJ Festival in Erlangen (2010) and Nuremberg (2013). For 'Vom Lutschlieserl und der Fräulein Irmi' I created the visuals for the radio play written and produced by Anton Leiss-Huber. In 2010, licht+spiel presented a first retrospective with three years of archive material as part of the 'Kultur im Rathaus' series in Altötting; in 2011 followed a solo exhibition at the Pratersauna Vienna Artspace.",
       "p8.format":"Live visuals, mapping, installation", "p8.rolle":"Creative director and VJ",
       "p8.presseVal":"City of Altötting, 2010",
       "p8.stripA":"Face and text in a projected layer", "p8.stripB":"Projection across the room corner",
