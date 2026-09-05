@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seite nicht gefunden — Michael J. Hofauer</title>
 <meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <style>
   html{ scrollbar-width:thin; scrollbar-color:#aaa transparent; }
   ::-webkit-scrollbar{ width:9px; }
@@ -41,11 +43,20 @@
     text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:2px;
   }
   a:hover{ color:var(--red); border-color:var(--red); }
+  /* Zweit- und Drittsprache kleiner, damit Deutsch die Hauptfassung bleibt */
+  p.alt{ font-size:clamp(.85rem,1.2vw,1rem); margin-bottom:clamp(8px,1.4vh,14px); }
+  p[lang="ja"]{
+    font-family:"Helvetica Neue", Helvetica, Arial, "Hiragino Sans",
+                "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Yu Gothic", Meiryo, sans-serif;
+    line-height:1.8; letter-spacing:.02em;
+  }
 </style>
 </head>
 <body>
   <p class="num">4<span>0</span>4</p>
   <p>Diese Seite gibt es nicht — oder nicht mehr. Vielleicht ist der Link veraltet.</p>
+  <p class="alt" lang="en">This page does not exist — or no longer does. The link may be out of date.</p>
+  <p class="alt" lang="ja">このページは存在しないか、すでに削除されている。リンクが古い可能性がある。</p>
   <a href="/">Zurück zur Startseite ↓</a>
 </body>
 </html>
