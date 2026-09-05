@@ -267,6 +267,34 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 .colophon{ display:flex; justify-content:space-between; padding-top:16px; border-top:1px solid var(--line); margin-top:20px; }
 .colophon span{ font-size:11px; color:var(--grey); }
 
+
+/* ============================================================
+   JAPANISCH — Typografie
+   Lateinische Schnitte zuerst, damit Zahlen und Eigennamen in der
+   Helvetica bleiben; Kana und Kanji greifen auf die System-Gothic-
+   Schnitte zurueck. Kein Webfont, keine externe Abhaengigkeit.
+   ============================================================ */
+html[lang="ja"]{
+  --font:"Helvetica Neue", Helvetica, Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+         "Yu Gothic Medium", "Yu Gothic", "Noto Sans JP", Meiryo, sans-serif;
+}
+html[lang="ja"] body{ letter-spacing:.02em; line-height:1.85; font-feature-settings:"palt" 1; }
+html[lang="ja"] p, html[lang="ja"] li, html[lang="ja"] dd, html[lang="ja"] dt, html[lang="ja"] .cap{
+  word-break:normal; line-break:strict; overflow-wrap:break-word;
+}
+html[lang="ja"] .body-sec, html[lang="ja"] .lede{ line-height:1.95; letter-spacing:.035em; }
+html[lang="ja"] .cap{ line-height:1.7; letter-spacing:.02em; }
+html[lang="ja"] .p-facts dt, html[lang="ja"] .tool-btn, html[lang="ja"] .p-head{ letter-spacing:.09em; }
+html[lang="ja"] .display{ letter-spacing:-.045em; }
+html[lang="ja"] .idx-name{ letter-spacing:-.01em; }
+
+.head-name-ja{
+  grid-column:1/span 7; display:block; margin-top:16px;
+  font-size:13px; font-weight:400; color:var(--grey); letter-spacing:.34em;
+}
+html:not([lang="ja"]) .head-name-ja{ display:none; }
+@media(max-width:800px){ .head-name-ja{ grid-column:1/span 12; } }
+
 @media print{
   .bar,#gridOverlay,#scrollProgress,.cursor-ring,.play-btn{ display:none !important; }
   html,html[data-theme="dark"]{ --paper:#fff !important; --ink:#000 !important; --grey:#555 !important; --line:#ccc !important; }
@@ -310,6 +338,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 <!-- ========================= KOPF ========================= -->
 <section class="head wrap grid">
   <h1 class="head-name display">Michael J.<br>Hofauer</h1>
+  <span class="head-name-ja" aria-hidden="true">ミヒャエル・J・ホファウアー</span>
   <div class="head-meta">
     <p><b data-i18n="hero.role1">Visual Marketing</b><br><span data-i18n="hero.role2">Retail Design</span><br><span data-i18n="hero.role3">Creative Ops</span></p>
     <p style="margin-top:10px" data-i18n="hero.city">München</p>
@@ -720,12 +749,20 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     projectSections.forEach(function(s){ wayfinder.observe(s); });
   }
 
+  function themeLabel(lang, t){
+    if(lang === 'ja') return (t === 'dark') ? 'ライト' : 'ダーク';
+    if(lang === 'de') return (t === 'dark') ? 'Hell' : 'Dunkel';
+    return (t === 'dark') ? 'Light' : 'Dark';
+  }
+  var langOrder = ['de','en','ja'];
+  var langBtnLabel = { de:'EN', en:'日本語', ja:'DE' };
+
   /* ---------- Dark Mode ---------- */
   var root = document.documentElement;
   var themeBtn = document.getElementById('themeToggle');
   function applyTheme(t){
     root.dataset.theme = t;
-    themeBtn.textContent = (currentLang==='de') ? (t==='dark' ? 'Hell' : 'Dunkel') : (t==='dark' ? 'Light' : 'Dark');
+    themeBtn.textContent = themeLabel(currentLang, t);
     try{ localStorage.setItem('mjh-theme', t); }catch(e){}
   }
   var savedTheme = 'light';
@@ -820,6 +857,159 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
      Rechtlich maßgeblich bleibt in jedem Fall die deutsche Fassung.
      ============================================================ */
   var i18n = {
+    ja: {
+      "nav.index": "作品",
+      "nav.profil": "経歴",
+      "nav.kontakt": "連絡先",
+      "nav.grid": "グリッド",
+      "nav.dark": "ダーク",
+      "lbl.marke": "ブランド",
+      "lbl.flaeche": "空間",
+      "lbl.rolle": "担当",
+      "lbl.presse": "掲載",
+      "lbl.format": "形式",
+      "lbl.kontakt": "連絡先",
+      "lbl.residency": "レジデンシー",
+      "lbl.clubs": "クラブ",
+      "lbl.festivals": "フェスティバル",
+      "lbl.international": "海外",
+      "hero.role1": "ビジュアルマーケティング",
+      "hero.role2": "リテールデザイン",
+      "hero.role3": "クリエイティブオペレーション",
+      "hero.city": "ミュンヘン",
+      "idx.date1": "2023年春",
+      "idx.date2": "2023年秋",
+      "idx.date3": "2025年秋",
+      "idx.name4": "Freude schenken",
+      "idx.date4": "2023年クリスマス",
+      "idx.date5": "2023年秋",
+      "idx.date6": "2024年秋",
+      "idx.date7": "2024年夏",
+      "p1.kicker": "Hirmer — 2023年春",
+      "p1.desc": "建物全体をアルプスの草原に変える。担当はビジュアライゼーション。この可視化があってはじめて必要量を算出でき、花が八週間もつことは当初からの条件だった。",
+      "p1.flaeche": "ショーウィンドウと売場",
+      "p1.rolle": "コンセプト、ビジュアライゼーション",
+      "p1.stat1": "花",
+      "p1.stat2": "ワイヤー",
+      "p1.stat3": "草原",
+      "p1.stat4": "VMチーム作業時間",
+      "p1.stat1val": "50,000",
+      "p1.stat2val": "20,000 m",
+      "p1.stat3val": "1,000 m²",
+      "p1.stripA": "寸法入りの施工図",
+      "p1.stripB": "陳列上部への花の吊り込み",
+      "p2.kicker": "Canada Goose — 2023年秋",
+      "p2.desc": "売場を写真スタジオに。スレート、巨石、スタジオ照明を店内の中央に持ち込んだ。ここでのムードボードは飾りではなく、施工の指示書そのもの。",
+      "p2.flaeche": "ポップアップ",
+      "p2.rolle": "コンセプト、ムードボード、ビジュアルディレクション",
+      "p2.stripA": "素材・照明・ロケーションを事前に確定",
+      "p2.stripB": "砂利、巨石、ストロボ機材",
+      "p3.kicker": "Hirmer — 2025年秋",
+      "p3.desc": "3階のデイバーは季節ごとに設えを変える。2025年秋のテーマは民族衣装トラハト。3Dプランから完成した空間まで、施工はVMチームが担当した。",
+      "p3.flaeche": "デイバー、3階",
+      "p3.rolle": "コンセプト、3Dプランニング、詳細設計",
+      "p3.stripA": "空間写真に合成した3Dプレビュー",
+      "p3.stripB": "人工樹のあいだに配したトラハトのジャケット",
+      "p4.kicker": "Hirmer × LEGO — 2023年クリスマス",
+      "p4.title": "Freude schenken",
+      "p4.desc": "LEGOとのクリスマス企画を、上長と調整しながら建物全体の規模で共同立案した。ビジュアライゼーションとウィンドウ展開図への落とし込みは自ら担当し、施工はVMチームが行った。",
+      "p4.flaeche": "建物全体",
+      "p4.rolle": "コンセプト、プランニング、調整",
+      "p4.stat1": "ブロック数（企画全体）",
+      "p4.stat1val": "800,000以上",
+      "p4.stat2": "トナカイのそり",
+      "p4.stat2val": "240,000ブロック",
+      "p4.stat3": "階段室の世界",
+      "p4.stat3val": "30,000ブロック",
+      "p4.stripA": "ウィンドウ展開図のビジュアライゼーション",
+      "p4.stripB": "VMチームによる施工",
+      "p4.stripC": "背面壁、モデル、商品構成",
+      "p5.kicker": "Windsor — 2023年秋",
+      "p5.desc": "待合スペースを映画館に。古い劇場椅子を什器として使い、背景のスクリーンにはロゴを映す。本来なら腰を下ろす場所に、商品が置かれている。",
+      "p5.flaeche": "1階のポップアップ",
+      "p5.rolle": "コンセプト、小道具、プランニング",
+      "p5.stripA": "折り畳んだ商品を並べた座席列",
+      "p5.stripB": "什器としての劇場椅子",
+      "p5.stripC": "参照：ベルリン・ドイツ・オペラ",
+      "p6.kicker": "Fred Perry — 2024年秋",
+      "p6.desc": "手元にあるのはオンラインショップの商品写真だけで、空間の下敷きはない。画像をライトボックス上にグリッド状に並べ、その手前に同じ装いのマネキンを一体、そしてロゴを金のカッティングシートで。",
+      "p6.flaeche": "ショーウィンドウ",
+      "p6.rolle": "コンセプト、ライトボックス設計、原案",
+      "p6.stripA": "施工前の3Dプレビュー",
+      "p6.stripB": "平面図、上からの視点",
+      "p7.kicker": "Dressler — 2024年夏",
+      "p7.desc": "二分割の金色のライトボックスの前に、ジャケット五着がナイロン糸で浮かぶ。狙いは、そのジャケットが驚くほど軽いことを見せることにあった。",
+      "p7.flaeche": "ショーウィンドウ",
+      "p7.rolle": "コンセプト、グラフィック、ビジュアライゼーション",
+      "p7.stripA": "ライトボックス構造の3Dプレビュー",
+      "p8.kicker": "メディアアート — 2007–2017",
+      "p8.desc": "ライブビジュアルとプロジェクションマッピングの十年。ミュンヘンのHarry Kleinでのレジデンシーに加え、エアランゲン（2010年）とニュルンベルク（2013年）のVJ Festivalに出演。『Vom Lutschlieserl und der Fräulein Irmi』では、Anton Leiss-Huberが脚本・制作したラジオドラマにビジュアルをつけた。2010年にはアルトエッティングの「Kultur im Rathaus」の一環として、三年分のアーカイブによる最初の回顧展を開催。2011年にはウィーンのPratersauna Artspaceで個展。",
+      "p8.format": "ライブビジュアル、マッピング、インスタレーション",
+      "p8.rolle": "クリエイティブディレクター／VJ",
+      "p8.presseVal": "アルトエッティング市、2010年",
+      "p8.stripA": "顔と文字を重ねたレイヤー",
+      "p8.stripB": "部屋の角をまたぐ投影",
+      "prof.lede": "手仕事とテクノロジーの交点で仕事をしている。シーズンコンセプトから3Dビジュアライゼーション、そして組み上がった売場まで。Hirmerでは3Dレンダリングを計画の標準として定着させ、生成AIのワークフローを早い段階で設計・計画のプロセスに組み込んだ。",
+      "prof.since": "2022年6月 – 現在",
+      "prof.title": "シニア・ビジュアルマーケティング／クリエイティブオペレーション",
+      "prof.duty1": "データにもとづくVMシーズンコンセプトとPOSキャンペーン",
+      "prof.duty2": "業務プロセスの最適化と自作ツール（Google Apps Script、InDesign）",
+      "prof.duty3": "計画ツールとしての3Dレンダリング導入（Substance 3D）",
+      "prof.duty4": "デジタルサイネージとPOSのLEDティッカー",
+      "prof.duty5": "専門面での指導と若手メンバーのメンタリング",
+      "prof.duty6": "社内AIプロジェクトグループのメンバー",
+      "prof.trackhead1": "プロジェクトと創業",
+      "prof.trackhead2": "グラフィックと制作",
+      "prof.trackhead3": "オペレーション",
+      "prof.cv1role": "代表取締役・創業者",
+      "prof.cv1where": "Whatthetaste GmbH、ミュンヘン — 事業開発、B2B・B2Cイベント",
+      "prof.cv2role": "クリエイティブディレクター／VJ",
+      "prof.cv2where": "licht+spiel、メディアアート — ライブビジュアル、プロジェクションマッピング",
+      "prof.cv3role": "グラフィッカー／オートメーション",
+      "prof.cv5role": "メディアデザイナー／AVテクニシャン",
+      "prof.cv7role": "シニアバーテンダー",
+      "prof.cv8role": "バーテンダー",
+      "prof.sidehead1": "学歴",
+      "prof.sidehead2": "ツール",
+      "prof.sidehead3": "社会活動",
+      "prof.side1role": "メディアデザイナー（デジタル／印刷）",
+      "prof.side2role": "演劇学",
+      "prof.side3role": "アビトゥーア（大学入学資格）",
+      "prof.expert": "— エキスパート",
+      "prof.eng1": "ミュンヘン区裁判所 参審員",
+      "prof.eng2": "Hirmer 救急要員",
+      "foot.adresse": "住所",
+      "foot.plzort": "81677 ミュンヘン",
+      "foot.telefon": "電話",
+      "foot.email": "メール",
+      "foot.online": "オンライン",
+      "foot.copy": "© 2026 Michael J. Hofauer",
+      "foot.city": "ミュンヘン",
+      "legal.impressum": "運営者情報",
+      "legal.datenschutz": "プライバシーポリシー",
+      "legal.angaben": "ドイツ・デジタルサービス法（DDG）第5条にもとづく表示",
+      "legal.deutschland": "ドイツ",
+      "legal.tel": "電話",
+      "legal.bildrechte": "画像の権利",
+      "legal.bildrechteText": "掲載しているすべての制作物は著作権で保護されている。クライアント案件の利用権は各発注者に帰属する。",
+      "legal.h.verantwortlich": "管理者",
+      "legal.p.verantwortlich": "本ウェブサイトにおけるデータ処理の管理者は Michael J. Hofauer（Einsteinstr. 187, 81677 München, Germany、メール: m.hofauer@me.com）。",
+      "legal.h.grundsatz": "基本方針",
+      "legal.p.grundsatz": "本サイトは情報提供のみを目的としたオンラインポートフォリオである。問い合わせフォーム、クッキー、アクセス解析・トラッキングサービス、広告はいっさい使用していない。あらゆるウェブサイトの閲覧時に技術上必然的に生じる接続データ（「ホスティング」参照）を除き、個人データを能動的に収集することはない。",
+      "legal.h.hosting": "ホスティング",
+      "legal.p.hosting": "本サイトは GitHub, Inc.（88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA、Microsoft傘下）のサービス GitHub Pages でホスティングされている。ページの閲覧時、GitHubはサーバーのログに技術的な接続データを自動的に記録する。法的根拠はGDPR第6条1項(f)。GitHubはEU-US Data Privacy Frameworkの認証を受けている。詳細：GitHub Privacy Statement",
+      "legal.h.fonts": "フォント",
+      "legal.p.fonts": "本サイトは閲覧端末にすでに存在するシステムフォントのみを使用する。フォント提供事業者へのデータ送信は発生しない。",
+      "legal.h.youtube": "YouTube動画の埋め込み",
+      "legal.p.youtube": "「licht+spiel」の項ではYouTubeの動画をリンクしており、初期状態ではサムネイル画像のみを表示する。クリックした場合にかぎり、プライバシー強化モード（youtube-nocookie.com）でプレーヤーを読み込む。法的根拠はクリックによる同意（GDPR第6条1項(a)）。詳細：Googleプライバシーポリシー",
+      "legal.h.kontaktaufnahme": "お問い合わせ",
+      "legal.p.kontaktaufnahme": "メールまたは電話で連絡した場合、提供された情報は問い合わせ対応のためにのみ処理され（GDPR第6条1項(f)または(b)）、不要になり次第削除される。",
+      "legal.h.rechte": "利用者の権利",
+      "legal.p.rechte": "アクセス、訂正、削除、処理の制限、データポータビリティ、異議申立ての権利がある（GDPR第15–21条）。上記の連絡先まで。",
+      "legal.h.beschwerde": "苦情申立ての権利",
+      "legal.p.beschwerde": "管轄監督機関はバイエルン州データ保護監督局（BayLDA）、Promenade 27, 91522 Ansbach, Germany。",
+      "legal.note": "この日本語版は理解のための参考訳である。法的に有効なのはドイツ語版のみ。"
+    },
     en: {
       "nav.index":"Index", "nav.profil":"Profile", "nav.kontakt":"Contact",
       "nav.grid":"Grid", "nav.dark":"Dark",
@@ -931,12 +1121,12 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
   function setLang(lang){
     currentLang = lang;
     document.documentElement.lang = lang;
-    langBtn.textContent = (lang === 'de') ? 'EN' : 'DE';
-    themeBtn.textContent = (lang==='de') ? (root.dataset.theme==='dark' ? 'Hell' : 'Dunkel') : (root.dataset.theme==='dark' ? 'Light' : 'Dark');
-    if(lang === 'en'){
+    langBtn.textContent = langBtnLabel[lang];
+    themeBtn.textContent = themeLabel(lang, root.dataset.theme);
+    if(i18n[lang]){
       document.querySelectorAll('[data-i18n]').forEach(function(el){
         var key = el.dataset.i18n;
-        if(i18n.en[key] !== undefined) el.textContent = i18n.en[key];
+        if(i18n[lang][key] !== undefined) el.textContent = i18n[lang][key];
       });
     } else {
       /* zurueck auf Deutsch: Seite ist im deutschen Ausgangszustand einfach neu laden */
@@ -947,11 +1137,13 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
     try{ localStorage.setItem('mjh-lang', lang); }catch(e){}
   }
 
-  langBtn.addEventListener('click', function(){ setLang(currentLang === 'de' ? 'en' : 'de'); });
+  langBtn.addEventListener('click', function(){
+    setLang(langOrder[(langOrder.indexOf(currentLang) + 1) % langOrder.length]);
+  });
 
   var savedLang = 'de';
   try{ savedLang = localStorage.getItem('mjh-lang') || 'de'; }catch(e){}
-  if(savedLang === 'en'){ setLang('en'); }
+  if(savedLang !== 'de'){ setLang(savedLang); }
 })();
 </script>
 
