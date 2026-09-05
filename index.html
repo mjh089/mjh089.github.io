@@ -320,12 +320,12 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 <!-- ========================= INDEX ========================= -->
 <section class="index-section wrap" id="index">
   <a class="index-row" href="#p1"><span class="idx-num">01</span><span class="idx-name">Spring Inside</span><span class="idx-year" data-i18n="idx.date1">Frühjahr 2023</span></a>
-  <a class="index-row" href="#p2"><span class="idx-num">02</span><span class="idx-name">Backstage Nature</span><span class="idx-year">Fall 2023</span></a>
+  <a class="index-row" href="#p2"><span class="idx-num">02</span><span class="idx-name">Backstage Nature</span><span class="idx-year" data-i18n="idx.date2">Herbst 2023</span></a>
   <a class="index-row" href="#p3"><span class="idx-num">03</span><span class="idx-name">Tagesbar Tracht</span><span class="idx-year" data-i18n="idx.date3">Herbst 2025</span></a>
   <a class="index-row" href="#p4"><span class="idx-num">04</span><span class="idx-name" data-i18n="idx.name4">Freude schenken</span><span class="idx-year" data-i18n="idx.date4">Weihnachten 2023</span></a>
   <a class="index-row" href="#p5"><span class="idx-num">05</span><span class="idx-name">Windsor Pop-up</span><span class="idx-year" data-i18n="idx.date5">Herbst 2023</span></a>
-  <a class="index-row" href="#p6"><span class="idx-num">06</span><span class="idx-name">Fred Perry Window</span><span class="idx-year">Fall 2024</span></a>
-  <a class="index-row" href="#p7"><span class="idx-num">07</span><span class="idx-name">Dressler Window</span><span class="idx-year">Summer 2024</span></a>
+  <a class="index-row" href="#p6"><span class="idx-num">06</span><span class="idx-name">Fred Perry Window</span><span class="idx-year" data-i18n="idx.date6">Herbst 2024</span></a>
+  <a class="index-row" href="#p7"><span class="idx-num">07</span><span class="idx-name">Dressler Window</span><span class="idx-year" data-i18n="idx.date7">Sommer 2024</span></a>
   <a class="index-row" href="#p8"><span class="idx-num">08</span><span class="idx-name">licht+spiel</span><span class="idx-year">2007–2017</span></a>
 </section>
 
@@ -360,7 +360,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 02 BACKSTAGE NATURE ========================= -->
 <section class="project wrap" id="p2">
-  <div class="p-head"><span class="p-num">02</span><span>Canada Goose — Fall 2023</span></div>
+  <div class="p-head"><span class="p-num">02</span><span data-i18n="p2.kicker">Canada Goose — Herbst 2023</span></div>
   <div class="grid">
     <div class="p-image" style="background:#736e68"><img src="images/canadagoose-hero.jpg" width="2000" height="1250" alt="Backstage Nature" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2/900/620?grayscale';"></div>
     <div class="p-data">
@@ -462,7 +462,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 06 FRED PERRY ========================= -->
 <section class="project wrap" id="p6">
-  <div class="p-head"><span class="p-num">06</span><span>Fred Perry — Fall 2024</span></div>
+  <div class="p-head"><span class="p-num">06</span><span data-i18n="p6.kicker">Fred Perry — Herbst 2024</span></div>
   <div class="grid">
     <div class="p-image" style="background:#787066"><img src="images/fredperry-hero.jpg" width="1131" height="706" alt="Fred Perry Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6/900/620?grayscale';"></div>
     <div class="p-data">
@@ -485,7 +485,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 
 <!-- ========================= 07 DRESSLER ========================= -->
 <section class="project wrap" id="p7">
-  <div class="p-head"><span class="p-num">07</span><span>Dressler — Summer 2024</span></div>
+  <div class="p-head"><span class="p-num">07</span><span data-i18n="p7.kicker">Dressler — Sommer 2024</span></div>
   <div class="grid">
     <div class="p-image" style="background:#7b7b7b"><img src="images/dressler-hero.jpg" width="2000" height="1250" alt="Dressler Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7/900/620?grayscale';"></div>
     <div class="p-data">
@@ -678,6 +678,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var currentLang = 'de';
 
   /* ---------- Videos: erst nach Klick laden ---------- */
   document.querySelectorAll('.video-thumb').forEach(function(el){
@@ -823,7 +824,8 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "lbl.format":"Format", "lbl.quelle":"Source", "lbl.kontakt":"Contact",
       "hero.role1":"Visual Marketing", "hero.role2":"Retail Design", "hero.role3":"Creative Ops",
       "hero.city":"Munich",
-      "idx.date1":"Spring 2023", "idx.date3":"Fall 2025", "idx.name4":"Freude schenken", "idx.date4":"Christmas 2023", "idx.date5":"Fall 2023",
+      "idx.date1":"Spring 2023", "idx.date2":"Fall 2023", "idx.date3":"Fall 2025", "idx.name4":"Freude schenken", "idx.date4":"Christmas 2023", "idx.date5":"Fall 2023",
+      "idx.date6":"Fall 2024", "idx.date7":"Summer 2024",
 
       "p1.kicker":"Hirmer — Spring 2023",
       "p1.desc":"The whole store becomes an alpine meadow. My part was the visualisation — it was the basis on which quantities could be calculated, and the flowers had to last eight weeks from the start.",
@@ -833,6 +835,7 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "p1.stripA":"Build drawing with measurements", "p1.stripB":"Flower installation above the display",
 
       "p2.desc":"A photo studio as sales floor: slate, boulders and studio lighting in the middle of the store. The moodboard wasn't decoration here — it was the build instructions.",
+      "p2.kicker":"Canada Goose — Fall 2023",
       "p2.flaeche":"Pop-up", "p2.rolle":"Concept, moodboard, visual direction",
       "p2.stripA":"Material, light and location set in advance", "p2.stripB":"Gravel, boulders, studio lights",
 
@@ -855,10 +858,12 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
       "p5.stripA":"Seating rows with folded merchandise", "p5.stripB":"Cinema seats as product displays", "p5.stripC":"Reference: Deutsche Oper Berlin",
 
       "p6.desc":"Only product photos from the online shop, no spatial template. The images ran in a grid on a lightbox, with a single figure in front wearing the exact same outfit, plus the logo as a gold foil plot.",
+      "p6.kicker":"Fred Perry — Fall 2024",
       "p6.flaeche":"Shop window", "p6.rolle":"Concept, lightbox design, draft",
       "p6.stripA":"3D preview before the build", "p6.stripB":"Floor plan, top view",
 
       "p7.desc":"Five blazers float on nylon threads in front of a two-part, gold-backed lightbox. The idea behind it: to show that the blazers are unusually light.",
+      "p7.kicker":"Dressler — Summer 2024",
       "p7.flaeche":"Shop window", "p7.rolle":"Concept, graphics, visualisation",
       "p7.stripA":"3D preview of the lightbox construction",
 
@@ -917,7 +922,6 @@ details[open] .sign::after{ transform:translate(-50%,-50%) scaleY(0); }
   };
   i18n.de = {}; /* Deutsch = Ausgangszustand im HTML, wird nicht ersetzt */
 
-  var currentLang = 'de';
   var langBtn = document.getElementById('langToggle');
 
   function setLang(lang){
