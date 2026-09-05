@@ -88,14 +88,35 @@ ul{ list-style:none; }
 .bar nav a{ color:var(--grey); transition:color .2s ease; }
 .bar nav a:hover{ color:var(--ink); }
 .bar-tools{ display:flex; gap:8px; }
-@media(max-width:640px){ .bar nav a:not(.tool-link){ display:none; } }
+.bar > b{ white-space:nowrap; }
+.brand-short{ display:none; }
+@media(max-width:640px){
+  .bar nav a:not(.tool-link){ display:none; }
+  /* enger setzen, damit die laengeren japanischen Beschriftungen einzeilig bleiben */
+  .bar-tools{ gap:6px; }
+  .tool-btn, .lang-opt{ font-size:11px; padding:4px 7px; }
+  .brand-full{ display:none; }
+  .brand-short{ display:inline; letter-spacing:.08em; }
+}
 
 .tool-btn{
-  font-family:var(--font); font-size:12px;
+  font-family:var(--font); font-size:12px; white-space:nowrap;
   background:var(--paper); border:1px solid var(--ink); color:var(--ink);
   padding:5px 10px; cursor:pointer; transition:background .2s ease, color .2s ease;
 }
 .tool-btn:hover{ background:var(--ink); color:var(--paper); }
+
+/* Sprachauswahl: drei Felder in einem Rahmen, das aktive gefuellt */
+.lang-select{ display:flex; border:1px solid var(--ink); }
+.lang-opt{
+  font-family:var(--font); font-size:12px; line-height:1; white-space:nowrap;
+  background:var(--paper); color:var(--ink); border:0;
+  padding:6px 9px; cursor:pointer;
+  transition:background .2s ease, color .2s ease;
+}
+.lang-opt + .lang-opt{ border-left:1px solid var(--ink); }
+.lang-opt:hover{ background:var(--line); }
+.lang-opt[aria-current="true"]{ background:var(--ink); color:var(--paper); }
 
 /* ---------- Raster ---------- */
 #gridOverlay{
@@ -314,7 +335,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <body>
 
 <header class="bar">
-  <b>Michael J. Hofauer</b>
+  <b><span class="brand-full">Michael J. Hofauer</span><span class="brand-short">MJH</span></b>
   <nav>
     <a href="#index" data-i18n="nav.index">Index</a>
     <a href="#profil" data-i18n="nav.profil">Profil</a>
@@ -322,7 +343,11 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     <div class="bar-tools">
       <button class="tool-btn" id="gridToggle" data-i18n="nav.grid">Raster</button>
       <button class="tool-btn" id="themeToggle" data-i18n="nav.dark">Dunkel</button>
-      <button class="tool-btn" id="langToggle">EN</button>
+      <div class="lang-select" role="group" aria-label="Sprache · Language · 言語">
+        <button class="lang-opt" data-lang="de" lang="de" aria-current="true">DE</button>
+        <button class="lang-opt" data-lang="en" lang="en" aria-current="false">EN</button>
+        <button class="lang-opt" data-lang="ja" lang="ja" aria-current="false">日本語</button>
+      </div>
     </div>
   </nav>
 </header>
@@ -754,8 +779,6 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     if(lang === 'de') return (t === 'dark') ? 'Hell' : 'Dunkel';
     return (t === 'dark') ? 'Light' : 'Dark';
   }
-  var langOrder = ['de','en','ja'];
-  var langBtnLabel = { de:'EN', en:'日本語', ja:'DE' };
 
   /* ---------- Dark Mode ---------- */
   var root = document.documentElement;
@@ -1116,29 +1139,38 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
   };
   i18n.de = {}; /* Deutsch = Ausgangszustand im HTML, wird nicht ersetzt */
 
-  var langBtn = document.getElementById('langToggle');
+  var langBtns = document.querySelectorAll('.lang-opt');
+
+  function markLang(lang){
+    langBtns.forEach(function(b){
+      b.setAttribute('aria-current', b.dataset.lang === lang ? 'true' : 'false');
+    });
+  }
 
   function setLang(lang){
+    /* Unbekannte Sprache faellt auf den Ausgangszustand zurueck */
+    if(lang !== 'de' && !i18n[lang]) lang = 'de';
     currentLang = lang;
     document.documentElement.lang = lang;
-    langBtn.textContent = langBtnLabel[lang];
+    markLang(lang);
     themeBtn.textContent = themeLabel(lang, root.dataset.theme);
-    if(i18n[lang]){
-      document.querySelectorAll('[data-i18n]').forEach(function(el){
-        var key = el.dataset.i18n;
-        if(i18n[lang][key] !== undefined) el.textContent = i18n[lang][key];
-      });
-    } else {
-      /* zurueck auf Deutsch: Seite ist im deutschen Ausgangszustand einfach neu laden */
+    if(lang === 'de'){
+      /* Deutsch steht als Ausgangszustand im HTML — neu laden stellt ihn wieder her */
       try{ localStorage.setItem('mjh-lang', 'de'); }catch(e){}
       location.reload();
       return;
     }
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.dataset.i18n;
+      if(i18n[lang][key] !== undefined) el.textContent = i18n[lang][key];
+    });
     try{ localStorage.setItem('mjh-lang', lang); }catch(e){}
   }
 
-  langBtn.addEventListener('click', function(){
-    setLang(langOrder[(langOrder.indexOf(currentLang) + 1) % langOrder.length]);
+  langBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      if(b.dataset.lang !== currentLang) setLang(b.dataset.lang);
+    });
   });
 
   var savedLang = 'de';
