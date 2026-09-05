@@ -5,7 +5,7 @@ keine externen Abhängigkeiten — auch keine Google Fonts, nur der
 System-Schriftstack (`Helvetica Neue`, Helvetica, Arial, sans-serif).
 
 Design: Swiss-Grid-System (12-Spalten-Raster, Rasterschalter, Hell/Dunkel-
-Umschalter, DE/EN), inspiriert von Josef Müller-Brockmann / Karl Gerstner.
+Umschalter, DE/EN/JA), inspiriert von Josef Müller-Brockmann / Karl Gerstner.
 
 ## Ordnerstruktur
 
@@ -14,16 +14,28 @@ Umschalter, DE/EN), inspiriert von Josef Müller-Brockmann / Karl Gerstner.
 ├── index.html
 ├── 404.html
 ├── CNAME          → enthält: michaelhofauer.com
+├── robots.txt
+├── sitemap.xml
+├── llms.txt       → Kurzüberblick für KI-Crawler
 └── images/
 ```
+
+Die Seite lädt nichts von fremden Servern. Eine Content-Security-Policy im
+`<head>` erzwingt das technisch: erlaubt sind nur eigene Dateien, `data:` für
+das Favicon und `youtube-nocookie.com` als Frame — Letzteres greift erst, wenn
+jemand ein Video anklickt. Wer eine externe Einbindung ergänzt, muss die Policy
+bewusst aufmachen; das ist die Bremse, die verhindert, dass die Aussagen in der
+Datenschutzerklärung unbemerkt unwahr werden.
 
 ## Bilder, die die Seite erwartet
 
 Dateinamen exakt so, alles klein geschrieben. GitHub Pages unterscheidet Groß-
 und Kleinschreibung — `Fredperry-Hero.JPG` wird nicht gefunden,
-`fredperry-hero.jpg` schon. Solange eine Datei fehlt, springt der
-`onerror`-Fallback auf picsum ein; die Seite sieht also nie kaputt aus, auch
-nicht halb befüllt.
+`fredperry-hero.jpg` schon. Es gibt bewusst keinen Platzhalter-Dienst als
+Rückfallebene mehr: Die Seite lädt ausschließlich Dateien von der eigenen
+Domain, damit die Zusage in der Datenschutzerklärung technisch stimmt. Fehlt
+eine Datei, bleibt die Fläche leer — das fällt beim Prüfen auf, statt sich
+hinter einem Fremdbild zu verstecken.
 
 ### Projekte
 
@@ -55,20 +67,25 @@ nicht halb befüllt.
 | `lichtspiel-motiv.jpg` | Gesichtsprojektion mit Textmotiv, Text vollständig lesbar | 3:2 |
 | `lichtspiel-mapping.jpg` | Gespiegelte Projektion über die Raumecke | 4:5 |
 
-Die Prozessbilder mit landschaftlichem Format (3:2) laufen in der
-Prozessreihe per `object-fit:contain` — sie werden nicht beschnitten, sondern
-zeigen das komplette Bild auf grauem Grund (`--thumb-bg`).
+Die Prozessreihen setzen die Bilder als ausgerichtete Zeile: Alle Bilder
+einer Reihe teilen sich dieselbe Höhe, die Breite ergibt sich aus dem
+jeweiligen Seitenverhältnis (`--ar` am `.strip-item`, Flexbox verteilt
+proportional). Dadurch wird nichts beschnitten und es entstehen keine Ränder.
+Wird ein Bild ausgetauscht, muss `--ar` mitgezogen werden.
 
 Zwei licht+spiel-Prozessbilder sind entfallen — es werden stattdessen zwei
 YouTube-Videos eingebunden (IDs `2O1iceiNoVI` und `4aS7LRck3JM`), über
-`youtube-nocookie.com`, geladen erst nach Klick.
+`youtube-nocookie.com`, geladen erst nach Klick. Die Vorschaubilder liegen als
+`lichtspiel-video1.jpg` und `lichtspiel-video2.jpg` lokal im Ordner, damit vor
+dem Klick keine Verbindung zu Google entsteht.
 
 ### Person und Teilen
 
 | Datei | Inhalt | Format |
 |---|---|---|
 | `portrait.jpg` | Porträt, einmalig im Profilbereich verwendet | 3:4 |
-| `og.jpg` | Vorschaubild beim Teilen | 1200 × 630 — **fehlt noch** |
+| `og.jpg` | Vorschaubild beim Teilen | 1200 × 630 |
+| `lichtspiel-video1.jpg`, `lichtspiel-video2.jpg` | YouTube-Vorschaubilder, lokal | 16:9, 1280 px |
 
 ## Veröffentlichen
 
@@ -82,10 +99,13 @@ YouTube-Videos eingebunden (IDs `2O1iceiNoVI` und `4aS7LRck3JM`), über
 
 Das Zertifikat braucht nach dem DNS-Eintrag meist 15 Minuten bis eine Stunde.
 
-Deployment ist manuell: Dateien über die GitHub-Weboberfläche hochladen
-(Add file → Upload files → Commit changes). `index.html`/`404.html` ins
-Repository-Root, Bilder in `images/`. Browser-Cache beim Prüfen unzuverlässig
-— im Inkognito-Fenster gegenchecken.
+Deployment läuft über GitHub Desktop (Commit → Push origin); alternativ über
+die GitHub-Weboberfläche. Browser-Cache beim Prüfen unzuverlässig — im
+Inkognito-Fenster gegenchecken, GitHub Pages braucht ein bis zwei Minuten für
+den Rebuild.
+
+Das Meta-Tag `google-site-verification` im `<head>` hält die Bestätigung der
+Search Console aufrecht und darf nicht entfernt werden.
 
 ## Farbschema
 
@@ -97,10 +117,27 @@ CSS-Variablen in `:root` und `html[data-theme="dark"]`. Auswahl wird in
 
 ## Sprache
 
-Deutsch ist der Grundzustand im HTML. `#langToggle` schaltet per
-`data-i18n`-Attributen auf Englisch um (Dictionary `i18n.en` im Script-Block).
-Zurück auf Deutsch löst einfach `location.reload()` aus. Auswahl wird in
-`localStorage['mjh-lang']` gemerkt.
+Drei Sprachen in einer Datei. Deutsch ist der Grundzustand im Markup und hat
+kein Wörterbuch; Englisch und Japanisch liegen als `i18n.en` und `i18n.ja` im
+Script-Block und werden über `data-i18n`-Attribute per `textContent` eingesetzt.
+Zurück auf Deutsch löst `location.reload()` aus, weil der Ausgangszustand damit
+ohne zweites Wörterbuch wiederhergestellt ist.
+
+Die Auswahl sitzt als Feldgruppe `.lang-select` in der Kopfleiste, das aktive
+Feld ist über `aria-current="true"` ausgezeichnet. Auswahl wird in
+`localStorage['mjh-lang']` gemerkt; ein unbekannter Wert fällt auf Deutsch
+zurück.
+
+**Beim Ergänzen von Inhalten:** Jeder neue Text braucht ein `data-i18n` und
+einen Eintrag in *beiden* Wörterbüchern. Ein Element ohne Attribut bleibt in
+allen Sprachen deutsch — das ist der Fehler, der hier schon mehrfach passiert
+ist. Prüfen lässt sich das, indem man die Schlüsselmengen von Markup, `i18n.en`
+und `i18n.ja` vergleicht; sie müssen deckungsgleich sein.
+
+Eigennamen bleiben bewusst lateinisch (Projekttitel, Venues, Firmen, Software).
+Ortsnamen stehen in der japanischen Fassung im Katakana, ebenso Marken mit
+amtlicher japanischer Schreibweise (レゴ、カナダグース、フレッドペリー).
+Datumsangaben folgen dort japanischer Konvention (`2020年9月`).
 
 ## Bildexport
 

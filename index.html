@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-src https://www.youtube-nocookie.com; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <title>Michael J. Hofauer — Senior Visual Marketing / Creative Ops</title>
 <meta name="description" content="Michael J. Hofauer, Senior Visual Marketing und Creative Ops. Schaufenster, Pop-ups und Verkaufsflächen für Mode. München.">
 <meta name="robots" content="index, follow">
@@ -128,14 +130,28 @@ ul{ list-style:none; }
 #gridOverlay span{ background:rgba(225,0,15,.07); border-inline:1px solid rgba(225,0,15,.3); transition:background .5s var(--ease); }
 #gridOverlay span.active{ background:rgba(225,0,15,.24); }
 
+
+/* Sprunglink: nur sichtbar, wenn er den Fokus hat */
+.skip{
+  position:absolute; left:-9999px; top:0; z-index:100;
+  background:var(--ink); color:var(--paper);
+  padding:10px 14px; font-size:13px; text-decoration:none;
+}
+.skip:focus{ left:0; }
+main:focus{ outline:none; }
+
 /* ---------- Fortschritt & Cursor ---------- */
 #scrollProgress{
   position:fixed; top:48px; left:0; z-index:55; height:2px; width:100%;
   transform-origin:0 50%; transform:scaleX(0); background:var(--red); pointer-events:none;
 }
 @media (hover:hover) and (pointer:fine){
-  a,button,.video-thumb,summary,[role="button"]{ cursor:none; }
-  body{ cursor:none; }
+  /* Systemcursor nur ausblenden, wenn das Skript den Ersatzring wirklich
+     zeichnet — sonst haetten Nutzer mit reduzierter Bewegung oder ohne
+     JavaScript gar keinen sichtbaren Zeiger. */
+  .cursor-custom body{ cursor:none; }
+  .cursor-custom a, .cursor-custom button, .cursor-custom .video-thumb,
+  .cursor-custom summary, .cursor-custom [role="button"]{ cursor:none; }
   .cursor-ring{
     position:fixed; top:0; left:0; z-index:70;
     width:14px; height:14px; margin:-7px 0 0 -7px;
@@ -214,7 +230,7 @@ ul{ list-style:none; }
 .strip-item.reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
 .strip-item.reveal.in{ opacity:1; transform:none; }
 
-.video-thumb{ position:relative; cursor:none; background:#111; }
+.video-thumb{ position:relative; background:#111; }
 .video-thumb iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
 .play-btn{
   position:absolute; inset:0; margin:auto; width:46px; height:46px;
@@ -333,6 +349,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 </style>
 </head>
 <body>
+<a class="skip" href="#inhalt" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
 <header class="bar">
   <b><span class="brand-full">Michael J. Hofauer</span><span class="brand-short">MJH</span></b>
@@ -358,7 +375,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 </div>
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
-<main>
+<main id="inhalt" tabindex="-1">
 
 <!-- ========================= KOPF ========================= -->
 <section class="head wrap grid">
@@ -387,7 +404,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p1">
   <div class="p-head"><span class="p-num">01</span><span data-i18n="p1.kicker">Hirmer — Frühjahr 2023</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#545a58"><img src="images/spring-hero.jpg" width="2000" height="1249" alt="Spring Inside" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#545a58"><img src="images/spring-hero.jpg" width="2000" height="1249" alt="Spring Inside" loading="lazy"></div>
     <div class="p-data">
       <h3>Spring Inside</h3>
       <p class="body-sec" data-i18n="p1.desc">Das ganze Haus wird zur Almwiese. Meine Rolle war die Visualisierung — erst auf deren Basis ließen sich die Mengen berechnen, und dass die Blumen acht Wochen halten mussten, war von Anfang an gesetzt.</p>
@@ -405,9 +422,9 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#bfb7a3"><img src="images/spring-plan.jpg" width="1400" height="933" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#bfb7a3"><img src="images/spring-plan.jpg" width="1400" height="933" alt="Plan" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p1.stripA">Aufbauzeichnung mit Maßen</span></div></div>
-    <div class="strip-item n2" style="--ar:0.8"><div class="thumb" style="background:#e8e5de"><img src="images/spring-detail.jpg" width="1000" height="1250" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg1b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.8"><div class="thumb" style="background:#e8e5de"><img src="images/spring-detail.jpg" width="1000" height="1250" alt="Fläche" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p1.stripB">Blumenabhängung über der Auslage</span></div></div>
   </div>
 </section>
@@ -416,7 +433,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p2">
   <div class="p-head"><span class="p-num">02</span><span data-i18n="p2.kicker">Canada Goose — Herbst 2023</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#736e68"><img src="images/canadagoose-hero.jpg" width="2000" height="1250" alt="Backstage Nature" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#736e68"><img src="images/canadagoose-hero.jpg" width="2000" height="1250" alt="Backstage Nature" loading="lazy"></div>
     <div class="p-data">
       <h3>Backstage Nature</h3>
       <p class="body-sec" data-i18n="p2.desc">Ein Fotostudio als Verkaufsfläche: Schiefer, Findlinge und Studiolicht mitten im Haus. Das Moodboard war hier kein Beiwerk, sondern die Bauanleitung.</p>
@@ -428,9 +445,9 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#b4b3b1"><img src="images/canadagoose-moodboard.jpg" width="1400" height="933" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#b4b3b1"><img src="images/canadagoose-moodboard.jpg" width="1400" height="933" alt="Moodboard" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p2.stripA">Material, Licht, Location vorab festgelegt</span></div></div>
-    <div class="strip-item n2" style="--ar:0.8006"><div class="thumb" style="background:#7c786d"><img src="images/canadagoose-bau.jpg" width="1000" height="1249" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg2b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.8006"><div class="thumb" style="background:#7c786d"><img src="images/canadagoose-bau.jpg" width="1000" height="1249" alt="Aufbau" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p2.stripB">Schotter, Findlinge, Blitzanlage</span></div></div>
   </div>
 </section>
@@ -439,7 +456,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p3">
   <div class="p-head"><span class="p-num">03</span><span data-i18n="p3.kicker">Hirmer — Herbst 2025</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#6a6255"><img src="images/tagesbar-hero.jpg" width="2000" height="1250" alt="Tagesbar Tracht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#6a6255"><img src="images/tagesbar-hero.jpg" width="2000" height="1250" alt="Tagesbar Tracht" loading="lazy"></div>
     <div class="p-data">
       <h3>Tagesbar Tracht</h3>
       <p class="body-sec" data-i18n="p3.desc">Die Tagesbar im dritten Stock wird saisonal neu bespielt. Im Herbst 2025 stand sie unter dem Thema Tracht — von meinem 3D-Plan bis zur fertigen Fläche, umgesetzt vom VM-Team.</p>
@@ -451,9 +468,9 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2" style="--ar:1.5"><div class="thumb" style="background:#807967"><img src="images/tagesbar-plan.jpg" width="1266" height="844" alt="Plan" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5"><div class="thumb" style="background:#807967"><img src="images/tagesbar-plan.jpg" width="1266" height="844" alt="Plan" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p3.stripA">3D-Voransicht, ins Raumfoto integriert</span></div></div>
-    <div class="strip-item n2" style="--ar:1.3333"><div class="thumb" style="background:#716b51"><img src="images/tagesbar-detail.jpg" width="1000" height="750" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg3b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.3333"><div class="thumb" style="background:#716b51"><img src="images/tagesbar-detail.jpg" width="1000" height="750" alt="Detail" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p3.stripB">Trachtenjacken zwischen Kunstbäumen</span></div></div>
   </div>
 </section>
@@ -462,7 +479,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p4">
   <div class="p-head"><span class="p-num">04</span><span data-i18n="p4.kicker">Hirmer × LEGO — Weihnachten 2023</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#8a8985"><img src="images/lego-treppenhaus.jpg" width="2000" height="1250" alt="Freude schenken" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#8a8985"><img src="images/lego-treppenhaus.jpg" width="2000" height="1250" alt="Freude schenken" loading="lazy"></div>
     <div class="p-data">
       <h3 data-i18n="p4.title">Freude schenken</h3>
       <p class="body-sec" data-i18n="p4.desc">Diese Weihnachtskooperation mit LEGO habe ich in Abstimmung mit meinem Vorgesetzten für das ganze Haus mitgeplant. Visualisiert und in Fensterabwicklungen übersetzt habe ich das selbst; gebaut hat es das VM-Team.</p>
@@ -480,11 +497,11 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n3" style="--ar:1.5005"><div class="thumb" style="background:#c7bbbf"><img src="images/lego-plan.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4a/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5005"><div class="thumb" style="background:#c7bbbf"><img src="images/lego-plan.jpg" width="1400" height="933" alt="Planung" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p4.stripA">Fensterabwicklung, visualisiert</span></div></div>
-    <div class="strip-item n3" style="--ar:0.7997"><div class="thumb" style="background:#5f4e3c"><img src="images/lego-fenster.jpg" width="990" height="1238" alt="Ergebnis" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4b/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:0.7997"><div class="thumb" style="background:#5f4e3c"><img src="images/lego-fenster.jpg" width="990" height="1238" alt="Ergebnis" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p4.stripB">Vom VM-Team umgesetzt</span></div></div>
-    <div class="strip-item n3" style="--ar:1.5009"><div class="thumb" style="background:#745340"><img src="images/lego-flaeche.jpg" width="1600" height="1066" alt="Fläche" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg4c/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5009"><div class="thumb" style="background:#745340"><img src="images/lego-flaeche.jpg" width="1600" height="1066" alt="Fläche" loading="lazy"></div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p4.stripC">Rückwand, Modell, Warenpräsentation</span></div></div>
   </div>
 </section>
@@ -493,7 +510,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p5">
   <div class="p-head"><span class="p-num">05</span><span data-i18n="p5.kicker">Windsor — Herbst 2023</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#6b5e55"><img src="images/windsor-hero.jpg" width="2000" height="1250" alt="Windsor Pop-up" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#6b5e55"><img src="images/windsor-hero.jpg" width="2000" height="1250" alt="Windsor Pop-up" loading="lazy"></div>
     <div class="p-data">
       <h3>Windsor Pop-up</h3>
       <p class="body-sec" data-i18n="p5.desc">Ein Wartebereich wird zum Kinosaal: alte Kinosessel als Warenträger, das Logo als Leinwand-Motiv im Hintergrund. Die Ware liegt auf dem Platz, auf dem man sich sonst hinsetzt.</p>
@@ -505,11 +522,11 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n3" style="--ar:1.5005"><div class="thumb" style="background:#6e5748"><img src="images/windsor-aufbau.jpg" width="1400" height="933" alt="Aufbau" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5a/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5005"><div class="thumb" style="background:#6e5748"><img src="images/windsor-aufbau.jpg" width="1400" height="933" alt="Aufbau" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p5.stripA">Sitzreihen mit gefalteter Ware</span></div></div>
-    <div class="strip-item n3" style="--ar:0.8"><div class="thumb" style="background:#736155"><img src="images/windsor-detail.jpg" width="1000" height="1250" alt="Detail" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5b/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:0.8"><div class="thumb" style="background:#736155"><img src="images/windsor-detail.jpg" width="1000" height="1250" alt="Detail" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p5.stripB">Kinosessel als Warenträger</span></div></div>
-    <div class="strip-item n3" style="--ar:1.5006"><div class="thumb" style="background:#9b9192"><img src="images/windsor-moodboard.jpg" width="1247" height="831" alt="Moodboard" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg5c/600/750?grayscale';"></div>
+    <div class="strip-item n3" style="--ar:1.5006"><div class="thumb" style="background:#9b9192"><img src="images/windsor-moodboard.jpg" width="1247" height="831" alt="Moodboard" loading="lazy"></div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p5.stripC">Referenz Deutsche Oper Berlin</span></div></div>
   </div>
 </section>
@@ -518,7 +535,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p6">
   <div class="p-head"><span class="p-num">06</span><span data-i18n="p6.kicker">Fred Perry — Herbst 2024</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#787066"><img src="images/fredperry-hero.jpg" width="1131" height="706" alt="Fred Perry Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#787066"><img src="images/fredperry-hero.jpg" width="1131" height="706" alt="Fred Perry Window" loading="lazy"></div>
     <div class="p-data">
       <h3>Fred Perry Window</h3>
       <p class="body-sec" data-i18n="p6.desc">Nur Produktfotos aus dem Onlineshop, keine räumliche Vorlage. Die Bilder liefen im Raster auf einem Leuchtkasten, davor eine Figur im exakt gleichen Outfit, dazu das Logo als Folienplot in Gold.</p>
@@ -530,9 +547,9 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#bbb6b3"><img src="images/fredperry-planung.jpg" width="1400" height="933" alt="Planung" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#bbb6b3"><img src="images/fredperry-planung.jpg" width="1400" height="933" alt="Planung" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p6.stripA">3D-Voransicht vor dem Bau</span></div></div>
-    <div class="strip-item n2" style="--ar:0.7991"><div class="thumb" style="background:#95908a"><img src="images/fredperry-grundriss.jpg" width="704" height="881" alt="Grundriss" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg6b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.7991"><div class="thumb" style="background:#95908a"><img src="images/fredperry-grundriss.jpg" width="704" height="881" alt="Grundriss" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p6.stripB">Grundriss, Ansicht von oben</span></div></div>
   </div>
 </section>
@@ -541,7 +558,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p7">
   <div class="p-head"><span class="p-num">07</span><span data-i18n="p7.kicker">Dressler — Sommer 2024</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#7b7b7b"><img src="images/dressler-hero.jpg" width="2000" height="1250" alt="Dressler Window" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#7b7b7b"><img src="images/dressler-hero.jpg" width="2000" height="1250" alt="Dressler Window" loading="lazy"></div>
     <div class="p-data">
       <h3>Dressler Window</h3>
       <p class="body-sec" data-i18n="p7.desc">Fünf Sakkos schweben an Nylonfäden vor einem zweiteiligen, golden hinterlegten Leuchtkasten. Die Idee dahinter: zeigen, dass die Sakkos ungewöhnlich leicht sind.</p>
@@ -553,7 +570,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item strip-full" style="--ar:1.5009"><div class="thumb" style="background:#bebcbd"><img src="images/dressler-punktc.jpg" width="1600" height="1066" alt="3D-Voransicht" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg7a/1600/700?grayscale';"></div>
+    <div class="strip-item strip-full" style="--ar:1.5009"><div class="thumb" style="background:#bebcbd"><img src="images/dressler-punktc.jpg" width="1600" height="1066" alt="3D-Voransicht" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p7.stripA">3D-Voransicht der Leuchtkasten-Konstruktion</span></div></div>
   </div>
 </section>
@@ -562,7 +579,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="project wrap" id="p8">
   <div class="p-head"><span class="p-num">08</span><span data-i18n="p8.kicker">Medienkunst — 2007–2017</span></div>
   <div class="grid">
-    <div class="p-image" style="background:#6e492e"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8/900/620?grayscale';"></div>
+    <div class="p-image" style="background:#6e492e"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy"></div>
     <div class="p-data">
       <h3>licht+spiel</h3>
       <p class="body-sec" data-i18n="p8.desc">Zehn Jahre Live-Visuals und Projection Mapping — mit einer Residency im Münchner Harry Klein sowie Auftritten beim VJ Festival in Erlangen (2010) und Nürnberg (2013). Für „Vom Lutschlieserl und der Fräulein Irmi" visualisierte ich das von Anton Leiss-Huber geschriebene und produzierte Hörspiel. 2010 zeigte licht+spiel im Rahmen der Reihe „Kultur im Rathaus" in Altötting eine erste Retrospektive mit drei Jahren Archivmaterial; 2011 folgte eine Einzelausstellung im Artspace der Pratersauna Wien.</p>
@@ -578,22 +595,22 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
-    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#362a50"><img src="images/lichtspiel-motiv.jpg" width="1400" height="933" alt="Motiv" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8a/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:1.5005"><div class="thumb" style="background:#362a50"><img src="images/lichtspiel-motiv.jpg" width="1400" height="933" alt="Motiv" loading="lazy"></div>
       <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p8.stripA">Gesicht und Schriftzug im Layer</span></div></div>
-    <div class="strip-item n2" style="--ar:0.8"><div class="thumb" style="background:#502342"><img src="images/lichtspiel-mapping.jpg" width="1000" height="1250" alt="Mapping" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sg8b/600/750?grayscale';"></div>
+    <div class="strip-item n2" style="--ar:0.8"><div class="thumb" style="background:#502342"><img src="images/lichtspiel-mapping.jpg" width="1000" height="1250" alt="Mapping" loading="lazy"></div>
       <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p8.stripB">Projektion über die Raumecke</span></div></div>
   </div>
   <div class="strip">
-    <div class="strip-item n2" style="--ar:1.3333">
-      <div class="thumb video-thumb" data-video="2O1iceiNoVI" role="button" tabindex="0" aria-label="Video: Techno Francais">
-        <img src="https://img.youtube.com/vi/2O1iceiNoVI/hqdefault.jpg" alt="Video" loading="lazy">
+    <div class="strip-item n2" style="--ar:1.7778">
+      <div class="thumb video-thumb" style="background:#596154" data-video="2O1iceiNoVI" role="button" tabindex="0" aria-label="Video: Techno Francais">
+        <img src="images/lichtspiel-video1.jpg" width="1280" height="720" alt="Video" loading="lazy">
         <span class="play-btn" aria-hidden="true">▶</span>
       </div>
       <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p8.vid1">Techno Francais, Harry Klein, 08.10.2010</span></div>
     </div>
-    <div class="strip-item n2" style="--ar:1.3333">
-      <div class="thumb video-thumb" data-video="4aS7LRck3JM" role="button" tabindex="0" aria-label="Video: Cargo Edition Night">
-        <img src="https://img.youtube.com/vi/4aS7LRck3JM/hqdefault.jpg" alt="Video" loading="lazy">
+    <div class="strip-item n2" style="--ar:1.7778">
+      <div class="thumb video-thumb" style="background:#2d4e83" data-video="4aS7LRck3JM" role="button" tabindex="0" aria-label="Video: Cargo Edition Night">
+        <img src="images/lichtspiel-video2.jpg" width="1280" height="720" alt="Video" loading="lazy">
         <span class="play-btn" aria-hidden="true">▶</span>
       </div>
       <div class="label"><span class="letter">d</span><span class="cap" data-i18n="p8.vid2">Cargo Edition Night, Harry Klein, 10.07.2010</span></div>
@@ -605,7 +622,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 <section class="profile wrap" id="profil">
   <div class="p-head"><span></span><span data-i18n="nav.profil">Profil</span></div>
   <div class="grid">
-    <div class="portrait" style="background:#777a7f"><img src="images/portrait.jpg" width="1200" height="1600" alt="Porträt Michael J. Hofauer" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/mjh-portrait/900/1200?grayscale';"></div>
+    <div class="portrait" style="background:#777a7f"><img src="images/portrait.jpg" width="1200" height="1600" alt="Porträt Michael J. Hofauer" loading="lazy"></div>
     <div class="prof-lede">
       <p class="lede" data-i18n="prof.lede">Ich arbeite an der Schnittstelle von Handwerk und Technologie — vom Saisonkonzept über die 3D-Visualisierung bis zur montierten Fläche. Bei Hirmer habe ich 3D-Rendering als festen Planungsstandard etabliert und frühzeitig Workflows für generative KI in den Gestaltungs- und Planungsprozess integriert.</p>
       <div class="now">
@@ -718,7 +735,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
         <h5 data-i18n="legal.h.fonts">Schriftarten</h5>
         <p data-i18n="legal.p.fonts">Diese Website verwendet ausschließlich auf dem jeweiligen Endgerät bereits vorhandene Systemschriften. Es findet keine Datenübertragung an Schriftanbieter statt.</p>
         <h5 data-i18n="legal.h.youtube">Eingebundene YouTube-Videos</h5>
-        <p data-i18n="legal.p.youtube">Im Bereich „licht+spiel" sind Videos der Plattform YouTube verlinkt, zunächst nur als Vorschaubild. Erst nach aktivem Klick wird der Player im datenschutzfreundlichen Modus („youtube-nocookie.com") nachgeladen. Rechtsgrundlage ist Ihre durch den Klick erteilte Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google-Datenschutzerklärung</a>.</p>
+        <p data-i18n="legal.p.youtube">Im Bereich „licht+spiel" sind Videos der Plattform YouTube verlinkt, zunächst nur als Vorschaubild. Dieses Vorschaubild wird von diesem Server ausgeliefert; vor Ihrem Klick entsteht keine Verbindung zu YouTube und es werden keine Daten an Google übertragen. Erst nach aktivem Klick wird der Player im datenschutzfreundlichen Modus („youtube-nocookie.com") nachgeladen. Rechtsgrundlage ist Ihre durch den Klick erteilte Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google-Datenschutzerklärung</a>.</p>
         <h5 data-i18n="legal.h.kontaktaufnahme">Kontaktaufnahme</h5>
         <p data-i18n="legal.p.kontaktaufnahme">Bei Kontakt per E-Mail oder Telefon werden die mitgeteilten Daten ausschließlich zur Bearbeitung der Anfrage verarbeitet (Art. 6 Abs. 1 lit. f bzw. lit. b DSGVO) und gelöscht, sobald sie nicht mehr erforderlich sind.</p>
         <h5 data-i18n="legal.h.rechte">Ihre Rechte</h5>
@@ -813,6 +830,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
   window.addEventListener('resize', computeColEdges);
 
   if(fine && !reduce && ring){
+    root.classList.add('cursor-custom');
     var on=false;
     document.addEventListener('mousemove', function(e){
       tx=e.clientX; ty=e.clientY;
@@ -855,6 +873,11 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       e.preventDefault();
       var y = t.getBoundingClientRect().top + window.pageYOffset - 50;
       window.scrollTo({ top:y, behavior: reduce ? 'auto' : 'smooth' });
+      /* Fokus mitnehmen, sonst tabbt man nach einem Sprung weiter oben weiter —
+         fuer den Sprunglink zum Inhalt ist genau das der ganze Zweck. */
+      if(t.hasAttribute('tabindex') || /^(a|button|input|select|textarea)$/i.test(t.tagName)){
+        t.focus({ preventScroll:true });
+      }
     });
   });
 
@@ -881,7 +904,8 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
      ============================================================ */
   var i18n = {
     ja: {
-      "nav.index": "作品",
+      "a11y.skip": "本文へスキップ",
+  "nav.index": "作品",
       "nav.profil": "経歴",
       "nav.kontakt": "連絡先",
       "nav.grid": "グリッド",
@@ -1058,7 +1082,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "legal.h.fonts": "フォント",
       "legal.p.fonts": "本サイトは閲覧端末にすでに存在するシステムフォントのみを使用する。フォント提供事業者へのデータ送信は発生しない。",
       "legal.h.youtube": "YouTube動画の埋め込み",
-      "legal.p.youtube": "「licht+spiel」の項ではYouTubeの動画をリンクしており、初期状態ではサムネイル画像のみを表示する。クリックした場合にかぎり、プライバシー強化モード（youtube-nocookie.com）でプレーヤーを読み込む。法的根拠はクリックによる同意（GDPR第6条1項(a)）。詳細：Googleプライバシーポリシー",
+      "legal.p.youtube": "「licht+spiel」の項ではYouTubeの動画をリンクしており、初期状態ではサムネイル画像のみを表示する。このサムネイルは当サイトのサーバーから配信されており、クリックする前にYouTubeへの接続は発生せず、Googleへのデータ送信もない。クリックした場合にかぎり、プライバシー強化モード（youtube-nocookie.com）でプレーヤーを読み込む。法的根拠はクリックによる同意（GDPR第6条1項(a)）。詳細：Googleプライバシーポリシー",
       "legal.h.kontaktaufnahme": "お問い合わせ",
       "legal.p.kontaktaufnahme": "メールまたは電話で連絡した場合、提供された情報は問い合わせ対応のためにのみ処理され（GDPR第6条1項(f)または(b)）、不要になり次第削除される。",
       "legal.h.rechte": "利用者の権利",
@@ -1068,6 +1092,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "legal.note": "この日本語版は理解のための参考訳である。法的に有効なのはドイツ語版のみ。"
     },
     en: {
+      "a11y.skip":"Skip to content",
       "nav.index":"Index", "nav.profil":"Profile", "nav.kontakt":"Contact",
       "nav.grid":"Grid", "nav.dark":"Dark",
       "lbl.marke":"Brand", "lbl.flaeche":"Space", "lbl.rolle":"Role", "lbl.presse":"Press",
@@ -1189,7 +1214,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "legal.h.fonts":"Fonts",
       "legal.p.fonts":"This website uses only fonts already installed on your device. No data is transmitted to any font provider.",
       "legal.h.youtube":"Embedded YouTube videos",
-      "legal.p.youtube":"In the \u201elicht+spiel\u201c section, videos from YouTube are linked, initially shown only as a thumbnail. Only after an active click is the player loaded in privacy-enhanced mode (\u201eyoutube-nocookie.com\u201c). The legal basis is your consent given by clicking (Art. 6(1)(a) GDPR). More information: Google Privacy Policy.",
+      "legal.p.youtube":"In the \u201elicht+spiel\u201c section, videos from YouTube are linked, initially shown only as a thumbnail. That thumbnail is served from this site; before you click, no connection to YouTube is made and no data is transmitted to Google. Only after an active click is the player loaded in privacy-enhanced mode (\u201eyoutube-nocookie.com\u201c). The legal basis is your consent given by clicking (Art. 6(1)(a) GDPR). More information: Google Privacy Policy.",
       "legal.h.kontaktaufnahme":"Contacting me",
       "legal.p.kontaktaufnahme":"If you contact me by email or phone, the data you provide is processed solely to handle your enquiry (Art. 6(1)(f) or (b) GDPR) and deleted once it is no longer required.",
       "legal.h.rechte":"Your rights",
