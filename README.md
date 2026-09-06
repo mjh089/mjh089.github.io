@@ -139,6 +139,20 @@ Ortsnamen stehen in der japanischen Fassung im Katakana, ebenso Marken mit
 amtlicher japanischer Schreibweise (レゴ、カナダグース、フレッドペリー).
 Datumsangaben folgen dort japanischer Konvention (`2020年9月`).
 
+## Typografie
+
+Anführungszeichen und Apostrophe folgen je Sprache der dortigen Konvention.
+Gerade Zeichen (" und ') gehören in den Code, nicht in den Text:
+
+| Sprache | Anführung | Apostroph |
+|---|---|---|
+| Deutsch | `„Wort“` (U+201E / U+201C) | `’` (U+2019) |
+| Englisch | `“Word”` (U+201C / U+201D) | `’` (U+2019) |
+| Japanisch | `「言葉」`, Werktitel `『…』` | – |
+
+Im Wörterbuch stehen die Zeichen literal, nicht als `\uXXXX`-Kürzel — die
+Datei ist UTF-8, und literale Zeichen bleiben beim Bearbeiten lesbar.
+
 ## Bildexport
 
 - **Farbraum sRGB.** Kein Adobe RGB, kein ProPhoto. Browser ignorieren eingebettete
