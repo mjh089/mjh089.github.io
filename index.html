@@ -745,7 +745,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
         <p data-i18n="legal.p.rechte">Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15–21 DSGVO). Wenden Sie sich hierzu an die oben genannte Kontaktadresse.</p>
         <h5 data-i18n="legal.h.beschwerde">Beschwerderecht</h5>
         <p data-i18n="legal.p.beschwerde">Zuständige Aufsichtsbehörde ist das Bayerische Landesamt für Datenschutzaufsicht (BayLDA), Promenade 27, 91522 Ansbach.</p>
-        <p class="legal-note" data-i18n="legal.note">Diese englische Fassung dient nur der Verständlichkeit. Rechtlich maßgeblich ist ausschließlich die deutsche Version dieser Datenschutzerklärung.</p>
+        <p class="legal-note" data-i18n="legal.note" hidden>Diese englische Fassung dient nur der Verständlichkeit. Rechtlich maßgeblich ist ausschließlich die deutsche Version dieser Datenschutzerklärung.</p>
       </div>
     </details>
   </div>
@@ -1260,6 +1260,9 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       var key = el.dataset.i18n;
       if(i18n[lang][key] !== undefined) el.textContent = i18n[lang][key];
     });
+    /* Hinweis "diese Uebersetzung ist unverbindlich" ergibt nur Sinn,
+       wenn tatsaechlich eine Uebersetzung angezeigt wird */
+    document.querySelectorAll('.legal-note').forEach(function(el){ el.hidden = false; });
     try{ localStorage.setItem('mjh-lang', lang); }catch(e){}
   }
 
