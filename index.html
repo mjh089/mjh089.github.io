@@ -222,6 +222,27 @@ main:focus{ outline:none; }
 .strip-item .label{ display:flex; gap:8px; align-items:baseline; }
 .strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; margin-left:-0.02em; }
 .strip-item .cap{ font-size:11.5px; color:var(--grey); }
+
+/* Pull Quote — eigene Rasterzeile. Das oeffnende Anfuehrungszeichen haengt
+   in den Rand, damit der erste Buchstabe optisch auf der Spaltenkante sitzt;
+   dieselbe Logik wie das negative margin-left an den roten Ziffern. */
+.pq{ margin:clamp(18px,3vh,28px) 0 0; padding-top:clamp(20px,3.4vh,32px);
+     border-top:1px solid var(--line); }
+.pq blockquote{ grid-column:3/span 9; margin:0; }
+.pq p{ margin:0; font-weight:700; letter-spacing:-0.025em; line-height:1.12;
+       font-size:clamp(1.25rem,2.7vw,2.15rem); }
+/* Praemisse / erstens / zweitens stehen als eigene Zeilen — der Satz hat die
+   Gliederung selbst, die Typografie macht sie nur sichtbar */
+.pq-l{ display:block; }
+.pq-l + .pq-l{ margin-top:.24em; }
+.pq-l:first-child{ text-indent:-0.4em; }
+.pq figcaption{ grid-column:3/span 9; margin-top:clamp(14px,2.2vh,20px);
+                font-size:11.5px; color:var(--grey); }
+.pq figcaption a{ text-decoration:underline; text-underline-offset:2px; }
+/* 「 ist vollbreit, die Glyphe sitzt in der rechten Haelfte — daher halber Geviertzug */
+html[lang="ja"] .pq p{ letter-spacing:0; line-height:1.5; }
+html[lang="ja"] .pq-l:first-child{ text-indent:-0.5em; }
+@media(max-width:800px){ .pq blockquote, .pq figcaption{ grid-column:1/span 12; } }
 .strip-full{ flex-basis:100%; }
 @media(max-width:640px){
   .strip{ flex-direction:column; }
@@ -591,7 +612,6 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
         <dt data-i18n="lbl.festivals">Festivals</dt><dd><span data-i18n="p8.fest1">VJ Festival Erlangen (2010) &amp; Nürnberg (2013, Zentralcafé K4), VJ Fest Istanbul (2011), Urban Art Forms Wiener Neustadt (2011), </span><a href="https://www.facebook.com/PRESSUREfestival/" target="_blank" rel="noopener">Pressure</a><span data-i18n="p8.fest2"> Neumarkt im Hausruck, Playground VJDJ Camp (Sakog, Österreich), Elektrogelände, Utopienwerkstatt (München)</span></dd>
         <dt data-i18n="lbl.international">International</dt><dd data-i18n="p8.international">mission2beach im Club Magic Life, Kemer (2011)</dd>
         <dt data-i18n="lbl.presse">Presse</dt><dd><a href="https://www.altoetting.de/aktuelles/news/kultur-im-rathaus-vj-team-licht-spiel/" target="_blank" rel="noopener" data-i18n="p8.presseVal">Stadt Altötting, 2010</a></dd>
-        <dt data-i18n="lbl.doku">Doku</dt><dd><a href="https://youtu.be/WuSsUrdK2cs?t=601" target="_blank" rel="noopener" data-i18n="p8.dokuVal">„WACH&amp;KRACH Geschichten“, Upclose Pictures (2013)</a><span data-i18n="p8.dokuZeit"> — Interview ab 10:02</span></dd>
       </dl>
     </div>
   </div>
@@ -617,6 +637,10 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       <div class="label"><span class="letter">d</span><span class="cap" data-i18n="p8.vid2">Cargo Edition Night, Harry Klein, 10.07.2010</span></div>
     </div>
   </div>
+  <figure class="pq grid">
+    <blockquote cite="https://youtu.be/WuSsUrdK2cs?t=601"><p><span class="pq-l" data-i18n="p8.quote1">„Das ist keine Selbstverständlichkeit in nem Club:</span><span class="pq-l" data-i18n="p8.quote2">erstens, dass es überhaupt Visuals gibt,</span><span class="pq-l" data-i18n="p8.quote3">und zweitens, dass man mit den Visuals die komplette Lichtstimmung bestimmt.“</span></p></blockquote>
+    <figcaption><span data-i18n="p8.quoteWho">Michael J. Hofauer im Interview für </span><a href="https://youtu.be/WuSsUrdK2cs?t=601" target="_blank" rel="noopener" data-i18n="p8.quoteSrc">„WACH&amp;KRACH Geschichten“</a><span data-i18n="p8.quoteYear">, Upclose Pictures, 2013</span></figcaption>
+  </figure>
 </section>
 
 <!-- ========================= PROFIL ========================= -->
@@ -924,7 +948,6 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "lbl.clubs": "クラブ",
       "lbl.festivals": "フェスティバル",
       "lbl.international": "海外",
-      "lbl.doku": "ドキュメンタリー",
       "hero.role1": "ビジュアルマーケティング",
       "hero.role2": "リテールデザイン",
       "hero.role3": "クリエイティブオペレーション",
@@ -1002,8 +1025,12 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "p8.format": "ライブビジュアル、マッピング、インスタレーション",
       "p8.rolle": "クリエイティブディレクター／VJ",
       "p8.presseVal": "アルトエッティング市、2010年",
-      "p8.dokuVal": "『WACH&KRACH Geschichten』（Upclose Pictures、2013年）",
-      "p8.dokuZeit": "・インタビューは10:02から",
+      "p8.quote1": "「クラブでは当たり前のことではない。",
+      "p8.quote2": "第一に、そもそもビジュアルがあること。",
+      "p8.quote3": "第二に、そのビジュアルが照明の雰囲気そのものを決めていること。」",
+      "p8.quoteWho": "Michael J. Hofauer、",
+      "p8.quoteSrc": "『WACH&KRACH Geschichten』",
+      "p8.quoteYear": "（Upclose Pictures、2013年）でのインタビュー",
       "p8.stripA": "顔と文字を重ねたレイヤー",
       "p8.stripB": "部屋の角をまたぐ投影",
       "prof.lede": "手仕事とテクノロジーの交点で仕事をしている。シーズンコンセプトから3Dビジュアライゼーション、そして組み上がった売場まで。Hirmerでは3Dレンダリングを計画の標準として定着させ、生成AIのワークフローを早い段階で設計・計画のプロセスに組み込んだ。",
@@ -1108,7 +1135,6 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "lbl.marke":"Brand", "lbl.flaeche":"Space", "lbl.rolle":"Role", "lbl.presse":"Press",
       "lbl.format":"Format", "lbl.kontakt":"Contact",
       "lbl.residency":"Residency", "lbl.clubs":"Clubs", "lbl.festivals":"Festivals", "lbl.international":"International",
-      "lbl.doku":"Documentary",
       "hero.role1":"Visual Marketing", "hero.role2":"Retail Design", "hero.role3":"Creative Ops",
       "hero.city":"Munich",
       "idx.date1":"Spring 2023", "idx.date2":"Fall 2023", "idx.date3":"Fall 2025", "idx.name4":"Freude schenken", "idx.date4":"Christmas 2023", "idx.date5":"Fall 2023",
@@ -1159,8 +1185,12 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "p8.desc":"Ten years of live visuals and projection mapping — with a residency at Munich’s Harry Klein plus performances at the VJ Festival in Erlangen (2010) and Nuremberg (2013). For “Vom Lutschlieserl und der Fräulein Irmi” I created the visuals for the radio play written and produced by Anton Leiss-Huber. In 2010, licht+spiel presented a first retrospective with three years of archive material as part of the “Kultur im Rathaus” series in Altötting; in 2011 followed a solo exhibition at the Pratersauna Vienna Artspace.",
       "p8.format":"Live visuals, mapping, installation", "p8.rolle":"Creative director and VJ",
       "p8.presseVal":"City of Altötting, 2010",
-      "p8.dokuVal":"“WACH&KRACH Geschichten”, Upclose Pictures (2013)",
-      "p8.dokuZeit":" — interview from 10:02",
+      "p8.quote1":"“It’s not a given in a club:",
+      "p8.quote2":"first, that there are visuals at all,",
+      "p8.quote3":"and second, that the visuals determine the entire light atmosphere.”",
+      "p8.quoteWho":"Michael J. Hofauer in ",
+      "p8.quoteSrc":"“WACH&KRACH Geschichten”",
+      "p8.quoteYear":", Upclose Pictures, 2013",
       "p8.stripA":"Face and text in a projected layer", "p8.stripB":"Projection across the room corner",
 
       "prof.lede":"I work at the intersection of craft and technology — from the seasonal concept through 3D visualisation to the finished space. At Hirmer I established 3D rendering as a standard planning tool and was an early adopter of generative-AI workflows in design and planning.",

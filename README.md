@@ -153,6 +153,29 @@ Gerade Zeichen (" und ') gehören in den Code, nicht in den Text:
 Im Wörterbuch stehen die Zeichen literal, nicht als `\uXXXX`-Kürzel — die
 Datei ist UTF-8, und literale Zeichen bleiben beim Bearbeiten lesbar.
 
+### Pull Quote (`.pq`)
+
+Eigene Rasterzeile am Ende von licht+spiel, Spalten 3–11. Zwei Eigenheiten,
+die beim Kopieren des Musters leicht verlorengehen:
+
+- **`figure` braucht `margin:0`.** Browser geben dem Element von sich aus
+  `margin: 1em 40px` mit. Ohne das Zurücksetzen sitzt der Block 40 px
+  eingerückt und berechnet seine zwölf Spalten auf der verschmälerten
+  Breite — er läuft dann sichtbar neben dem Seitenraster. Gegenprobe: Die
+  linke Kante muss exakt auf der von `.idx-name` liegen, das ebenfalls auf
+  Spalte 3 sitzt.
+- **Das öffnende Anführungszeichen hängt im Rand** (`text-indent:-0.4em`,
+  im Japanischen `-0.5em`, weil `「` vollbreit ist und die Glyphe nur die
+  rechte Hälfte füllt). Damit sitzt der erste Buchstabe optisch auf der
+  Spaltenkante — dieselbe Logik wie das negative `margin-left` an den roten
+  Ziffern. `hanging-punctuation` wird bewusst *nicht* verwendet: Safari
+  kennt es, alle anderen nicht, und zusammen mit dem `text-indent` würde
+  der Versatz dort doppelt greifen.
+
+Das Zitat ist in seine Sinnglieder zerlegt (`.pq-l`, je ein eigener
+`data-i18n`-Schlüssel), weil `textContent` beim Sprachwechsel jedes
+Innenmarkup löschen würde. Jede Sprache setzt ihre Umbrüche damit selbst.
+
 ## Bildexport
 
 - **Farbraum sRGB.** Kein Adobe RGB, kein ProPhoto. Browser ignorieren eingebettete
