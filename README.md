@@ -178,6 +178,16 @@ Das Zitat ist in seine Sinnglieder zerlegt (`.pq-l`, je ein eigener
 `data-i18n`-Schlüssel), weil `textContent` beim Sprachwechsel jedes
 Innenmarkup löschen würde. Jede Sprache setzt ihre Umbrüche damit selbst.
 
+**Kein Zusatzabstand zwischen den Gliedern.** Der Block läuft auf einem
+einzigen Zeilenabstand. Ein `margin-top` auf `.pq-l + .pq-l` wirkt nur
+zwischen den Gliedern, nicht innerhalb eines Glieds, das umbricht — und
+sobald eines umbricht (im Deutschen das dritte, mobil alle), stehen zwei
+verschiedene Rhythmen im selben Absatz. Die Gliederung tragen allein die
+Umbrüche an den Sinngrenzen; das reicht, weil die vorderen Glieder
+sichtbar vor dem Satzspiegel enden. Nachmessen lässt sich das mit einer
+`Range` über `.pq-l`: `getClientRects()` liefert eine Box je gerenderter
+Zeile, die Abstände müssen alle gleich sein.
+
 ## Bildexport
 
 - **Farbraum sRGB.** Kein Adobe RGB, kein ProPhoto. Browser ignorieren eingebettete
