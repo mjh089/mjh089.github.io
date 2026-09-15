@@ -155,7 +155,9 @@ Datei ist UTF-8, und literale Zeichen bleiben beim Bearbeiten lesbar.
 
 ### Pull Quote (`.pq`)
 
-Eigene Rasterzeile am Ende von licht+spiel, Spalten 3–11. Zwei Eigenheiten,
+Eigene Rasterzeile in licht+spiel, Spalten 3–11, gesetzt zwischen die
+Bildreihe und die Videoreihe: Die Textfläche trennt dort zwei Bildbänder
+und lockert den Abschnitt auf, statt ihn nur zu beenden. Zwei Eigenheiten,
 die beim Kopieren des Musters leicht verlorengehen:
 
 - **`figure` braucht `margin:0`.** Browser geben dem Element von sich aus
