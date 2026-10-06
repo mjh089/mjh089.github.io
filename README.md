@@ -112,7 +112,8 @@ Search Console aufrecht und darf nicht entfernt werden.
 `/abfahrt-d9785f7f8ba7/` zeigt Live-Abfahrten einer MVG-Haltestelle fürs iPhone
 (Safari → Teilen → Zum Home-Bildschirm). Die Haltestelle wird in der Seite gewählt
 (Suche mit Vorschlägen, „In meiner Nähe“ per Standort, zuletzt gewählte) und steckt im
-Link (`?h=Vogelweideplatz`, dazu `w=0` ohne Wetter, `r=0` ohne Richtungsspalten) bzw. im
+Link (`?h=Vogelweideplatz`, dazu `w=0` ohne Wetter, `r=0` ohne Richtungsspalten, `m=0` ohne
+Störungsmeldungen) bzw. im
 Speicher des Geräts – nicht im Code. `noindex`, nirgends verlinkt.
 
 Stadteinwärts/stadtauswärts ordnet die Seite selbst: Liegt ein Ziel von der Haltestelle
@@ -136,7 +137,8 @@ Daten von außen werden auf ihren Typ geprüft, bevor sie verarbeitet werden.
 
 **Beim Ändern:** `?v=…` an den Dateien in `index.html` hochzählen – GitHub Pages lässt
 Dateien zehn Minuten im Gerätespeicher; ohne neue Nummer mischt das iPhone kurz neue
-Seite und alte Skripte. Prüfen mit `python3 tools/web_check.py` im Projekt
+Seite und alte Skripte. Passiert es doch (alte Seite, neues Skript), lädt sich die Seite
+einmal frisch am Zwischenspeicher vorbei (`&frisch=…`, wird danach wieder entfernt). Prüfen mit `python3 tools/web_check.py` im Projekt
 `trmnl-mvg-abfahrten` (Einzelfälle + Abgleich mit dem Plugin auf Echtdaten).
 
 ## Farbschema

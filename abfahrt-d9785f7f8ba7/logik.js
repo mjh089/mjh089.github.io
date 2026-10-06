@@ -203,6 +203,10 @@
       if (!groups.has(c.line)) { groups.set(c.line, []); }
       groups.get(c.line).push(c);
     });
+    if (cards.every(function (c) { return c._angle === null; })) {   // Lage noch unbekannt: erst einmal eine Liste
+      cards.forEach(function (c) { delete c._angle; });
+      return null;
+    }
     groups.forEach(function (list) {
       var known = list.filter(function (c) { return c._angle !== null; }).sort(function (a, b) { return a._angle - b._angle; });
       known.forEach(function (c) { sides.set(c, c._angle < 90 ? "L" : "R"); });

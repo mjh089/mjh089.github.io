@@ -10,6 +10,29 @@
     document.body.appendChild(out);
     return;
   }
+  // Seite und Skript passen nicht zusammen (alte Seite aus dem Zwischenspeicher, neues Skript – GitHub
+  // Pages hält Dateien 10 Min.): einmal frisch laden; der Zusatz im Link umgeht den Zwischenspeicher.
+  var NEEDED = ["title", "sub", "notices", "heads", "rows", "empty", "stand", "edit", "settings", "setForm", "q", "opts", "dir", "msg", "wx", "cancel"];
+  var healed = null;
+  try { healed = sessionStorage.getItem("abfahrt-frisch"); } catch (e) { healed = "x"; }
+  if (NEEDED.some(function (id) { return !document.getElementById(id); })) {
+    if (!healed) {
+      try { sessionStorage.setItem("abfahrt-frisch", "1"); } catch (e) { /* dann eben ohne */ }
+      var fresh = new URL(location.href);
+      fresh.searchParams.set("frisch", String(Date.now()));
+      location.replace(fresh.toString());
+    } else {
+      var hint = document.getElementById("stand") || document.body;
+      hint.textContent = "Es gibt eine neue Version. Bitte die Seite neu laden bzw. die App schließen und neu öffnen.";
+    }
+    return;
+  }
+  try { sessionStorage.removeItem("abfahrt-frisch"); } catch (e) { /* egal */ }
+  if (/[?&]frisch=/.test(location.search)) {   // Zusatz wieder aus dem Link nehmen
+    var clean = new URL(location.href);
+    clean.searchParams.delete("frisch");
+    history.replaceState(null, "", clean.pathname + clean.search);
+  }
   var MAX_WAIT = 60 * 60000;   // Linien, die erst später fahren, ruhen („Heute keine Fahrt mehr“)
   var REFRESH = 30000;         // Abfahrten alle 30 s neu holen, solange die Seite sichtbar ist
   var SLOW = 10 * 60000;       // Meldungen (~370 KB) und Wetter nur alle 10 Min.
@@ -51,11 +74,11 @@
   }
   function sane(s) {
     s = s && typeof s === "object" ? s : {};
-    return { h: String(s.h || "").trim().slice(0, LIMIT), w: s.w !== false, d: s.d !== false };
+    return { h: String(s.h || "").trim().slice(0, LIMIT), w: s.w !== false, d: s.d !== false, m: s.m !== false };
   }
   function readSettings() {
     var p = new URLSearchParams(location.search), map = readJSON("abfahrt-links", {});
-    if (p.has("h")) { return sane(map[location.search] || { h: p.get("h"), w: p.get("w") !== "0", d: p.get("r") !== "0" }); }
+    if (p.has("h")) { return sane(map[location.search] || { h: p.get("h"), w: p.get("w") !== "0", d: p.get("r") !== "0", m: p.get("m") !== "0" }); }
     return sane(readJSON("abfahrt-settings", {}));
   }
   function writeSettings(s) {
@@ -63,6 +86,7 @@
     p.set("h", s.h);
     if (!s.w) { p.set("w", "0"); }
     if (!s.d) { p.set("r", "0"); }
+    if (!s.m) { p.set("m", "0"); }
     var search = "?" + p.toString(), map = readJSON("abfahrt-links", {});
     map[launch] = s; map[search] = s;
     var keys = Object.keys(map);
@@ -104,7 +128,7 @@
       state.stations = sts;
       var jobs = sts.map(function (s) { return A.fetchDepartures(s.globalId).catch(function () { return null; }); });
       var side = [];
-      if (!state.messages || started - state.msgAt > SLOW) {
+      if (settings.m && (!state.messages || started - state.msgAt > SLOW)) {   // Meldungen nur, wenn gewünscht (~370 KB)
         side.push(A.fetchMessages().then(function (m) { if (Array.isArray(m)) { state.messages = m; state.msgAt = Date.now(); } }, function () {}));
       }
       if (settings.w && sts[0].latitude && (!state.weather || started - state.wxAt > SLOW)) {
@@ -158,6 +182,7 @@
   }
 
   // ---------- Darstellung ----------
+  var firstTrip = false;   // nachts: die angezeigten Fahrten sind die ersten des Morgens
   function countdown(t, now) {
     var m = Math.floor((t - now) / 60000);
     if (m < 1) { return "jetzt"; }
@@ -181,7 +206,7 @@
     next.appendChild(el("span", "time" + (c.cancelled ? " x" : ""), hhmm(c.t)));
     if (c.delay > 0 && !c.cancelled) { next.appendChild(el("span", "delay", "+" + c.delay)); }
     var soon = !c.cancelled && c.t - now < 3 * 60000;
-    next.appendChild(el("span", "count" + (soon ? " count--soon" : ""), c.cancelled ? "fällt aus" : countdown(c.t, now)));
+    next.appendChild(el("span", "count" + (soon ? " count--soon" : ""), c.cancelled ? "fällt aus" : (firstTrip ? "erste Fahrt · " : "") + countdown(c.t, now)));
     box.appendChild(next);
     if (c.live || c.platform) {
       var meta = el("div", "meta");
@@ -243,12 +268,15 @@
 
     var dormant = [];
     var cards = A.buildCards(state.raw, now, hhmm, { maxWaitMs: MAX_WAIT, horizonMs: state.horizon, laterN: 4, dormant: dormant });
-    if (!cards.length) {   // nachts: die ersten Fahrten des Morgens
+    var night = false;
+    if (!cards.length) {   // nachts: die ersten Fahrten des Morgens (wie im TRMNL-Plugin: „erste Fahrt“)
       cards = A.buildCards(state.raw, now, hhmm, { horizonMs: state.horizon, laterN: 4 });
+      night = cards.length > 0 && cards.every(function (c) { return c.t - now >= 60 * 60000; });
       dormant = [];
     }
+    firstTrip = night;
     dormant.forEach(function (d) { d.tomorrow = serviceDay(d.t) !== serviceDay(now); });
-    var alerts = state.messages ? A.buildAlerts(state.messages, new Set(cards.map(function (c) { return c.line; })), now, hhmm) : [];
+    var alerts = settings.m && state.messages ? A.buildAlerts(state.messages, new Set(cards.map(function (c) { return c.line; })), now, hhmm) : [];
     A.attachHints(cards, alerts).slice(0, 3).forEach(function (a) {
       var n = el("div", "notice");
       n.appendChild(el("b", null, a.lines + ": "));
@@ -364,7 +392,7 @@
     if (!h) { return; }
     if (station) { store("abfahrt-st:" + h, JSON.stringify([station])); }   // genau die gewählte Haltestelle
     var changed = h !== settings.h;
-    settings = sane({ h: h, w: settings.w, d: settings.d });
+    settings = sane({ h: h, w: settings.w, d: settings.d, m: settings.m });
     writeSettings(settings);
     if (changed) { state = freshState(state); }
     closeSettings();
@@ -381,7 +409,7 @@
   }
   function openSettings() {
     q.value = "";
-    $("dir").checked = settings.d; $("wx").checked = settings.w;
+    $("dir").checked = settings.d; $("wx").checked = settings.w; $("msg").checked = settings.m;
     showStart();
     if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute("open", ""); }
     q.focus();
@@ -396,14 +424,16 @@
     if (first) { first.click(); } else if (text) { apply(text, null); }
   });
   function toggle() {
-    settings = sane({ h: settings.h, w: $("wx").checked, d: $("dir").checked });
+    settings = sane({ h: settings.h, w: $("wx").checked, d: $("dir").checked, m: $("msg").checked });
     if (settings.h) { writeSettings(settings); }
     if (!settings.w) { state.weather = null; state.wxAt = 0; }
+    if (!settings.m) { state.messages = null; state.msgAt = 0; }
     render();
-    if (settings.w) { load(); }
+    if (settings.w || settings.m) { load(); }
   }
   $("dir").addEventListener("change", toggle);
   $("wx").addEventListener("change", toggle);
+  $("msg").addEventListener("change", toggle);
   $("cancel").addEventListener("click", closeSettings);
   $("edit").addEventListener("click", openSettings);
   $("title").addEventListener("click", openSettings);
