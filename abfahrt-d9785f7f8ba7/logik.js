@@ -180,6 +180,41 @@
   }
   function parseTerms(s) { return String(s || "").split(",").map(function (t) { return t.trim().toLowerCase(); }).filter(Boolean); }
 
+  // ---------- stadteinwärts / stadtauswärts – automatisch ----------
+  // Liegt das Ziel von der Haltestelle aus in Richtung Marienplatz (Winkel unter 90°), ist es
+  // stadteinwärts. Je Linie stehen die beiden Richtungen dann links und rechts – auch bei Linien,
+  // die die Stadt umfahren (X30): die Richtung mit dem kleineren Winkel kommt nach links.
+  var CENTER = [48.13725, 11.57542];   // Marienplatz
+  function flat(p, ref) { return [(p[1] - ref[1]) * Math.cos(ref[0] * Math.PI / 180), p[0] - ref[0]]; }
+  function distKm(a, b) { var v = flat(b, a); return Math.sqrt(v[0] * v[0] + v[1] * v[1]) * 111.2; }
+  function angleToCenter(stop, dest) {
+    var a = flat(dest, stop), b = flat(CENTER, stop), la = Math.hypot(a[0], a[1]), lb = Math.hypot(b[0], b[1]);
+    if (!la || !lb) { return null; }
+    return Math.acos(Math.max(-1, Math.min(1, (a[0] * b[0] + a[1] * b[1]) / (la * lb)))) * 180 / Math.PI;
+  }
+  // cards: Karten (auch ruhende), stop: [lat, lon], coordsOf(ziel) -> [lat, lon] | null
+  // Ergebnis: Map Karte -> "L" | "R"; null, wenn die Haltestelle selbst in der Innenstadt liegt
+  function directionSides(cards, stop, coordsOf) {
+    if (!stop || distKm(stop, CENTER) < 1.5) { return null; }   // Innenstadt: eine Liste
+    var sides = new Map(), groups = new Map();
+    cards.forEach(function (c) {
+      var p = coordsOf(c.destination), ang = p ? angleToCenter(stop, p) : null;
+      c._angle = ang;
+      if (!groups.has(c.line)) { groups.set(c.line, []); }
+      groups.get(c.line).push(c);
+    });
+    groups.forEach(function (list) {
+      var known = list.filter(function (c) { return c._angle !== null; }).sort(function (a, b) { return a._angle - b._angle; });
+      known.forEach(function (c) { sides.set(c, c._angle < 90 ? "L" : "R"); });
+      var hasL = known.some(function (c) { return sides.get(c) === "L"; }), hasR = known.some(function (c) { return sides.get(c) === "R"; });
+      if (known.length >= 2 && !hasL) { sides.set(known[0], "L"); hasL = true; }                     // umfährt die Stadt
+      if (known.length >= 2 && !hasR) { sides.set(known[known.length - 1], "R"); hasR = true; }
+      list.forEach(function (c) { if (c._angle === null) { sides.set(c, hasL && !hasR ? "R" : "L"); } });   // Lage unbekannt
+    });
+    cards.forEach(function (c) { delete c._angle; });
+    return sides;
+  }
+
   // ---------- Meldungen ----------
   function buildAlerts(messages, labels, nowMs, fmt) {
     var horizon = nowMs + ALERT_LOOKAHEAD_H * 3600000, out = [];
@@ -309,6 +344,18 @@
       return arr(hits).filter(function (h) { return h && h.type === "STATION" && h.globalId && h.name; }).slice(0, 8);
     });
   }
+  function fetchNearby(lat, lon) {   // auf ~100 m gerundet: genauer muss die MVG den Standort nicht kennen
+    return getJSON(API + "/stations/nearby", { latitude: lat.toFixed(3), longitude: lon.toFixed(3) }).then(function (list) {
+      return arr(list).filter(function (h) { return h && h.globalId && h.name; }).slice(0, 8);
+    });
+  }
+  function locate(name) {           // Lage eines Ziels (für stadteinwärts / stadtauswärts)
+    return getJSON(API + "/locations", { query: String(name).replace(/\s*\([^)]*\)\s*$/, "") }).then(function (hits) {
+      var h = arr(hits).find(function (x) { return x && x.type === "STATION" && typeof x.latitude === "number"; }) ||
+              arr(hits).find(function (x) { return x && typeof x.latitude === "number"; });
+      return h ? [h.latitude, h.longitude] : null;
+    });
+  }
   function fetchDepartures(globalId, types) {
     return getJSON(API + "/departures", { globalId: globalId, limit: DEP_LIMIT, transportTypes: types || "" });
   }
@@ -342,7 +389,8 @@
     API: API, buildCards: buildCards, isLeft: isLeft, parseTerms: parseTerms, buildAlerts: buildAlerts,
     attachHints: attachHints, buildWeather: buildWeather, sameDest: sameDest, direction: direction,
     shortLabel: shortLabel, stripDirection: stripDirection, resolveStation: resolveStation,
-    searchStations: searchStations, fetchDepartures: fetchDepartures, fetchMessages: fetchMessages,
+    searchStations: searchStations, fetchDepartures: fetchDepartures, fetchNearby: fetchNearby, locate: locate,
+    directionSides: directionSides, angleToCenter: angleToCenter, distKm: distKm, fetchMessages: fetchMessages,
     fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime
   };
 })(window);

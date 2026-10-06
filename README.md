@@ -110,9 +110,16 @@ Search Console aufrecht und darf nicht entfernt werden.
 ## Abfahrt (unverlinkte Unterseite)
 
 `/abfahrt-d9785f7f8ba7/` zeigt Live-Abfahrten einer MVG-Haltestelle fürs iPhone
-(Safari → Teilen → Zum Home-Bildschirm). Die Haltestelle wird in der Seite gewählt und
-steckt im Link (`?h=Vogelweideplatz&l=Pasing,%20Harras`) bzw. im Speicher des Geräts –
-nicht im Code. `noindex`, nirgends verlinkt.
+(Safari → Teilen → Zum Home-Bildschirm). Die Haltestelle wird in der Seite gewählt
+(Suche mit Vorschlägen, „In meiner Nähe“ per Standort, zuletzt gewählte) und steckt im
+Link (`?h=Vogelweideplatz`, dazu `w=0` ohne Wetter, `r=0` ohne Richtungsspalten) bzw. im
+Speicher des Geräts – nicht im Code. `noindex`, nirgends verlinkt.
+
+Stadteinwärts/stadtauswärts ordnet die Seite selbst: Liegt ein Ziel von der Haltestelle
+aus in Richtung Marienplatz (Winkel unter 90°), steht es links; je Linie kommen die beiden
+Richtungen nebeneinander. Die Lage der Ziele fragt sie einmal bei der MVG ab und merkt sie
+sich auf dem Gerät. In der Innenstadt (unter 1,5 km zum Marienplatz) gibt es eine Liste.
+„In meiner Nähe“ schickt den Standort auf ~100 m gerundet an die MVG, nur nach Antippen.
 
 Ausnahme vom Grundsatz „nichts von fremden Servern“, bewusst und eng: Die eigene
 Content-Security-Policy dieser Unterseite erlaubt `connect-src` nur zu `www.mvg.de`

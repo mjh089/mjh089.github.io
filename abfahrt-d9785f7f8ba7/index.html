@@ -19,51 +19,49 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<script src="thema.js?v=2"></script>
+<script src="thema.js?v=4"></script>
 <!-- ?v=… bei jeder Änderung hochzählen: GitHub Pages lässt Dateien 10 Min. im Gerätespeicher,
      sonst mischt das iPhone kurz neue Seite und alte Skripte. -->
-<link rel="stylesheet" href="stil.css?v=2">
+<link rel="stylesheet" href="stil.css?v=4">
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="station">
-      <h1 id="title">Abfahrt</h1>
+      <h1><button class="title" id="title" type="button" aria-haspopup="dialog">Abfahrt</button></h1>
       <div class="sub" id="sub">Abfahrten der MVG, live</div>
     </div>
     <button class="edit" id="edit" type="button" aria-haspopup="dialog">Ändern</button>
   </header>
   <div id="notices"></div>
-  <div class="heads" id="heads" hidden><div id="headL"></div><div id="headR"></div></div>
+  <div class="heads" id="heads" hidden><div>Stadteinwärts</div><div>Stadtauswärts</div></div>
   <main class="rows" id="rows"></main>
   <p class="empty" id="empty" hidden></p>
   <footer>
     <div id="stand">Wird geladen …</div>
     <div>Abfahrten: MVG (inoffizielle Schnittstelle), Wetter: Open-Meteo. Die gewählte Haltestelle
-      wird nur auf diesem Gerät gespeichert. <a href="/">michaelhofauer.com</a></div>
+      wird nur auf diesem Gerät gespeichert. „In meiner Nähe“ schickt deinen Standort – auf etwa 100 m
+      gerundet – an die MVG, und nur dann, wenn du darauf tippst. <a href="/">michaelhofauer.com</a></div>
   </footer>
 </div>
 
 <dialog id="settings" aria-labelledby="setTitle">
-  <form class="sheet" id="setForm" method="dialog">
-    <h2 id="setTitle">Haltestelle</h2>
-    <label for="q">Name, Adresse oder mehrere mit „;“
-      <input id="q" type="text" maxlength="200" autocomplete="off" autocapitalize="words" enterkeyhint="search" placeholder="z. B. Marienplatz">
-    </label>
-    <div class="hits" id="hits"></div>
-    <label for="left">Linke Spalte: Ziele, kommagetrennt (optional)
-      <input id="left" type="text" maxlength="200" autocomplete="off" placeholder="z. B. Hauptbahnhof, Pasing">
-    </label>
-    <p>Karten mit diesen Zielen stehen links (etwa stadteinwärts), alle anderen rechts. Leer: eine Liste.</p>
-    <label class="check" for="wx"><input id="wx" type="checkbox" checked> Wetter anzeigen</label>
-    <div class="tip">Auf dem iPhone: in Safari auf <b>Teilen</b> tippen, dann <b>Zum Home-Bildschirm</b>. Die Haltestelle steckt im Link des Symbols.</div>
-    <div class="actions">
-      <button class="btn" id="cancel" type="button">Abbrechen</button>
-      <button class="btn btn--main" id="save" type="submit">Übernehmen</button>
+  <form class="sheet" id="setForm" method="dialog" role="search">
+    <div class="sheet-head">
+      <h2 id="setTitle">Haltestelle wählen</h2>
+      <button class="btn btn--main" id="cancel" type="button">Fertig</button>
     </div>
+    <input id="q" type="search" maxlength="200" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+           enterkeyhint="search" placeholder="Haltestelle oder Adresse suchen" aria-label="Haltestelle oder Adresse suchen" aria-controls="opts">
+    <div class="opts" id="opts" role="listbox" aria-label="Haltestellen"></div>
+    <div class="switches">
+      <label class="check" for="dir"><input id="dir" type="checkbox" checked><span>Nach Richtung ordnen<small>stadteinwärts links, stadtauswärts rechts</small></span></label>
+      <label class="check" for="wx"><input id="wx" type="checkbox" checked><span>Wetter anzeigen</span></label>
+    </div>
+    <div class="tip">Als App aufs iPhone: in Safari auf <b>Teilen</b> tippen, dann <b>Zum Home-Bildschirm</b>.</div>
   </form>
 </dialog>
-<script src="logik.js?v=2"></script>
-<script src="app.js?v=2"></script>
+<script src="logik.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

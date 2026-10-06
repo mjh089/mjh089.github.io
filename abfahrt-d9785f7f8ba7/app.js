@@ -36,34 +36,34 @@
   }
 
   // ---------- Einstellungen ----------
-  // Der Link (?h=…&l=…) bringt die Haltestelle mit – so steckt sie im Home-Symbol. Ändert man sie in der
-  // App, merkt sich das Gerät die neue Wahl zu genau diesem Startlink: iOS öffnet das Symbol immer mit
-  // dem ursprünglichen Link, die Änderung soll trotzdem bleiben.
+  // Der Link (?h=Haltestelle) bringt die Haltestelle mit – so steckt sie im Home-Symbol. Ändert man sie in
+  // der App, merkt sich das Gerät die neue Wahl zu genau diesem Startlink: iOS öffnet das Symbol immer
+  // mit dem ursprünglichen Link, die Änderung soll trotzdem bleiben. w=0: ohne Wetter, r=0: eine Liste.
   var LIMIT = 200;   // Eingaben begrenzen
   function sessionGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function sessionSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* egal */ } }
   var launch = sessionGet("abfahrt-launch");
   if (launch === null) { launch = location.search; sessionSet("abfahrt-launch", launch); }
-  function linkMap() {
-    var m = null;
-    try { m = JSON.parse(store("abfahrt-links") || "null"); } catch (e) { m = null; }
-    return m && typeof m === "object" && !Array.isArray(m) ? m : {};
+  function readJSON(key, fallback) {
+    var v = null;
+    try { v = JSON.parse(store(key) || "null"); } catch (e) { v = null; }
+    return v === null || typeof v !== typeof fallback || Array.isArray(v) !== Array.isArray(fallback) ? fallback : v;
   }
   function sane(s) {
     s = s && typeof s === "object" ? s : {};
-    return { h: String(s.h || "").trim().slice(0, LIMIT), l: String(s.l || "").trim().slice(0, LIMIT), w: s.w !== false };
+    return { h: String(s.h || "").trim().slice(0, LIMIT), w: s.w !== false, d: s.d !== false };
   }
   function readSettings() {
-    var p = new URLSearchParams(location.search), map = linkMap();
-    if (p.has("h")) { return sane(map[location.search] || { h: p.get("h"), l: p.get("l") || "", w: p.get("w") !== "0" }); }
-    try { return sane(JSON.parse(store("abfahrt-settings") || "{}")); } catch (e) { return sane({}); }
+    var p = new URLSearchParams(location.search), map = readJSON("abfahrt-links", {});
+    if (p.has("h")) { return sane(map[location.search] || { h: p.get("h"), w: p.get("w") !== "0", d: p.get("r") !== "0" }); }
+    return sane(readJSON("abfahrt-settings", {}));
   }
   function writeSettings(s) {
     var p = new URLSearchParams();
     p.set("h", s.h);
-    if (s.l) { p.set("l", s.l); }
     if (!s.w) { p.set("w", "0"); }
-    var search = "?" + p.toString(), map = linkMap();
+    if (!s.d) { p.set("r", "0"); }
+    var search = "?" + p.toString(), map = readJSON("abfahrt-links", {});
     map[launch] = s; map[search] = s;
     var keys = Object.keys(map);
     keys.slice(0, Math.max(0, keys.length - 12)).forEach(function (k) { if (k !== launch && k !== search) { delete map[k]; } });
@@ -132,6 +132,29 @@
       state.loading = false;
       render();
     });
+  }
+
+  // ---------- Lage der Ziele (stadteinwärts / stadtauswärts), auf dem Gerät zwischengespeichert ----------
+  var coords = readJSON("abfahrt-ziele", {}), pending = {}, failed = {}, redraw = null;
+  function coordsOf(name) {
+    if (!name) { return null; }
+    var v = coords[name];
+    if (Array.isArray(v) && typeof v[0] === "number" && typeof v[1] === "number") { return v; }
+    if (v === 0) { return null; }                                   // gesucht, nicht gefunden
+    if (!pending[name] && !(failed[name] > Date.now() - 10 * 60000) && Object.keys(pending).length < 4) {
+      pending[name] = true;
+      A.locate(name).then(function (p) {
+        coords[name] = p || 0;
+        var keys = Object.keys(coords);
+        if (keys.length > 400) { keys.slice(0, keys.length - 400).forEach(function (k) { delete coords[k]; }); }
+        store("abfahrt-ziele", JSON.stringify(coords));
+      }, function () { failed[name] = Date.now(); }).then(function () {
+        delete pending[name];
+        clearTimeout(redraw);
+        redraw = setTimeout(render, 80);                            // sobald die Lage da ist, richtig einsortieren
+      });
+    }
+    return null;
   }
 
   // ---------- Darstellung ----------
@@ -233,28 +256,26 @@
       notices.appendChild(n);
     });
 
-    // Zeilen je Linie: links die Ziele aus „Linke Spalte“, rechts die Gegenrichtung. Ruhende Richtungen
-    // nur, wenn die Linie heute nicht mehr fährt oder ihre andere Richtung gerade eine Karte hat.
-    var terms = A.parseTerms(settings.l), split = terms.length > 0;
+    // Zeilen je Linie: links stadteinwärts, rechts stadtauswärts (automatisch, siehe logik.js). Ruhende
+    // Richtungen nur, wenn die Linie heute nicht mehr fährt oder ihre andere Richtung gerade eine Karte hat.
     var active = new Set(cards.map(function (c) { return c.line; }));
     var shown = cards.concat(dormant.filter(function (d) { return d.tomorrow || active.has(d.line); }));
+    var st = state.stations && state.stations[0];
+    var sides = settings.d && st && typeof st.latitude === "number" ? A.directionSides(shown, [st.latitude, st.longitude], coordsOf) : null;
+    var split = !!sides;
     var groups = new Map();
     shown.forEach(function (c) {
       var key = c.sort.join("|") + "|" + c.line;
       if (!groups.has(key)) { groups.set(key, { sort: c.sort.concat([c.line]), L: [], R: [] }); }
       var g = groups.get(key);
-      (split && !A.isLeft(c, terms) ? g.R : g.L).push(c);
+      (split && sides.get(c) === "R" ? g.R : g.L).push(c);
     });
     var list = Array.from(groups.values()).sort(function (a, b) {
       for (var i = 0; i < a.sort.length; i++) { if (a.sort[i] !== b.sort[i]) { return a.sort[i] < b.sort[i] ? -1 : 1; } }
       return 0;
     });
     rows.className = "rows" + (split ? "" : " rows--single");
-    if (split) {
-      $("heads").hidden = false;
-      $("headL").textContent = settings.l.split(",").map(function (s) { return s.trim(); }).filter(Boolean).slice(0, 3).join(" · ");
-      $("headR").textContent = "Gegenrichtung";
-    }
+    $("heads").hidden = !split;
     list.forEach(function (g) {
       var n = split ? Math.max(g.L.length, g.R.length) : g.L.length;
       for (var i = 0; i < n; i++) {
@@ -268,51 +289,124 @@
     $("stand").textContent = "Stand " + secF.format(new Date(state.fetchedAt)) + " Uhr · aktualisiert sich alle 30 Sekunden, solange die Seite offen ist.";
   }
 
-  // ---------- Einstellungen-Dialog ----------
-  var dlg = $("settings"), q = $("q"), hits = $("hits"), searchTimer = null;
-  function openSettings() {
-    q.value = settings.h; $("left").value = settings.l; $("wx").checked = settings.w;
-    hits.textContent = "";
-    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute("open", ""); }
-    if (!settings.h) { q.focus(); }
+  // ---------- Haltestelle wählen ----------
+  var dlg = $("settings"), q = $("q"), opts = $("opts"), searchTimer = null, searchSeq = 0;
+  var MODES = { UBAHN: ["U", "U-Bahn"], SBAHN: ["S", "S-Bahn"], TRAM: ["T", "Tram"], BUS: ["B", "Bus"], REGIONAL_BUS: ["B", "Bus"] };
+  function recent() { return readJSON("abfahrt-zuletzt", []).filter(function (s) { return s && s.globalId && s.name; }); }
+  function slim(s) { return { globalId: String(s.globalId), name: String(s.name), place: s.place ? String(s.place) : "", latitude: s.latitude, longitude: s.longitude,
+                              transportTypes: Array.isArray(s.transportTypes) ? s.transportTypes.map(String).slice(0, 6) : [] }; }
+  function option(s, extra) {
+    var b = el("button", "opt"), seen = {};
+    b.type = "button"; b.setAttribute("role", "option");
+    b.appendChild(el("span", "opt-name", s.name));
+    var sub = [];
+    if (s.place && s.place !== "München") { sub.push(s.place); }
+    if (extra) { sub.push(extra); }
+    if (sub.length) { b.appendChild(el("span", "opt-sub", sub.join(" · "))); }
+    var modes = el("span", "opt-modes");
+    (s.transportTypes || []).forEach(function (t) {
+      var m = MODES[t];
+      if (m && !seen[m[0]]) { seen[m[0]] = 1; var x = el("span", "mode mode--" + m[0], m[0] === "T" ? "Tram" : m[0] === "B" ? "Bus" : m[0]); x.title = m[1]; modes.appendChild(x); }
+    });
+    b.appendChild(modes);
+    b.addEventListener("click", function () { pickStation(s); });
+    return b;
   }
-  function closeSettings() { if (dlg.close) { dlg.close(); } else { dlg.removeAttribute("open"); } }
-  q.addEventListener("input", function () {
+  function message(text) { opts.textContent = ""; opts.appendChild(el("div", "opt-msg", text)); }
+  function showStart() {   // ohne Eingabe: „In der Nähe“ und zuletzt gewählte Haltestellen
+    opts.textContent = "";
+    if (navigator.geolocation) {
+      var near = el("button", "opt opt--near", "📍 Haltestellen in meiner Nähe");
+      near.type = "button";
+      near.addEventListener("click", findNearby);
+      opts.appendChild(near);
+    }
+    var r = recent();
+    if (r.length) {
+      opts.appendChild(el("div", "opt-head", "Zuletzt gewählt"));
+      r.forEach(function (s) { opts.appendChild(option(s)); });
+    }
+  }
+  function findNearby() {
+    message("Standort wird bestimmt …");
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      message("Haltestellen in der Nähe werden gesucht …");
+      A.fetchNearby(pos.coords.latitude, pos.coords.longitude).then(function (list) {
+        if (!list.length) { message("Keine Haltestelle in der Nähe gefunden."); return; }
+        opts.textContent = "";
+        opts.appendChild(el("div", "opt-head", "In der Nähe"));
+        list.forEach(function (s) {
+          var d = typeof s.distanceInMeters === "number" ? (s.distanceInMeters < 1000 ? Math.round(s.distanceInMeters / 10) * 10 + " m" : (s.distanceInMeters / 1000).toFixed(1).replace(".", ",") + " km") : "";
+          opts.appendChild(option(s, d));
+        });
+      }, function () { message("Die MVG ist gerade nicht erreichbar."); });
+    }, function (err) {
+      message(err && err.code === 1 ? "Standort nicht freigegeben – bitte den Namen der Haltestelle eintippen." : "Standort nicht verfügbar – bitte den Namen eintippen.");
+    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 120000 });
+  }
+  function search() {
+    var text = q.value.trim(), seq = ++searchSeq;
     clearTimeout(searchTimer);
-    var text = q.value.trim();
-    if (text.length < 2 || text.indexOf(";") >= 0) { hits.textContent = ""; return; }
+    if (!text) { showStart(); return; }
+    if (text.indexOf(";") >= 0) { message("Mehrere Haltestellen: mit der Eingabetaste übernehmen."); return; }
+    if (text.length < 2) { return; }
     searchTimer = setTimeout(function () {
       A.searchStations(text).then(function (list) {
-        if (q.value.trim() !== text) { return; }
-        hits.textContent = "";
-        list.forEach(function (s) {
-          var b = el("button", "chip", s.name);
-          b.type = "button";
-          if (s.place && s.place !== "München") { b.appendChild(el("span", null, " · " + s.place)); }
-          b.addEventListener("click", function () {
-            if (s.name !== settings.h) { $("left").value = ""; }   // die linke Spalte gehört zur alten Haltestelle
-            q.value = s.name; hits.textContent = "";
-          });
-          hits.appendChild(b);
-        });
-      }, function () { hits.textContent = ""; });
-    }, 250);
-  });
-  $("setForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var s = sane({ h: q.value, l: $("left").value, w: $("wx").checked });
-    if (!s.h) { q.focus(); return; }
-    var changed = s.h !== settings.h;
-    settings = s;
-    writeSettings(s);
+        if (seq !== searchSeq) { return; }
+        if (!list.length) { message("Nichts gefunden – andere Schreibweise oder eine Adresse versuchen."); return; }
+        opts.textContent = "";
+        list.forEach(function (s) { opts.appendChild(option(s)); });
+      }, function () { if (seq === searchSeq) { message("Die MVG ist gerade nicht erreichbar."); } });
+    }, 200);
+  }
+  function apply(h, station) {
+    h = String(h || "").trim().slice(0, LIMIT);
+    if (!h) { return; }
+    if (station) { store("abfahrt-st:" + h, JSON.stringify([station])); }   // genau die gewählte Haltestelle
+    var changed = h !== settings.h;
+    settings = sane({ h: h, w: settings.w, d: settings.d });
+    writeSettings(settings);
     if (changed) { state = freshState(state); }
-    if (!s.w) { state.weather = null; state.wxAt = 0; }
     closeSettings();
     render();
     load();
+  }
+  function pickStation(s) {
+    s = slim(s);
+    var r = recent().filter(function (x) { return x.globalId !== s.globalId; });
+    r.unshift(s);
+    store("abfahrt-zuletzt", JSON.stringify(r.slice(0, 6)));
+    // Name im Link, wenn eindeutig (München), sonst die Global-ID – „Rotkreuzstraße“ gibt es mehrfach
+    apply(!s.place || s.place === "München" ? s.name : s.globalId, s);
+  }
+  function openSettings() {
+    q.value = "";
+    $("dir").checked = settings.d; $("wx").checked = settings.w;
+    showStart();
+    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute("open", ""); }
+    q.focus();
+  }
+  function closeSettings() { if (dlg.close) { dlg.close(); } else { dlg.removeAttribute("open"); } }
+  q.addEventListener("input", search);
+  $("setForm").addEventListener("submit", function (e) {   // Eingabetaste: erster Treffer bzw. mehrere mit „;“
+    e.preventDefault();
+    var text = q.value.trim();
+    if (text.indexOf(";") >= 0) { apply(text, null); return; }
+    var first = opts.querySelector(".opt:not(.opt--near)");
+    if (first) { first.click(); } else if (text) { apply(text, null); }
   });
+  function toggle() {
+    settings = sane({ h: settings.h, w: $("wx").checked, d: $("dir").checked });
+    if (settings.h) { writeSettings(settings); }
+    if (!settings.w) { state.weather = null; state.wxAt = 0; }
+    render();
+    if (settings.w) { load(); }
+  }
+  $("dir").addEventListener("change", toggle);
+  $("wx").addEventListener("change", toggle);
   $("cancel").addEventListener("click", closeSettings);
   $("edit").addEventListener("click", openSettings);
+  $("title").addEventListener("click", openSettings);
 
   // ---------- Takt ----------
   setInterval(function () {
