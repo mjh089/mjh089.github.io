@@ -107,6 +107,20 @@ den Rebuild.
 Das Meta-Tag `google-site-verification` im `<head>` hält die Bestätigung der
 Search Console aufrecht und darf nicht entfernt werden.
 
+## Abfahrt (unverlinkte Unterseite)
+
+`/abfahrt-d9785f7f8ba7/` zeigt Live-Abfahrten einer MVG-Haltestelle fürs iPhone
+(Safari → Teilen → Zum Home-Bildschirm). Die Haltestelle wird in der Seite gewählt und
+steckt im Link (`?h=Vogelweideplatz&l=Pasing,%20Harras`) bzw. im Speicher des Geräts –
+nicht im Code. `noindex`, nirgends verlinkt.
+
+Ausnahme vom Grundsatz „nichts von fremden Servern“, bewusst und eng: Die eigene
+Content-Security-Policy dieser Unterseite erlaubt `connect-src` nur zu `www.mvg.de`
+(Abfahrten, Meldungen – inoffizielle Schnittstelle) und `api.open-meteo.com` (Wetter).
+Schrift (Manrope, OFL, `OFL.txt`) und Symbole liegen hier. Die Logik ist eine
+Übertragung des TRMNL-Plugins (`trmnl-mvg-abfahrten/src/transform.py`) und wurde mit
+dessen Ergebnissen auf Echtdaten abgeglichen.
+
 ## Farbschema
 
 Hell/Dunkel wird global über `data-theme="dark"|"light"` auf `<html>`
