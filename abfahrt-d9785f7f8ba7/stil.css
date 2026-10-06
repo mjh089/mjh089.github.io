@@ -18,11 +18,14 @@
   color-scheme: dark; }
 
 * { box-sizing: border-box; }
+/* Silbentrennung erst ab 4 Buchstaben je Seite – kein „we-gen“ in schmalen Karten */
+.dest, .hint { hyphenate-limit-chars: 8 4 4; -webkit-hyphenate-limit-before: 4; -webkit-hyphenate-limit-after: 4; }
 [hidden] { display: none !important; }
 html, body { margin: 0; }
 body { background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.35;
        -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; }
-.wrap { max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 14px) 16px calc(env(safe-area-inset-bottom, 0px) + 28px); }
+.wrap { max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 14px) max(16px, env(safe-area-inset-right, 0px))
+        calc(env(safe-area-inset-bottom, 0px) + 28px) max(16px, env(safe-area-inset-left, 0px)); }   /* quer: Abstand zu Notch / Dynamic Island */
 button { font: inherit; color: inherit; }
 
 header { display: flex; align-items: flex-start; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid var(--red); }
@@ -39,8 +42,10 @@ h1 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.1; letter-spac
 .notice + .notice { margin-top: 8px; }
 .offline { background: var(--card); color: var(--grey); }
 
-.heads { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; font-size: 11px; font-weight: 700;
+.heads { display: grid; grid-template-columns: 1fr; column-gap: 18px; margin-top: 14px; font-size: 11px; font-weight: 700;
          letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.heads .dup { display: none; }   /* zweite Überschrift nur im breiten Layout (zwei Linien nebeneinander) */
 .rows { display: grid; gap: 10px; margin-top: 8px; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
 .rows--single .row { grid-template-columns: 1fr; }
@@ -77,6 +82,7 @@ h1 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.1; letter-spac
 
 .empty { margin-top: 28px; color: var(--grey); text-align: center; }
 footer { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--grey); display: grid; gap: 6px; }
+footer .theme { padding: 0 0 10px; margin-bottom: 4px; border-bottom: 1px solid var(--line); color: var(--ink); }
 footer a { color: inherit; }
 
 /* Haltestelle wählen: oben angeheftet, damit Feld und Vorschläge über der Tastatur bleiben */
@@ -106,11 +112,45 @@ input[type="search"]:focus { border-color: var(--ink); }
 .opt-head { margin: 6px 2px 0; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey); }
 .opt-msg { padding: 10px 4px; font-size: 14px; color: var(--grey); }
 .switches { display: grid; gap: 10px; padding-top: 4px; border-top: 1px solid var(--line); }
-.check { display: flex; align-items: flex-start; gap: 10px; padding-top: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-.check input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--red); }
+/* Schalter wie in iOS: Text links, Schiebeschalter rechts (Knopf als Verlauf – geht in jedem Browser) */
+.check { display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; gap: 14px; padding-top: 8px;
+         font-size: 15px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.check input { flex: none; width: 50px; height: 30px; margin: 0; border: 0; border-radius: 999px; cursor: pointer;
+               -webkit-appearance: none; appearance: none;
+               background: var(--line) radial-gradient(circle, #FFFFFF 0 12px, rgba(0,0,0,.14) 12.5px 13px, transparent 13.5px) no-repeat 0 50% / 30px 30px; }
+.check input:checked { background-color: var(--red); background-position: 100% 50%; }
+.check input:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { .check input { transition: background-color .2s, background-position .2s; } }
 .check small { display: block; font-size: 12px; font-weight: 500; color: var(--grey); }
 .btn { padding: 8px 14px; border: 1.5px solid var(--line); border-radius: 999px; background: none; font-weight: 700; cursor: pointer; }
 .btn--main { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .tip { padding: 10px 12px; border-radius: 10px; background: var(--card); font-size: 13px; color: var(--grey); }
 .tip b { color: var(--ink); }
 @media (prefers-reduced-motion: no-preference) { .card { transition: opacity .2s; } }
+
+/* Breit (iPhone quer, iPad, Rechner): zwei Linien nebeneinander – vier Karten je Reihe, jedes Paar
+   mit eigener Überschrift; ohne Richtungen vier Karten je Reihe. */
+@media (min-width: 720px) {
+  .wrap { max-width: 1120px; }
+  .heads { grid-template-columns: 1fr 1fr; }
+  .heads .dup { display: grid; }
+  .heads--one .dup { display: none; }
+  .rows:not(.rows--single) { grid-template-columns: 1fr 1fr; column-gap: 18px; }
+  .rows.rows--single { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+/* iPhone quer: wenig Höhe – Kopf in einer Zeile, knappere Abstände; Auswahlfenster zweispaltig
+   (links Suche und Treffer, rechts die Schalter), damit nichts unter dem Rand verschwindet. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .wrap { padding-top: 10px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); }
+  header { align-items: center; padding-bottom: 8px; }
+  .station { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; }
+  h1 { font-size: 22px; }
+  .sub { margin-top: 0; }
+  .notice { margin-top: 8px; padding: 7px 10px; }
+  .heads { margin-top: 10px; }
+  .later { max-height: 1.35em; overflow: hidden; }   /* Folgezeiten einzeilig: was nicht passt, bricht in die verdeckte 2. Zeile */
+  dialog { width: min(820px, calc(100% - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px))); max-height: calc(100% - 16px); margin-top: 8px; }
+  .sheet { grid-template-columns: minmax(0, 1fr) minmax(220px, 280px); grid-template-areas: "head head" "q switches" "opts switches" "opts tip"; column-gap: 16px; align-items: start; }
+  .sheet-head { grid-area: head; } #q { grid-area: q; } .opts { grid-area: opts; max-height: calc(100vh - 150px); }
+  .switches { grid-area: switches; padding-top: 0; border-top: 0; } .tip { grid-area: tip; }
+}

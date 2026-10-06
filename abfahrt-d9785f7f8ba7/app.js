@@ -12,7 +12,7 @@
   }
   // Seite und Skript passen nicht zusammen (alte Seite aus dem Zwischenspeicher, neues Skript – GitHub
   // Pages hält Dateien 10 Min.): einmal frisch laden; der Zusatz im Link umgeht den Zwischenspeicher.
-  var NEEDED = ["title", "sub", "notices", "heads", "rows", "empty", "stand", "edit", "settings", "setForm", "q", "opts", "dir", "msg", "wx", "cancel"];
+  var NEEDED = ["title", "sub", "notices", "heads", "rows", "empty", "stand", "edit", "settings", "setForm", "q", "opts", "dir", "msg", "wx", "cancel", "dark"];
   var healed = null;
   try { healed = sessionStorage.getItem("abfahrt-frisch"); } catch (e) { healed = "x"; }
   if (NEEDED.some(function (id) { return !document.getElementById(id); })) {
@@ -304,6 +304,7 @@
     });
     rows.className = "rows" + (split ? "" : " rows--single");
     $("heads").hidden = !split;
+    $("heads").classList.toggle("heads--one", list.length < 2);   // breit: zweite Überschrift nur bei zwei Linien
     list.forEach(function (g) {
       var n = split ? Math.max(g.L.length, g.R.length) : g.L.length;
       for (var i = 0; i < n; i++) {
@@ -435,6 +436,18 @@
   $("wx").addEventListener("change", toggle);
   $("msg").addEventListener("change", toggle);
   $("cancel").addEventListener("click", closeSettings);
+
+  // ---------- Hell / Dunkel (Schalter unten; thema.js setzt das Design schon im <head>) ----------
+  var T = window.AbfahrtThema, dark = $("dark");
+  function syncTheme() { dark.checked = T.current() === "dark"; }
+  if (T) {
+    syncTheme();
+    dark.addEventListener("change", function () { T.set(dark.checked ? "dark" : "light"); });
+    T.onSystemChange(syncTheme);
+    window.addEventListener("storage", function (e) { if (e.key === "mjh-theme" || e.key === null) { T.reload(); syncTheme(); } });
+  } else {
+    dark.closest(".theme").hidden = true;
+  }
   $("edit").addEventListener("click", openSettings);
   $("title").addEventListener("click", openSettings);
 

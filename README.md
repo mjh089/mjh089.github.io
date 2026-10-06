@@ -122,6 +122,13 @@ Richtungen nebeneinander. Die Lage der Ziele fragt sie einmal bei der MVG ab und
 sich auf dem Gerät. In der Innenstadt (unter 1,5 km zum Marienplatz) gibt es eine Liste.
 „In meiner Nähe“ schickt den Standort auf ~100 m gerundet an die MVG, nur nach Antippen.
 
+Darstellung: hochkant zwei Spalten (die beiden Richtungen); ab 720 px Breite (iPhone quer,
+iPad, Rechner) zwei Linien nebeneinander, also vier Karten je Reihe; iPhone quer zusätzlich
+mit knappem Kopf und einzeiligen Folgezeiten. Hell/Dunkel folgt dem System; der Schalter
+„Dunkelmodus“ unten schreibt dieselbe Wahl wie `#themeToggle` der Hauptseite
+(`localStorage['mjh-theme']`) – stimmt sie mit dem System überein, wird sie gelöscht und
+die Seite folgt wieder dem System (`thema.js`).
+
 Ausnahme vom Grundsatz „nichts von fremden Servern“, bewusst und eng: Die eigene
 Content-Security-Policy dieser Unterseite erlaubt `connect-src` nur zu `www.mvg.de`
 (Abfahrten, Meldungen – inoffizielle Schnittstelle) und `api.open-meteo.com` (Wetter).
