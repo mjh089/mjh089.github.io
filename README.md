@@ -121,6 +121,17 @@ Schrift (Manrope, OFL, `OFL.txt`) und Symbole liegen hier. Die Logik ist eine
 Übertragung des TRMNL-Plugins (`trmnl-mvg-abfahrten/src/transform.py`) und wurde mit
 dessen Ergebnissen auf Echtdaten abgeglichen.
 
+Sicherheit: `default-src 'none'`, nur eigene Skripte/Styles/Schrift/Bilder, kein
+Inline-Code, `require-trusted-types-for 'script'` (Chromium sperrt damit jede
+HTML-Einfügung; der Code setzt Texte ausschließlich per `textContent`). Abrufe ohne
+Cookies und ohne Referrer. In fremde Seiten eingebettet zeigt sie nur einen Link.
+Daten von außen werden auf ihren Typ geprüft, bevor sie verarbeitet werden.
+
+**Beim Ändern:** `?v=…` an den Dateien in `index.html` hochzählen – GitHub Pages lässt
+Dateien zehn Minuten im Gerätespeicher; ohne neue Nummer mischt das iPhone kurz neue
+Seite und alte Skripte. Prüfen mit `python3 tools/web_check.py` im Projekt
+`trmnl-mvg-abfahrten` (Einzelfälle + Abgleich mit dem Plugin auf Echtdaten).
+
 ## Farbschema
 
 Hell/Dunkel wird global über `data-theme="dark"|"light"` auf `<html>`

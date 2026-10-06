@@ -42,7 +42,7 @@
   }
   function groupKey(d) {    // Linie + Richtung (+ Steig); ohne Richtung der Steig bzw. das Ziel
     var dr = direction(d);
-    return [String(d.label), dr, d.stopPointGlobalId || (dr ? "" : (d.destination || ""))];
+    return [String(d.label), dr, String(d.stopPointGlobalId || (dr ? "" : (d.destination || "")))];
   }
   function words(x) {
     x = String(x || "").toLowerCase().replace(/\(.*?\)/g, " ");
@@ -72,11 +72,13 @@
     if (w === w.toUpperCase() && w.length > 3) { w = w.charAt(0) + w.slice(1).toLowerCase(); }
     return w.length <= 9 ? w : w.slice(0, 8) + "…";
   }
+  function arr(x) { return Array.isArray(x) ? x : []; }   // Daten von außen: nur echte Listen durchlassen
+  function num(v, dflt) { return typeof v === "number" && isFinite(v) ? v : dflt; }
   function hintTexts(d) {
-    var infos = (d.infos || []).filter(function (i) { return i && typeof i === "object" && i.message; });
+    var infos = arr(d.infos).filter(function (i) { return i && typeof i === "object" && i.message; });
     infos.sort(function (a, b) { return (a.type !== "INCIDENT") - (b.type !== "INCIDENT"); });   // Störungen zuerst
     var texts = infos.map(function (i) { return clean(i.message); })
-      .concat((d.messages || []).filter(function (m) { return typeof m === "string"; }).map(clean));
+      .concat(arr(d.messages).filter(function (m) { return typeof m === "string"; }).map(clean));
     if (d.sev) { texts.unshift("Ersatzverkehr"); }
     return texts;
   }
@@ -184,16 +186,16 @@
     (Array.isArray(messages) ? messages : []).forEach(function (m) {
       if (!m || typeof m !== "object") { return; }
       var ls = new Set();
-      (m.lines || []).forEach(function (l) {
-        var lab = Array.isArray(l) ? l[0] : (l || {}).label;
+      arr(m.lines).forEach(function (l) {
+        var lab = Array.isArray(l) ? l[0] : l && typeof l === "object" ? l.label : null;
         if (lab) { ls.add(String(lab).replace(/^SEV\s+/, "")); }   // „SEV S2“ betrifft die S2
       });
       var hit = Array.from(ls).filter(function (l) { return labels.has(l); }).sort(function (a, b) { return pad4(a) < pad4(b) ? -1 : pad4(a) > pad4(b) ? 1 : 0; });
       if (!hit.length) { return; }
-      var spans = m.incidentDurations || [{ from: m.validFrom, to: m.validTo }];
-      var span = spans.find(function (s) { return (s.from || 0) <= horizon && (s.to || 9e15) >= nowMs; });
+      var spans = arr(m.incidentDurations).length ? m.incidentDurations : [{ from: m.validFrom, to: m.validTo }];
+      var span = spans.find(function (s) { return s && typeof s === "object" && num(s.from, 0) <= horizon && num(s.to, 9e15) >= nowMs; });
       if (!span) { return; }
-      var starts = span.from || 0;
+      var starts = num(span.from, 0);
       out.push([[m.type !== "INCIDENT" ? 1 : 0, starts], {
         lines: hit.slice(0, 4).join(" · ") + (hit.length > 4 ? " …" : ""), title: clean(m.title),
         from: starts <= nowMs ? null : starts, hit: hit, description: clean(m.description || "")
@@ -273,7 +275,8 @@
       .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }).join("&") : "";
     var ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
     var timer = ctl ? setTimeout(function () { ctl.abort(); }, timeoutMs || 8000) : null;
-    return fetch(url + q, { headers: { Accept: "application/json" }, signal: ctl ? ctl.signal : undefined })
+    return fetch(url + q, { headers: { Accept: "application/json" }, signal: ctl ? ctl.signal : undefined,
+                            credentials: "omit", referrerPolicy: "no-referrer", cache: "no-store" })
       .then(function (r) {
         if (r.status >= 400 && r.status < 500) { return { _http_error: r.status }; }
         if (!r.ok) { throw new Error("HTTP " + r.status); }
@@ -289,8 +292,9 @@
                                                    function () { return { globalId: q, name: q }; });
     }
     return getJSON(API + "/locations", { query: q }).then(function (hits) {
-      if (!Array.isArray(hits) || !hits.length) { return null; }
-      if (hits[0].type === "STATION") { return hits[0]; }
+      hits = arr(hits).filter(function (h) { return h && typeof h === "object"; });
+      if (!hits.length) { return null; }
+      if (hits[0].type === "STATION" && hits[0].globalId) { return hits[0]; }
       var first = hits[0];
       if (first.latitude && first.longitude) {
         return getJSON(API + "/stations/nearby", { latitude: first.latitude, longitude: first.longitude }).then(function (near) {
@@ -302,7 +306,7 @@
   }
   function searchStations(query) {
     return getJSON(API + "/locations", { query: query }).then(function (hits) {
-      return (Array.isArray(hits) ? hits : []).filter(function (h) { return h.type === "STATION"; }).slice(0, 8);
+      return arr(hits).filter(function (h) { return h && h.type === "STATION" && h.globalId && h.name; }).slice(0, 8);
     });
   }
   function fetchDepartures(globalId, types) {

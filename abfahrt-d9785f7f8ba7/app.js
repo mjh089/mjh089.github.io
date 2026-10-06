@@ -2,6 +2,14 @@
 (function () {
   "use strict";
   var A = window.Abfahrt;
+  // in fremde Seiten eingebettet? Dann nur ein Link – keine Bedienung in einem fremden Rahmen
+  if (window.top !== window.self) {
+    document.body.textContent = "";
+    var out = document.createElement("a");
+    out.href = location.href; out.target = "_top"; out.rel = "noopener"; out.textContent = "Abfahrt öffnen";
+    document.body.appendChild(out);
+    return;
+  }
   var MAX_WAIT = 60 * 60000;   // Linien, die erst später fahren, ruhen („Heute keine Fahrt mehr“)
   var REFRESH = 30000;         // Abfahrten alle 30 s neu holen, solange die Seite sichtbar ist
   var SLOW = 10 * 60000;       // Meldungen (~370 KB) und Wetter nur alle 10 Min.
@@ -27,24 +35,51 @@
     return null;
   }
 
-  // ---------- Einstellungen: der Link (?h=…&l=…) hat Vorrang – so steckt die Haltestelle im Home-Symbol ----------
+  // ---------- Einstellungen ----------
+  // Der Link (?h=…&l=…) bringt die Haltestelle mit – so steckt sie im Home-Symbol. Ändert man sie in der
+  // App, merkt sich das Gerät die neue Wahl zu genau diesem Startlink: iOS öffnet das Symbol immer mit
+  // dem ursprünglichen Link, die Änderung soll trotzdem bleiben.
+  var LIMIT = 200;   // Eingaben begrenzen
+  function sessionGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function sessionSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* egal */ } }
+  var launch = sessionGet("abfahrt-launch");
+  if (launch === null) { launch = location.search; sessionSet("abfahrt-launch", launch); }
+  function linkMap() {
+    var m = null;
+    try { m = JSON.parse(store("abfahrt-links") || "null"); } catch (e) { m = null; }
+    return m && typeof m === "object" && !Array.isArray(m) ? m : {};
+  }
+  function sane(s) {
+    s = s && typeof s === "object" ? s : {};
+    return { h: String(s.h || "").trim().slice(0, LIMIT), l: String(s.l || "").trim().slice(0, LIMIT), w: s.w !== false };
+  }
   function readSettings() {
-    var p = new URLSearchParams(location.search), s = {};
-    try { s = JSON.parse(store("abfahrt-settings") || "{}") || {}; } catch (e) { s = {}; }
-    if (p.has("h")) { s = { h: p.get("h"), l: p.get("l") || "", w: p.get("w") !== "0" }; }
-    return { h: (s.h || "").trim(), l: (s.l || "").trim(), w: s.w !== false };
+    var p = new URLSearchParams(location.search), map = linkMap();
+    if (p.has("h")) { return sane(map[location.search] || { h: p.get("h"), l: p.get("l") || "", w: p.get("w") !== "0" }); }
+    try { return sane(JSON.parse(store("abfahrt-settings") || "{}")); } catch (e) { return sane({}); }
   }
   function writeSettings(s) {
-    store("abfahrt-settings", JSON.stringify(s));
     var p = new URLSearchParams();
     p.set("h", s.h);
     if (s.l) { p.set("l", s.l); }
     if (!s.w) { p.set("w", "0"); }
-    history.replaceState(null, "", location.pathname + "?" + p.toString());
+    var search = "?" + p.toString(), map = linkMap();
+    map[launch] = s; map[search] = s;
+    var keys = Object.keys(map);
+    keys.slice(0, Math.max(0, keys.length - 12)).forEach(function (k) { if (k !== launch && k !== search) { delete map[k]; } });
+    store("abfahrt-links", JSON.stringify(map));
+    store("abfahrt-settings", JSON.stringify(s));
+    history.replaceState(null, "", location.pathname + search);
   }
 
   var settings = readSettings();
-  var state = { stations: null, raw: null, horizon: null, fetchedAt: 0, messages: null, msgAt: 0, weather: null, wxAt: 0, error: null, loading: false };
+  function freshState(keep) {
+    return { stations: null, raw: null, horizon: null, fetchedAt: 0, triedAt: 0, failures: 0,
+             messages: keep ? keep.messages : null, msgAt: keep ? keep.msgAt : 0, weather: null, wxAt: 0, error: null, loading: false };
+  }
+  var state = freshState(null);
+  // nach Fehlschlägen seltener fragen: 30 s, 1, 2, 4 Min. … höchstens 5 Min. – die MVG nicht bedrängen
+  function nextDue() { return state.triedAt + Math.min(REFRESH * Math.pow(2, state.failures), 5 * 60000); }
 
   // ---------- Abrufe ----------
   function resolveAll(query) {
@@ -63,8 +98,9 @@
     if (!settings.h || state.loading) { return; }
     state.loading = true;
     var started = Date.now();
+    state.triedAt = started;
     (state.stations ? Promise.resolve(state.stations) : resolveAll(settings.h)).then(function (sts) {
-      if (!sts) { state.error = "Haltestelle „" + settings.h + "“ nicht gefunden – bitte unter „Ändern“ prüfen."; return null; }
+      if (!sts) { state.error = "Haltestelle „" + settings.h + "“ nicht gefunden – bitte unter „Ändern“ prüfen."; state.failures++; return null; }
       state.stations = sts;
       var jobs = sts.map(function (s) { return A.fetchDepartures(s.globalId).catch(function () { return null; }); });
       var side = [];
@@ -85,11 +121,13 @@
           state.error = state.raw ? "Keine Verbindung zur MVG – angezeigt wird der Stand von " + hhmm(state.fetchedAt) + " Uhr." : "Die MVG ist gerade nicht erreichbar.";
         } else {
           var m = A.mergeDepartures(deps);
-          state.raw = m.deps; state.horizon = m.horizonMs; state.fetchedAt = Date.now(); state.error = null;
+          state.raw = m.deps; state.horizon = m.horizonMs; state.fetchedAt = Date.now(); state.error = null; state.failures = 0;
         }
+        if (state.error) { state.failures++; }
       });
     }).catch(function () {
       state.error = state.raw ? "Keine Verbindung – angezeigt wird der Stand von " + hhmm(state.fetchedAt) + " Uhr." : "Keine Verbindung.";
+      state.failures++;
     }).then(function () {
       state.loading = false;
       render();
@@ -145,6 +183,14 @@
     return state.stations.length > 1 ? name.replace(/\s*\([^)]*\)\s*$/, "") : name;   // „Hauptbahnhof (U, Tram)“ -> „Hauptbahnhof“
   }
   function render() {
+    try { draw(); } catch (e) {   // ein Fehler bei Meldungen o. Ä. darf nicht die ganze Seite leeren
+      if (window.console) { console.error(e); }
+      var n = $("notices");
+      n.textContent = "";
+      n.appendChild(el("div", "notice offline", "Die Anzeige konnte nicht aufgebaut werden. Bitte die Seite neu laden."));
+    }
+  }
+  function draw() {
     var now = Date.now(), rows = $("rows"), notices = $("notices"), empty = $("empty");
     $("title").textContent = settings.h ? stationName() : "Abfahrt";
     var w = settings.w ? state.weather : null, sub = $("sub");
@@ -218,7 +264,7 @@
         rows.appendChild(row);
       }
     });
-    if (!list.length) { empty.hidden = false; empty.textContent = "Derzeit keine Abfahrten."; }
+    if (!list.length) { empty.hidden = false; empty.textContent = state.error ? "Keine aktuellen Daten." : "Derzeit keine Abfahrten."; }
     $("stand").textContent = "Stand " + secF.format(new Date(state.fetchedAt)) + " Uhr · aktualisiert sich alle 30 Sekunden, solange die Seite offen ist.";
   }
 
@@ -254,12 +300,12 @@
   });
   $("setForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    var s = { h: q.value.trim(), l: $("left").value.trim(), w: $("wx").checked };
+    var s = sane({ h: q.value, l: $("left").value, w: $("wx").checked });
     if (!s.h) { q.focus(); return; }
     var changed = s.h !== settings.h;
     settings = s;
     writeSettings(s);
-    if (changed) { state = { stations: null, raw: null, horizon: null, fetchedAt: 0, messages: state.messages, msgAt: state.msgAt, weather: null, wxAt: 0, error: null, loading: false }; }
+    if (changed) { state = freshState(state); }
     if (!s.w) { state.weather = null; state.wxAt = 0; }
     closeSettings();
     render();
@@ -272,7 +318,7 @@
   setInterval(function () {
     if (document.visibilityState !== "visible") { return; }
     render();
-    if (Date.now() - state.fetchedAt > REFRESH) { load(); }
+    if (Date.now() >= nextDue()) { load(); }
   }, TICK);
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") { render(); load(); } });
   window.addEventListener("pageshow", function (e) { if (e.persisted) { load(); } });
