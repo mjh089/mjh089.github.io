@@ -68,11 +68,11 @@ h1 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.1; letter-spac
 
 .next { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
 .time { font-size: 30px; font-weight: 800; line-height: 1; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-.delay { font-size: 14px; font-weight: 800; color: var(--red); font-variant-numeric: tabular-nums; }
 .count { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .count--soon { color: var(--red); }
 .x { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--grey); }
 .meta { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: 12px; color: var(--grey); font-variant-numeric: tabular-nums; }
+.late--big { color: var(--red); font-weight: 700; }   /* ab 5 Min. später: rot, sonst wie die übrige Zeile */
 .live::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 50%; background: var(--sbahn); vertical-align: 1px; }
 .later { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .later small { font-size: 12px; font-weight: 600; color: var(--grey); }

@@ -204,12 +204,14 @@
     }
     var next = el("div", "next");
     next.appendChild(el("span", "time" + (c.cancelled ? " x" : ""), hhmm(c.t)));
-    if (c.delay > 0 && !c.cancelled) { next.appendChild(el("span", "delay", "+" + c.delay)); }
     var soon = !c.cancelled && c.t - now < 3 * 60000;
     next.appendChild(el("span", "count" + (soon ? " count--soon" : ""), c.cancelled ? "fällt aus" : (firstTrip ? "erste Fahrt · " : "") + countdown(c.t, now)));
     box.appendChild(next);
-    if (c.live || c.platform) {
+    // Verspätung in Worten: die Uhrzeit ist schon die tatsächliche – „+3“ daneben liest man leicht als „3 dazurechnen“
+    var late = c.delay > 0 && !c.cancelled;
+    if (c.live || c.platform || late) {
       var meta = el("div", "meta");
+      if (late) { meta.appendChild(el("span", "late" + (c.delay >= 5 ? " late--big" : ""), c.delay + " Min. später")); }
       if (c.live) { meta.appendChild(el("span", "live", "Echtzeit")); }
       if (c.platform) { meta.appendChild(el("span", null, "Gleis " + c.platform)); }
       box.appendChild(meta);
