@@ -121,6 +121,10 @@ aus in Richtung Marienplatz (Winkel unter 90°), steht es links; je Linie kommen
 Richtungen nebeneinander. Die Lage der Ziele fragt sie einmal bei der MVG ab und merkt sie
 sich auf dem Gerät. In der Innenstadt (unter 1,5 km zum Marienplatz) gibt es eine Liste.
 „In meiner Nähe“ schickt den Standort auf ~100 m gerundet an die MVG, nur nach Antippen.
+Abends und nachts (18–5 Uhr) liest die Seite – wie das Plugin – lückenlos weiter bis 7 Uhr
+früh (höchstens alle 10 Min., im Hintergrund), damit Linien mit Betriebsschluss („149 · morgen
+05:56“) und Nachtbusse („N74 · erst 01:36“) als ruhende Zeile erscheinen; die MVG liefert sonst
+abends oft nur ~3 Stunden.
 
 Darstellung: hochkant zwei Spalten (die beiden Richtungen); ab 720 px Breite (iPhone quer,
 iPad, Rechner) zwei Linien nebeneinander, also vier Karten je Reihe; iPhone quer zusätzlich
