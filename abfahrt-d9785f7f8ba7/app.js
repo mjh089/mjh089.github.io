@@ -146,6 +146,7 @@
         } else {
           var m = A.mergeDepartures(deps);
           state.raw = m.deps; state.horizon = m.horizonMs; state.fetchedAt = Date.now(); state.error = null; state.failures = 0;
+          lookAhead(sts, m.deps, started);
         }
         if (state.error) { state.failures++; }
       });
@@ -154,6 +155,28 @@
       state.failures++;
     }).then(function () {
       state.loading = false;
+      render();
+    });
+  }
+
+  // Abends/nachts: Linien, die im ~3-h-Fenster der MVG fehlen (149 „morgen 05:56“, N74 „erst 01:36“), aus den
+  // nächsten Fenstern holen – höchstens alle 10 Min., im Hintergrund; bis dahin zählt die letzte Vorausschau
+  var hourF = new Intl.DateTimeFormat("de-DE", { timeZone: "Europe/Berlin", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+  function lookAhead(sts, deps, now) {
+    var hm = hourF.format(new Date(now)).split(":").map(Number), evening = hm[0] >= 18 || hm[0] < 5;
+    var key = sts.map(function (s) { return s.globalId; }).join(";");
+    if (!evening || sts.length !== 1) { state.ahead = null; return; }
+    var extra = state.ahead && state.ahead.key === key ? state.ahead.deps : [];
+    var known = new Set(deps.map(function (d) { return String(d.label); }));
+    state.raw = deps.concat(extra.filter(function (d) { return !known.has(String(d.label)) && (A.depTime(d) || 0) >= now; }));
+    if (state.ahead && state.ahead.key === key && now - state.ahead.at < SLOW) { return; }
+    var until = now + (((7 - hm[0] + 24) % 24) * 60 - hm[1]) * 60000;   // bis 7 Uhr früh
+    state.ahead = { key: key, at: now, deps: extra };
+    A.fetchAhead(sts[0].globalId, deps, now, until).then(function (more) {
+      if (!state.ahead || state.ahead.key !== key) { return; }
+      state.ahead.deps = more;
+      var have = new Set(state.raw.map(function (d) { return String(d.label); }));
+      state.raw = state.raw.concat(more.filter(function (d) { return !have.has(String(d.label)); }));
       render();
     });
   }
@@ -287,9 +310,8 @@
     });
 
     // Zeilen je Linie: links stadteinwärts, rechts stadtauswärts (automatisch, siehe logik.js). Ruhende
-    // Richtungen nur, wenn die Linie heute nicht mehr fährt oder ihre andere Richtung gerade eine Karte hat.
-    var active = new Set(cards.map(function (c) { return c.line; }));
-    var shown = cards.concat(dormant.filter(function (d) { return d.tomorrow || active.has(d.line); }));
+    // Richtungen kommen dazu – „heute keine Fahrt mehr · morgen 05:56“ wie „erst 01:36“ (Nachtbus), wie im Plugin.
+    var shown = cards.concat(dormant);
     var st = state.stations && state.stations[0];
     var sides = settings.d && st && typeof st.latitude === "number" ? A.directionSides(shown, [st.latitude, st.longitude], coordsOf) : null;
     var split = !!sides;

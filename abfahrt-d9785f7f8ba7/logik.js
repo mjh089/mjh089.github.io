@@ -360,8 +360,31 @@
       return h ? [h.latitude, h.longitude] : null;
     });
   }
-  function fetchDepartures(globalId, types) {
-    return getJSON(API + "/departures", { globalId: globalId, limit: DEP_LIMIT, transportTypes: types || "" });
+  function fetchDepartures(globalId, types, offsetMin) {
+    return getJSON(API + "/departures", { globalId: globalId, limit: DEP_LIMIT, transportTypes: types || "", offsetInMinutes: offsetMin });
+  }
+  // Abends und nachts liefert die MVG oft nur ~3 h: Linien, die heute enden (149) oder erst später fahren
+  // (Nachtbus N74), fehlen darin. Lückenlos weiterlesen – das nächste Fenster beginnt, wo das vorige endet –,
+  // höchstens zwei Fenster, bis 7 Uhr früh. Fällt eines aus, ist Schluss (lieber nichts als eine falsche
+  // erste Fahrt). Liefert die Abfahrten der Linien, die in deps fehlen (wie transform.py).
+  function fetchAhead(globalId, deps, nowMs, untilMs) {
+    var known = new Set(deps.map(function (d) { return String(d.label); }));
+    var reach = deps.reduce(function (m, d) { return Math.max(m, depTime(d) || 0); }, 0), out = [], seen = new Set();
+    function hop(n) {
+      if (n >= 2 || !reach || reach >= untilMs) { return Promise.resolve(out); }
+      return fetchDepartures(globalId, "", Math.max(0, Math.floor((reach - nowMs) / 60000))).then(function (r) {
+        var list = arr(r), end = list.reduce(function (m, d) { return Math.max(m, depTime(d) || 0); }, 0);
+        if (!list.length || end <= reach) { return out; }
+        list.forEach(function (d) {
+          if (!d || typeof d !== "object" || known.has(String(d.label))) { return; }
+          var k = JSON.stringify([d.tripId || d.destination, d.label, d.plannedDepartureTime]);
+          if (!seen.has(k)) { seen.add(k); out.push(d); }
+        });
+        reach = end;
+        return hop(n + 1);
+      }, function () { return out; });
+    }
+    return hop(0);
   }
   function fetchMessages() { return getJSON(API + "/messages", null, 12000); }
   function fetchWeather(lat, lon) {
@@ -393,7 +416,7 @@
     API: API, buildCards: buildCards, isLeft: isLeft, parseTerms: parseTerms, buildAlerts: buildAlerts,
     attachHints: attachHints, buildWeather: buildWeather, sameDest: sameDest, direction: direction,
     shortLabel: shortLabel, stripDirection: stripDirection, resolveStation: resolveStation,
-    searchStations: searchStations, fetchDepartures: fetchDepartures, fetchNearby: fetchNearby, locate: locate,
+    searchStations: searchStations, fetchDepartures: fetchDepartures, fetchAhead: fetchAhead, fetchNearby: fetchNearby, locate: locate,
     directionSides: directionSides, angleToCenter: angleToCenter, distKm: distKm, fetchMessages: fetchMessages,
     fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime
   };
