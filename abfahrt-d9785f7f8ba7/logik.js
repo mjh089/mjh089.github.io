@@ -369,11 +369,11 @@
   // erste Fahrt). Liefert die Abfahrten der Linien, die in deps fehlen (wie transform.py).
   function fetchAhead(globalId, deps, nowMs, untilMs) {
     var known = new Set(deps.map(function (d) { return String(d.label); }));
-    var reach = deps.reduce(function (m, d) { return Math.max(m, depTime(d) || 0); }, 0), out = [], seen = new Set();
+    var reach = robustHorizon(deps.map(depTime)) || 0, out = [], seen = new Set();
     function hop(n) {
       if (n >= 2 || !reach || reach >= untilMs) { return Promise.resolve(out); }
       return fetchDepartures(globalId, "", Math.max(0, Math.floor((reach - nowMs) / 60000))).then(function (r) {
-        var list = arr(r), end = list.reduce(function (m, d) { return Math.max(m, depTime(d) || 0); }, 0);
+        var list = arr(r), end = robustHorizon(list.map(depTime)) || 0;
         if (!list.length || end <= reach) { return out; }
         list.forEach(function (d) {
           if (!d || typeof d !== "object" || known.has(String(d.label))) { return; }
@@ -393,6 +393,16 @@
                                   forecast_minutely_15: 13, hourly: "temperature_2m", forecast_hours: 12 });
   }
   // mehrere Haltestellen zusammenführen: eine Fahrt nur einmal, innerhalb einer Haltestelle nie aussortieren
+  // Ende einer Abfahrtsliste ohne einzelne Ausreißer am Ende (wie robust_horizon in transform.py): Am Karlsplatz
+  // kamen 79 Abfahrten bis 17:55 und eine um 00:01 – mit 00:01 als Ende stünde „letzte Fahrt“ an Linien, die um 18 Uhr fahren
+  function robustHorizon(times) {
+    var ts = times.filter(function (x) { return typeof x === "number"; }).sort(function (a, b) { return a - b; });
+    if (ts.length < 3) { return ts.length ? ts[ts.length - 1] : null; }
+    var gaps = ts.slice(1).map(function (t, i) { return t - ts[i]; }).sort(function (a, b) { return a - b; });
+    var typical = gaps[Math.floor(gaps.length / 2)];
+    while (ts.length > 2 && ts[ts.length - 1] - ts[ts.length - 2] > Math.max(30 * 60000, 4 * typical)) { ts.pop(); }
+    return ts[ts.length - 1];
+  }
   function mergeDepartures(results) {
     var deps = [], seen = new Set(), horizons = [];
     results.forEach(function (r) {
@@ -407,7 +417,7 @@
       });
       mine.forEach(function (k) { seen.add(k); });
       var ts = r.map(function (d) { return d && depTime(d); }).filter(function (x) { return typeof x === "number"; });
-      if (ts.length) { horizons.push(Math.max.apply(null, ts)); }
+      if (ts.length) { horizons.push(robustHorizon(ts)); }
     });
     return { deps: deps, horizonMs: horizons.length ? Math.min.apply(null, horizons) : null };
   }
@@ -418,6 +428,6 @@
     shortLabel: shortLabel, stripDirection: stripDirection, resolveStation: resolveStation,
     searchStations: searchStations, fetchDepartures: fetchDepartures, fetchAhead: fetchAhead, fetchNearby: fetchNearby, locate: locate,
     directionSides: directionSides, angleToCenter: angleToCenter, distKm: distKm, fetchMessages: fetchMessages,
-    fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime
+    fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime, robustHorizon: robustHorizon
   };
 })(window);
