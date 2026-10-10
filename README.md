@@ -80,6 +80,11 @@ jeweiligen Seitenverhältnis (`--ar` am `.strip-item`, Flexbox verteilt
 proportional). Dadurch wird nichts beschnitten und es entstehen keine Ränder.
 Wird ein Bild ausgetauscht, muss `--ar` mitgezogen werden.
 
+Die Farbwelt im Fashion-Lab-Abschnitt (Reihe a) ist bewusst reiner Text mit
+Farbfeldern, ohne Material- oder Moodboard-Fotos: Die stammen aus fremden
+Quellen, und deren Rechte liegen nicht vor. Wer Fotos ergänzen will, braucht
+vorher geklärte Bildrechte.
+
 Die Fashion-Lab-Bilder sind logofrei: Marken auf Wänden, LED-Flächen und
 Produkten sind im Quellprojekt entfernt (`mjh_ci`, `praesentation/hse24/
 portfolio/logos-entfernen.py`, erzeugt mit `portfolio-bilder.py`). Ersetzen

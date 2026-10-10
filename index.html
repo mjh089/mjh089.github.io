@@ -222,6 +222,18 @@ main:focus{ outline:none; }
 .strip-item .label{ display:flex; gap:8px; align-items:baseline; }
 .strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; margin-left:-0.02em; }
 .strip-item .cap{ font-size:11.5px; color:var(--grey); }
+/* Farbwelt: reine Farbfelder mit Name, Pantone und Hexwert. Bewusst ohne
+   Materialfotos - die stammen aus fremden Quellen und gehoeren nicht auf
+   eine oeffentliche Seite. Als Text sind die Namen auch uebersetzbar. */
+.farbwelt{ display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:22px var(--gutter);
+  list-style:none; margin:0 0 14px; padding:0; }
+.farbwelt li{ display:flex; flex-direction:column; gap:7px; min-width:0; }
+.farbwelt .feld{ display:block; aspect-ratio:3/1; }
+.farbwelt b{ font-weight:400; font-size:11.5px; line-height:1.3; }
+.farbwelt li > span:last-child{ font-size:11.5px; line-height:1.4; color:var(--grey); font-variant-numeric:tabular-nums; }
+@media(max-width:800px){ .farbwelt{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media print{ .farbwelt .feld{ print-color-adjust:exact; -webkit-print-color-adjust:exact; } }
+
 /* 360-Grad-Umfahrt: Standbild als Platzhalter, darueber eine Leinwand,
    die erst nach dem ersten Anfassen die 120 Einzelbilder laedt.
    Steht bereit, ist aber noch nicht im HTML: die Bilder ohne Logos fehlen.
@@ -506,20 +518,36 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     </div>
   </div>
   <div class="strip">
+    <div class="strip-item strip-full">
+      <ul class="farbwelt">
+        <li><span class="feld" style="background:#F1CA97"></span><b data-i18n="p9.mat1">Bambusparkett, hell</b><span>Pantone 12-0817 TCX<br>#F1CA97</span></li>
+        <li><span class="feld" style="background:#D1C7B8"></span><b data-i18n="p9.mat2">Mikrozement</b><span>Pantone 12-0605 TCX<br>#D1C7B8</span></li>
+        <li><span class="feld" style="background:#DDC9B5"></span><b data-i18n="p9.mat3">Travertin</b><span>Pantone 13-1014 TCX<br>#DDC9B5</span></li>
+        <li><span class="feld" style="background:#704528"></span><b data-i18n="p9.mat4">Nussbaum</b><span>Pantone 18-1140 TCX<br>#704528</span></li>
+        <li><span class="feld" style="background:#7B6039"></span><b data-i18n="p9.mat5">Messing, gebürstet</b><span>Pantone 871 C<br>#7B6039</span></li>
+        <li><span class="feld" style="background:#C9CEBD"></span><b data-i18n="p9.mat6">Teppich, Wellenrelief</b><span>Pantone 14-6011 TCX<br>#C9CEBD</span></li>
+        <li><span class="feld" style="background:#B8AC97"></span><b data-i18n="p9.mat7">Teppichboden, Kurzflor</b><span>Pantone 15-1304 TCX<br>#B8AC97</span></li>
+        <li><span class="feld" style="background:#D6C7BE"></span><b data-i18n="p9.mat8">Teppich, Relief, Baumwolle</b><span>Pantone 13-1107 TCX<br>#D6C7BE</span></li>
+        <li><span class="feld" style="background:#56672D"></span><b data-i18n="p9.mat9">Monstera</b><span><i>Monstera deliciosa</i><br>#56672D</span></li>
+        <li><span class="feld" style="background:#696F93"></span><b data-i18n="p9.mat10">Hortensie</b><span><i>Hydrangea macrophylla</i><br>#696F93</span></li>
+      </ul>
+      <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p9.material">Material- und Farbwelt: Boden und Wand für das ganze Set, alles Weitere je Bereich</span></div></div>
+  </div>
+  <div class="strip">
     <div class="strip-item n3" style="--ar:1.3592"><div class="thumb" style="background:#c5ad92"><img src="images/fashionlab-layout.jpg" width="1400" height="1030" alt="Grundlayout" loading="lazy"></div>
-      <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p9.stripA">Moderation, Produkt und LED in jedem Bereich</span></div></div>
+      <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p9.stripA">Moderation, Produkt und LED in jedem Bereich</span></div></div>
     <div class="strip-item n3" style="--ar:1.1102"><div class="thumb plan-hell" style="background:#f5f3f3"><img class="nur-hell" src="images/fashionlab-plan.jpg" width="1400" height="1261" alt="Bauzeichnung" loading="lazy"><img class="nur-dunkel" src="images/fashionlab-plan-dunkel.jpg" width="1400" height="1261" alt="Bauzeichnung" loading="lazy"></div>
-      <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p9.stripB">Bauzeichnung, acht LED-Flächen</span></div></div>
+      <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p9.stripB">Bauzeichnung, acht LED-Flächen</span></div></div>
     <div class="strip-item n3" style="--ar:1.6667"><div class="thumb" style="background:#a99686"><img src="images/fashionlab-led.jpg" width="1400" height="840" alt="LED-Flächen" loading="lazy"></div>
-      <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p9.stripC">LED-Flächen frei vor der Rundwand</span></div></div>
+      <div class="label"><span class="letter">d</span><span class="cap" data-i18n="p9.stripC">LED-Flächen frei vor der Rundwand</span></div></div>
   </div>
   <div class="strip">
     <div class="strip-item n3" style="--ar:1.25"><div class="thumb" style="background:#c5b9b0"><img src="images/fashionlab-fashion.jpg" width="1100" height="880" alt="Fashion" loading="lazy"></div>
-      <div class="label"><span class="letter">d</span><span class="cap" data-i18n="p9.stripD">Derselbe Bau für Fashion</span></div></div>
+      <div class="label"><span class="letter">e</span><span class="cap" data-i18n="p9.stripD">Derselbe Bau für Fashion</span></div></div>
     <div class="strip-item n3" style="--ar:1.25"><div class="thumb" style="background:#baa796"><img src="images/fashionlab-cosmetics.jpg" width="1100" height="880" alt="Cosmetics" loading="lazy"></div>
-      <div class="label"><span class="letter">e</span><span class="cap" data-i18n="p9.stripE">… für Cosmetics</span></div></div>
+      <div class="label"><span class="letter">f</span><span class="cap" data-i18n="p9.stripE">… für Cosmetics</span></div></div>
     <div class="strip-item n3" style="--ar:0.6"><div class="thumb" style="background:#b2957b"><img src="images/fashionlab-schmuck.jpg" width="900" height="1500" alt="Schmuck" loading="lazy"></div>
-      <div class="label"><span class="letter">f</span><span class="cap" data-i18n="p9.stripF">… für Schmuck</span></div></div>
+      <div class="label"><span class="letter">g</span><span class="cap" data-i18n="p9.stripF">… für Schmuck</span></div></div>
   </div>
   </div>
 </section>
@@ -1167,6 +1195,10 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "p9.stripD": "同じ造作でファッション",
       "p9.stripE": "コスメ",
       "p9.stripF": "ジュエリー",
+      "p9.material": "素材とカラー：床と壁はセット全体共通、それ以外はエリアごと",
+      "p9.mat1": "竹フローリング（明るい色）", "p9.mat2": "マイクロセメント", "p9.mat3": "トラバーチン",
+      "p9.mat4": "ウォルナット", "p9.mat5": "ブラッシュド真鍮", "p9.mat6": "ウェーブレリーフのラグ",
+      "p9.mat7": "ショートパイルのカーペット", "p9.mat8": "コットンのレリーフラグ", "p9.mat9": "モンステラ", "p9.mat10": "アジサイ",
       "p9.stripG": "5つのエリアをめぐる360°ビュー",
       "p9.dreh": "ドラッグで回転",
       "p8.kicker": "メディアアート — 2007–2017",
@@ -1339,7 +1371,11 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "p9.stripA":"Moderation, product and LED in every area",
       "p9.stripB":"Construction drawing, eight LED walls",
       "p9.stripC":"LED walls standing clear of the curved wall",
-      "p9.stripD":"The same build for fashion", "p9.stripE":"… for cosmetics", "p9.stripF":"… for jewellery",
+      "p9.stripD":"The same build for fashion", "p9.stripE":"… for cosmetics", "p9.stripF":"… for jewelry",
+      "p9.material":"Materials and colors: floor and wall for the whole set, everything else per area",
+      "p9.mat1":"Bamboo parquet, light", "p9.mat2":"Microcement", "p9.mat3":"Travertine", "p9.mat4":"Walnut",
+      "p9.mat5":"Brushed brass", "p9.mat6":"Rug, wave relief", "p9.mat7":"Carpet, short pile",
+      "p9.mat8":"Rug, cotton relief", "p9.mat9":"Monstera", "p9.mat10":"Hydrangea",
       "p9.stripG":"360° tour through all five areas", "p9.dreh":"Drag to rotate",
       "p8.kicker":"Media art — 2007–2017",
       "p8.desc":"Ten years of live visuals and projection mapping — with a residency at Munich’s Harry Klein, whose compact dance floor was surrounded by video projections on several sides, plus performances at the VJ Festival in Erlangen (2010) and Nuremberg (2013). For “Vom Lutschlieserl und der Fräulein Irmi” I created the visuals for the radio play written and produced by Anton Leiss-Huber. In 2010, licht+spiel presented a first retrospective with three years of archive material as part of the “Kultur im Rathaus” series in Altötting; in 2011 followed a solo exhibition at the Pratersauna Vienna Artspace.",
