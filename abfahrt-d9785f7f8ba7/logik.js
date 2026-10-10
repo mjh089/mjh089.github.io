@@ -330,11 +330,12 @@
     }
     return out;
   }
+  // einzelner sehr schwacher Wert zwischen trockenen = Rauschen in der Vorhersage – außer jetzt (gemessen)
   function wetMask(series) {
     var raw = series.map(function (s) { return s[1] >= WET_MMH; });
     return raw.map(function (w, i) {
       var v = series[i][1];
-      return w && !(v < 2 * WET_MMH && !(i + 1 < raw.length && raw[i + 1]) && !(i > 0 && raw[i - 1]));
+      return w && (i === 0 || !(v < 2 * WET_MMH && !(i + 1 < raw.length && raw[i + 1]) && !raw[i - 1]));
     });
   }
   // „Regen bis 22:30“ / „Regen hält an“ / „Regen ab 22:05“ / null
