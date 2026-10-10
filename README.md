@@ -63,6 +63,13 @@ hinter einem Fremdbild zu verstecken.
 | `windsor-aufbau.jpg` | Sitzreihen mit Ware | 3:2 |
 | `windsor-detail.jpg` | Kinosessel als Warenträger | 4:5 |
 | `windsor-moodboard.jpg` | Moodboard, Referenz Deutsche Oper Berlin | 3:2 |
+| `fashionlab-hero.jpg` | Fashion Lab, Runway-Rendering, logofrei | 16:10 |
+| `fashionlab-layout.jpg` | Draufsicht mit den Zonen A/B/C | 1,36:1 |
+| `fashionlab-plan.jpg` | Bauzeichnung, acht LED-Flächen nummeriert | 1,10:1 |
+| `fashionlab-led.jpg` | Talk-Ecke, drei LED-Flächen vor der Rundwand | 5:3 |
+| `fashionlab-fashion.jpg` | Set mit Fashion | 5:4 |
+| `fashionlab-cosmetics.jpg` | Set mit Cosmetics | 5:4 |
+| `fashionlab-schmuck.jpg` | Set mit Schmuck, Rundbogen im Hochformat | 3:5 |
 | `lichtspiel-hero.jpg` | Projektion auf Architektur | 16:10 |
 | `lichtspiel-motiv.jpg` | Gesichtsprojektion mit Textmotiv, Text vollständig lesbar | 3:2 |
 | `lichtspiel-mapping.jpg` | Gespiegelte Projektion über die Raumecke | 4:5 |
@@ -72,6 +79,13 @@ einer Reihe teilen sich dieselbe Höhe, die Breite ergibt sich aus dem
 jeweiligen Seitenverhältnis (`--ar` am `.strip-item`, Flexbox verteilt
 proportional). Dadurch wird nichts beschnitten und es entstehen keine Ränder.
 Wird ein Bild ausgetauscht, muss `--ar` mitgezogen werden.
+
+Die Fashion-Lab-Bilder sind logofrei: Marken auf Wänden, LED-Flächen und
+Produkten sind im Quellprojekt entfernt (`mjh_ci`, `praesentation/hse24/
+portfolio/logos-entfernen.py`, erzeugt mit `portfolio-bilder.py`). Ersetzen
+nur von dort, nie aus den Original-Renderings. Der Abschnitt steht vor
+licht+spiel und zeigt die Nummer 08, trägt aber die id `p9`, damit die
+von außen verlinkten Anker `#p1` bis `#p8` gültig bleiben.
 
 Zwei licht+spiel-Prozessbilder sind entfallen — es werden stattdessen zwei
 YouTube-Videos eingebunden (IDs `2O1iceiNoVI` und `4aS7LRck3JM`), über

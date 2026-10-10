@@ -222,6 +222,30 @@ main:focus{ outline:none; }
 .strip-item .label{ display:flex; gap:8px; align-items:baseline; }
 .strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; margin-left:-0.02em; }
 .strip-item .cap{ font-size:11.5px; color:var(--grey); }
+/* 360-Grad-Umfahrt: Standbild als Platzhalter, darueber eine Leinwand,
+   die erst nach dem ersten Anfassen die 120 Einzelbilder laedt. */
+.umfahrt{ position:relative; cursor:grab; touch-action:pan-y; outline:0; }
+.umfahrt:active{ cursor:grabbing; }
+.umfahrt:focus-visible{ outline:2px solid var(--red); outline-offset:2px; }
+.umfahrt canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:0; }
+.umfahrt.bereit canvas{ opacity:1; }
+.umfahrt-hinweis{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:12px;
+  background:var(--paper); color:var(--ink); border:1px solid var(--ink); pointer-events:none;
+  transition:opacity .4s var(--ease); }
+.umfahrt-hinweis b{ font-weight:400; font-size:18px; line-height:1; }
+.umfahrt.benutzt .umfahrt-hinweis{ opacity:0; }
+.umfahrt-laden{ position:absolute; left:12px; bottom:12px; font-size:11.5px; color:var(--ink);
+  background:var(--paper); padding:4px 8px; font-variant-numeric:tabular-nums; pointer-events:none; }
+.umfahrt-laden[hidden]{ display:none; }
+@media print{ .umfahrt canvas,.umfahrt-hinweis,.umfahrt-laden{ display:none !important; } }
+
+/* Bauzeichnung in zwei Fassungen, je eine pro Thema. Ein Filter
+   (invert + hue-rotate) haette das Rot der LED-Flaechen rosa gemacht. */
+.plan-hell .nur-dunkel{ display:none; }
+html[data-theme="dark"] .plan-hell{ background:#151313 !important; }
+html[data-theme="dark"] .plan-hell .nur-hell{ display:none; }
+html[data-theme="dark"] .plan-hell .nur-dunkel{ display:block; }
 
 /* Pull Quote — eigene Rasterzeile. Das oeffnende Anfuehrungszeichen haengt
    in den Rand, damit der erste Buchstabe optisch auf der Spaltenkante sitzt;
@@ -355,6 +379,9 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
 @media print{
   .bar,#gridOverlay,#scrollProgress,.cursor-ring,.play-btn,.skip{ display:none !important; }
   html,html[data-theme="dark"]{ --paper:#fff !important; --ink:#000 !important; --grey:#555 !important; --line:#ccc !important; }
+  html[data-theme="dark"] .plan-hell{ background:#fff !important; }
+  html[data-theme="dark"] .plan-hell .nur-hell{ display:block !important; }
+  html[data-theme="dark"] .plan-hell .nur-dunkel{ display:none !important; }
   body{ cursor:auto !important; }
   a{ text-decoration:underline; }
   details:not([open]) > *:not(summary){ display:block !important; }
@@ -417,7 +444,8 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
   <a class="index-row" href="#p5"><span class="idx-num">05</span><span class="idx-name">Windsor Pop-up</span><span class="idx-year" data-i18n="idx.date5">Herbst 2023</span></a>
   <a class="index-row" href="#p6"><span class="idx-num">06</span><span class="idx-name">Fred Perry Window</span><span class="idx-year" data-i18n="idx.date6">Herbst 2024</span></a>
   <a class="index-row" href="#p7"><span class="idx-num">07</span><span class="idx-name">Dressler Window</span><span class="idx-year" data-i18n="idx.date7">Sommer 2024</span></a>
-  <a class="index-row" href="#p8"><span class="idx-num">08</span><span class="idx-name">licht+spiel</span><span class="idx-year">2007–2017</span></a>
+  <a class="index-row" href="#p9"><span class="idx-num">08</span><span class="idx-name">Fashion Lab</span><span class="idx-year" data-i18n="idx.date9">Herbst 2026</span></a>
+  <a class="index-row" href="#p8"><span class="idx-num">09</span><span class="idx-name">licht+spiel</span><span class="idx-year">2007–2017</span></a>
 </section>
 
 <!-- ========================= 01 SPRING INSIDE ========================= -->
@@ -595,9 +623,64 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
   </div>
 </section>
 
-<!-- ========================= 08 LICHT+SPIEL ========================= -->
+<!-- ========================= 08 FASHION LAB =========================
+     Steht vor licht+spiel, traegt aber die id p9: die ids p1-p8 sind von
+     aussen verlinkt (llms.txt) und bleiben stabil. Angezeigt wird 08,
+     licht+spiel zeigt jetzt 09.
+     Alle Bilder sind logofrei: Marken auf Waenden, LED-Flaechen und
+     Produkten wurden im Quellprojekt entfernt (mjh_ci, praesentation/
+     hse24/portfolio/logos-entfernen.py). Bitte nur von dort ersetzen. -->
+<section class="project wrap" id="p9">
+  <div class="p-head"><span class="p-num">08</span><span data-i18n="p9.kicker">Case Study — Herbst 2026</span></div>
+  <div class="grid">
+    <div class="p-image" style="background:#b9ac9f"><img src="images/fashionlab-hero.jpg" width="2000" height="1250" alt="Fashion Lab" loading="lazy"></div>
+    <div class="p-data">
+      <h3>Fashion Lab</h3>
+      <p class="body-sec" data-i18n="p9.desc">Ein modulares Studio für ein neues Fashion-Format im TV-Shopping, in dem mehrere Creator-Marken im Wechsel auftreten. Bühnenbau, LED-Content und Markenauftritt sollten ein System werden, vom Moodboard bis zur Bauzeichnung. Meine Antwort: ein Bau, der stehen bleibt, und Flächen, die die Marke wechseln.</p>
+      <dl class="p-facts">
+        <dt data-i18n="lbl.format">Format</dt><dd data-i18n="p9.format">Studio-Set, TV-Shopping</dd>
+        <dt data-i18n="lbl.flaeche">Fläche</dt><dd data-i18n="p9.flaeche">Rundstudio, 20 × 18 m</dd>
+        <dt data-i18n="lbl.rolle">Rolle</dt><dd data-i18n="p9.rolle">Konzept, 3D-Planung, Rendering, Bauzeichnung</dd>
+      </dl>
+      <ul class="p-stats">
+        <li><span data-i18n="p9.stat1">Freistehende LED-Flächen</span><b>8</b></li>
+        <li><span data-i18n="p9.stat2">LED-Bildfläche</span><b data-i18n="p9.stat2val">64,9 m²</b></li>
+        <li><span data-i18n="p9.stat3">Bereiche in einem Bau</span><b>5</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="strip">
+    <div class="strip-item n3" style="--ar:1.3592"><div class="thumb" style="background:#c5ad92"><img src="images/fashionlab-layout.jpg" width="1400" height="1030" alt="Grundlayout" loading="lazy"></div>
+      <div class="label"><span class="letter">a</span><span class="cap" data-i18n="p9.stripA">Moderation, Produkt und LED in jedem Bereich</span></div></div>
+    <div class="strip-item n3" style="--ar:1.1102"><div class="thumb plan-hell" style="background:#f5f3f3"><img class="nur-hell" src="images/fashionlab-plan.jpg" width="1400" height="1261" alt="Bauzeichnung" loading="lazy"><img class="nur-dunkel" src="images/fashionlab-plan-dunkel.jpg" width="1400" height="1261" alt="Bauzeichnung" loading="lazy"></div>
+      <div class="label"><span class="letter">b</span><span class="cap" data-i18n="p9.stripB">Bauzeichnung, acht LED-Flächen</span></div></div>
+    <div class="strip-item n3" style="--ar:1.6667"><div class="thumb" style="background:#a99686"><img src="images/fashionlab-led.jpg" width="1400" height="840" alt="LED-Flächen" loading="lazy"></div>
+      <div class="label"><span class="letter">c</span><span class="cap" data-i18n="p9.stripC">LED-Flächen frei vor der Rundwand</span></div></div>
+  </div>
+  <div class="strip">
+    <div class="strip-item n3" style="--ar:1.25"><div class="thumb" style="background:#c5b9b0"><img src="images/fashionlab-fashion.jpg" width="1100" height="880" alt="Fashion" loading="lazy"></div>
+      <div class="label"><span class="letter">d</span><span class="cap" data-i18n="p9.stripD">Derselbe Bau für Fashion</span></div></div>
+    <div class="strip-item n3" style="--ar:1.25"><div class="thumb" style="background:#baa796"><img src="images/fashionlab-cosmetics.jpg" width="1100" height="880" alt="Cosmetics" loading="lazy"></div>
+      <div class="label"><span class="letter">e</span><span class="cap" data-i18n="p9.stripE">… für Cosmetics</span></div></div>
+    <div class="strip-item n3" style="--ar:0.6"><div class="thumb" style="background:#b2957b"><img src="images/fashionlab-schmuck.jpg" width="900" height="1500" alt="Schmuck" loading="lazy"></div>
+      <div class="label"><span class="letter">f</span><span class="cap" data-i18n="p9.stripF">… für Schmuck</span></div></div>
+  </div>
+  <div class="strip">
+    <div class="strip-item strip-full" style="--ar:1.7778">
+      <div class="thumb umfahrt" style="background:#c9bdb1" data-pfad="images/fashionlab-360/u" data-anzahl="120"
+           tabindex="0" role="img" aria-label="360-Grad-Umfahrt durch das Set. Im Bild ziehen oder Pfeiltasten zum Drehen.">
+        <img src="images/fashionlab-360/u001.jpg" width="1280" height="720" alt="" loading="lazy">
+        <canvas width="1280" height="720" aria-hidden="true"></canvas>
+        <span class="umfahrt-hinweis" aria-hidden="true"><b>&#8596;</b><span data-i18n="p9.dreh">Im Bild ziehen</span></span>
+        <span class="umfahrt-laden" aria-hidden="true" hidden></span>
+      </div>
+      <div class="label"><span class="letter">g</span><span class="cap" data-i18n="p9.stripG">360°-Umfahrt durch alle fünf Bereiche</span></div></div>
+  </div>
+</section>
+
+<!-- ========================= 09 LICHT+SPIEL ========================= -->
 <section class="project wrap" id="p8">
-  <div class="p-head"><span class="p-num">08</span><span data-i18n="p8.kicker">Medienkunst — 2007–2017</span></div>
+  <div class="p-head"><span class="p-num">09</span><span data-i18n="p8.kicker">Medienkunst — 2007–2017</span></div>
   <div class="grid">
     <div class="p-image" style="background:#6e492e"><img src="images/lichtspiel-hero.jpg" width="2000" height="1250" alt="licht+spiel" loading="lazy"></div>
     <div class="p-data">
@@ -923,6 +1006,63 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     revealItems.forEach(function(el){ io.observe(el); });
   }
 
+  /* ---------- 360-Grad-Umfahrt ----------
+     Die 120 Einzelbilder (rund 7 MB) werden erst geladen, wenn jemand das
+     Bild anfasst oder es mit der Tastatur ansteuert - wer nur scrollt, laedt
+     nichts davon. Gezeichnet wird auf eine Leinwand: ein Bildtausch auf
+     vorab dekodierten Bildern dauert rund eine Millisekunde, ein
+     src-Wechsel am img kann beim Ziehen ruckeln. Eine Bildbreite Ziehen
+     ist eine ganze Umdrehung. */
+  document.querySelectorAll('.umfahrt').forEach(function(box){
+    var leinwand = box.querySelector('canvas'), ctx = leinwand.getContext('2d', { alpha:false });
+    var laden = box.querySelector('.umfahrt-laden');
+    var pfad = box.dataset.pfad, anzahl = +box.dataset.anzahl;
+    var bilder = [], gestartet = false, stand = 0, ziel = 0, geplant = false;
+
+    function nummer(k){ return pfad + String(k + 1).padStart(3, '0') + '.jpg'; }
+    function starten(){
+      if(gestartet) return; gestartet = true;
+      var fertig = 0; laden.hidden = false; laden.textContent = '0 %';
+      for(var k = 0; k < anzahl; k++){
+        (function(k){
+          var im = new Image();
+          im.onload = im.onerror = function(){
+            if(im.naturalWidth) bilder[k] = im;
+            fertig++;
+            laden.textContent = Math.round(fertig / anzahl * 100) + ' %';
+            if(k === 0 && bilder[0]){ zeichne(0); box.classList.add('bereit'); }
+            if(fertig === anzahl) laden.hidden = true;
+          };
+          im.src = nummer(k);
+        })(k);
+      }
+    }
+    function zeichne(k){ if(bilder[k]){ ctx.drawImage(bilder[k], 0, 0, leinwand.width, leinwand.height); stand = k; } }
+    function setze(k){
+      ziel = ((k % anzahl) + anzahl) % anzahl;
+      if(!geplant){ geplant = true; requestAnimationFrame(function(){ geplant = false; if(ziel !== stand) zeichne(ziel); }); }
+    }
+
+    var zieht = false, startX = 0, startK = 0;
+    box.addEventListener('pointerdown', function(e){
+      starten(); box.classList.add('benutzt');
+      zieht = true; startX = e.clientX; startK = stand;
+      box.setPointerCapture(e.pointerId);
+    });
+    box.addEventListener('pointermove', function(e){
+      if(!zieht) return;
+      setze(startK + Math.round((e.clientX - startX) / box.getBoundingClientRect().width * anzahl));
+    });
+    ['pointerup','pointercancel','lostpointercapture'].forEach(function(t){
+      box.addEventListener(t, function(){ zieht = false; });
+    });
+    box.addEventListener('keydown', function(e){
+      if(e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault(); starten(); box.classList.add('benutzt');
+      setze(stand + (e.key === 'ArrowRight' ? 1 : -1));
+    });
+  });
+
   /* ============================================================
      SPRACHUMSCHALTUNG
      Deutsch ist die Vorlage im HTML selbst (Ausgangszustand).
@@ -959,6 +1099,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "idx.date5": "2023年秋",
       "idx.date6": "2024年秋",
       "idx.date7": "2024年夏",
+      "idx.date9": "2026年秋",
       "p1.kicker": "Hirmer — 2023年春",
       "p1.desc": "建物全体をアルプスの草原に変える。担当はビジュアライゼーション。この可視化があってはじめて必要量を算出でき、花が八週間もつことは当初からの条件だった。",
       "p1.flaeche": "ショーウィンドウと売場",
@@ -1019,6 +1160,23 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "p7.flaeche": "ショーウィンドウ",
       "p7.rolle": "コンセプト、グラフィック、ビジュアライゼーション",
       "p7.stripA": "ライトボックス構造の3Dプレビュー",
+      "p9.kicker": "ケーススタディ — 2026年秋",
+      "p9.desc": "テレビ通販の新しいファッション番組のための、モジュール式スタジオ。複数のクリエイターブランドが交代で出演する。舞台造作、LEDコンテンツ、ブランドの見せ方を、ムードボードから施工図まで一つのシステムにまとめることが課題だった。答えは、動かない造作と、ブランドごとに変わる面。",
+      "p9.format": "スタジオセット、テレビ通販",
+      "p9.flaeche": "円形スタジオ、20 × 18 m",
+      "p9.rolle": "コンセプト、3Dプランニング、レンダリング、施工図",
+      "p9.stat1": "自立式LEDウォール",
+      "p9.stat2": "LED映像面積",
+      "p9.stat2val": "64.9 m²",
+      "p9.stat3": "一つの造作の中のエリア",
+      "p9.stripA": "どのエリアにも司会・商品・LED",
+      "p9.stripB": "施工図、8面のLEDウォール",
+      "p9.stripC": "円形の壁から離して立つLEDウォール",
+      "p9.stripD": "同じ造作でファッション",
+      "p9.stripE": "コスメ",
+      "p9.stripF": "ジュエリー",
+      "p9.stripG": "5つのエリアをめぐる360°ビュー",
+      "p9.dreh": "ドラッグで回転",
       "p8.kicker": "メディアアート — 2007–2017",
       "p8.desc": "ライブビジュアルとプロジェクションマッピングの十年。コンパクトなフロアが複数の面から映像投影に囲まれていたミュンヘンのHarry Kleinでのレジデンシーに加え、エアランゲン（2010年）とニュルンベルク（2013年）のVJ Festivalに出演。『Vom Lutschlieserl und der Fräulein Irmi』では、Anton Leiss-Huberが脚本・制作したラジオドラマにビジュアルをつけた。2010年にはアルトエッティングの「Kultur im Rathaus」の一環として、三年分のアーカイブによる最初の回顧展を開催。2011年にはウィーンのPratersauna Artspaceで個展。",
       "p8.format": "ライブビジュアル、マッピング、インスタレーション",
@@ -1137,7 +1295,7 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "hero.role1":"Visual Marketing", "hero.role2":"Retail Design", "hero.role3":"Creative Ops",
       "hero.city":"Munich",
       "idx.date1":"Spring 2023", "idx.date2":"Fall 2023", "idx.date3":"Fall 2025", "idx.name4":"Freude schenken", "idx.date4":"Christmas 2023", "idx.date5":"Fall 2023",
-      "idx.date6":"Fall 2024", "idx.date7":"Summer 2024",
+      "idx.date6":"Fall 2024", "idx.date7":"Summer 2024", "idx.date9":"Fall 2026",
 
       "p1.kicker":"Hirmer — Spring 2023",
       "p1.desc":"The whole store becomes an alpine meadow. My part was the visualisation — it was the basis on which quantities could be calculated, and the flowers had to last eight weeks from the start.",
@@ -1180,6 +1338,17 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
       "p7.flaeche":"Shop window", "p7.rolle":"Concept, graphics, visualisation",
       "p7.stripA":"3D preview of the lightbox construction",
 
+      "p9.kicker":"Case study — Fall 2026",
+      "p9.desc":"A modular studio for a new fashion format in TV shopping, where several creator brands take turns on air. Set construction, LED content and brand presence were to become one system, from mood board to construction drawing. My answer: a build that stays, and surfaces that change with the brand.",
+      "p9.format":"Studio set, TV shopping", "p9.flaeche":"Round studio, 20 × 18 m",
+      "p9.rolle":"Concept, 3D planning, rendering, construction drawing",
+      "p9.stat1":"Free-standing LED walls", "p9.stat2":"LED image area", "p9.stat2val":"64.9 m²",
+      "p9.stat3":"Areas in one build",
+      "p9.stripA":"Moderation, product and LED in every area",
+      "p9.stripB":"Construction drawing, eight LED walls",
+      "p9.stripC":"LED walls standing clear of the curved wall",
+      "p9.stripD":"The same build for fashion", "p9.stripE":"… for cosmetics", "p9.stripF":"… for jewellery",
+      "p9.stripG":"360° tour through all five areas", "p9.dreh":"Drag to rotate",
       "p8.kicker":"Media art — 2007–2017",
       "p8.desc":"Ten years of live visuals and projection mapping — with a residency at Munich’s Harry Klein, whose compact dance floor was surrounded by video projections on several sides, plus performances at the VJ Festival in Erlangen (2010) and Nuremberg (2013). For “Vom Lutschlieserl und der Fräulein Irmi” I created the visuals for the radio play written and produced by Anton Leiss-Huber. In 2010, licht+spiel presented a first retrospective with three years of archive material as part of the “Kultur im Rathaus” series in Altötting; in 2011 followed a solo exhibition at the Pratersauna Vienna Artspace.",
       "p8.format":"Live visuals, mapping, installation", "p8.rolle":"Creative director and VJ",
