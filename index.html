@@ -223,7 +223,9 @@ main:focus{ outline:none; }
 .strip-item .letter{ color:var(--red); font-weight:700; font-size:12px; margin-left:-0.02em; }
 .strip-item .cap{ font-size:11.5px; color:var(--grey); }
 /* 360-Grad-Umfahrt: Standbild als Platzhalter, darueber eine Leinwand,
-   die erst nach dem ersten Anfassen die 120 Einzelbilder laedt. */
+   die erst nach dem ersten Anfassen die 120 Einzelbilder laedt.
+   Steht bereit, ist aber noch nicht im HTML: die Bilder ohne Logos fehlen.
+   Das einzusetzende Stueck steht im README unter "360-Grad-Umfahrt". */
 .umfahrt{ position:relative; cursor:grab; touch-action:pan-y; outline:0; }
 .umfahrt:active{ cursor:grabbing; }
 .umfahrt:focus-visible{ outline:2px solid var(--red); outline-offset:2px; }
@@ -665,16 +667,6 @@ html:not([lang="ja"]) .head-name-ja{ display:none; }
     <div class="strip-item n3" style="--ar:0.6"><div class="thumb" style="background:#b2957b"><img src="images/fashionlab-schmuck.jpg" width="900" height="1500" alt="Schmuck" loading="lazy"></div>
       <div class="label"><span class="letter">f</span><span class="cap" data-i18n="p9.stripF">… für Schmuck</span></div></div>
   </div>
-  <div class="strip">
-    <div class="strip-item strip-full" style="--ar:1.7778">
-      <div class="thumb umfahrt" style="background:#c9bdb1" data-pfad="images/fashionlab-360/u" data-anzahl="120"
-           tabindex="0" role="img" aria-label="360-Grad-Umfahrt durch das Set. Im Bild ziehen oder Pfeiltasten zum Drehen.">
-        <img src="images/fashionlab-360/u001.jpg" width="1280" height="720" alt="" loading="lazy">
-        <canvas width="1280" height="720" aria-hidden="true"></canvas>
-        <span class="umfahrt-hinweis" aria-hidden="true"><b>&#8596;</b><span data-i18n="p9.dreh">Im Bild ziehen</span></span>
-        <span class="umfahrt-laden" aria-hidden="true" hidden></span>
-      </div>
-      <div class="label"><span class="letter">g</span><span class="cap" data-i18n="p9.stripG">360°-Umfahrt durch alle fünf Bereiche</span></div></div>
   </div>
 </section>
 

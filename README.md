@@ -87,6 +87,30 @@ nur von dort, nie aus den Original-Renderings. Der Abschnitt steht vor
 licht+spiel und zeigt die Nummer 08, trägt aber die id `p9`, damit die
 von außen verlinkten Anker `#p1` bis `#p8` gültig bleiben.
 
+### 360-Grad-Umfahrt (Fashion Lab, noch nicht eingesetzt)
+
+CSS und Skript für den Dreh-Viewer stehen schon in `index.html`, das HTML
+fehlt bewusst: Die Einzelbilder kommen aus einem neuen Render ohne Logos.
+Sobald sie als `images/fashionlab-360/u001.jpg` bis `u120.jpg` liegen
+(erzeugt mit `umfahrt-web.py` im Quellprojekt), dieses Stück im Abschnitt
+`#p9` direkt vor `</section>` einsetzen:
+
+```html
+  <div class="strip">
+    <div class="strip-item strip-full" style="--ar:1.7778">
+      <div class="thumb umfahrt" style="background:#c9bdb1" data-pfad="images/fashionlab-360/u" data-anzahl="120"
+           tabindex="0" role="img" aria-label="360-Grad-Umfahrt durch das Set. Im Bild ziehen oder Pfeiltasten zum Drehen.">
+        <img src="images/fashionlab-360/u001.jpg" width="1280" height="720" alt="" loading="lazy">
+        <canvas width="1280" height="720" aria-hidden="true"></canvas>
+        <span class="umfahrt-hinweis" aria-hidden="true"><b>&#8596;</b><span data-i18n="p9.dreh">Im Bild ziehen</span></span>
+        <span class="umfahrt-laden" aria-hidden="true" hidden></span>
+      </div>
+      <div class="label"><span class="letter">g</span><span class="cap" data-i18n="p9.stripG">360°-Umfahrt durch alle fünf Bereiche</span></div></div>
+```
+
+Die Texte `p9.stripG` und `p9.dreh` stehen in beiden Wörterbüchern bereits.
+Der Viewer lädt erst beim ersten Anfassen (rund 7 MB), vorher nur `u001.jpg`.
+
 Zwei licht+spiel-Prozessbilder sind entfallen — es werden stattdessen zwei
 YouTube-Videos eingebunden (IDs `2O1iceiNoVI` und `4aS7LRck3JM`), über
 `youtube-nocookie.com`, geladen erst nach Klick. Die Vorschaubilder liegen als
