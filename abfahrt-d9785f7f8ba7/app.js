@@ -36,6 +36,8 @@
   var MAX_WAIT = 60 * 60000;   // Linien, die erst später fahren, ruhen („Heute keine Fahrt mehr“)
   var REFRESH = 30000;         // Abfahrten alle 30 s neu holen, solange die Seite sichtbar ist
   var SLOW = 10 * 60000;       // Meldungen (~370 KB) und Wetter nur alle 10 Min.
+  var RADAR_EVERY = 5 * 60000; // Regenradar: neues Bild alle 5 Min.
+  var RADAR_STALE = 30 * 60000; // älteres Radar nicht mehr verwenden (dann Wettermodell)
   var TICK = 10000;            // Countdown alle 10 s neu rechnen – ohne Abruf
 
   var timeF = new Intl.DateTimeFormat("de-DE", { timeZone: "Europe/Berlin", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
@@ -99,7 +101,8 @@
   var settings = readSettings();
   function freshState(keep) {
     return { stations: null, raw: null, horizon: null, fetchedAt: 0, triedAt: 0, failures: 0,
-             messages: keep ? keep.messages : null, msgAt: keep ? keep.msgAt : 0, weather: null, wxAt: 0, error: null, loading: false };
+             messages: keep ? keep.messages : null, msgAt: keep ? keep.msgAt : 0, wx: null, wxAt: 0, radar: null, radarAt: 0,
+             error: null, loading: false };
   }
   var state = freshState(null);
   // nach Fehlschlägen seltener fragen: 30 s, 1, 2, 4 Min. … höchstens 5 Min. – die MVG nicht bedrängen
@@ -131,10 +134,15 @@
       if (settings.m && (!state.messages || started - state.msgAt > SLOW)) {   // Meldungen nur, wenn gewünscht (~370 KB)
         side.push(A.fetchMessages().then(function (m) { if (Array.isArray(m)) { state.messages = m; state.msgAt = Date.now(); } }, function () {}));
       }
-      if (settings.w && sts[0].latitude && (!state.weather || started - state.wxAt > SLOW)) {
+      if (settings.w && sts[0].latitude && (!state.wx || started - state.wxAt > SLOW)) {
         side.push(A.fetchWeather(sts[0].latitude, sts[0].longitude).then(function (w) {
-          var b = A.buildWeather(w);
-          if (b) { state.weather = b; state.wxAt = Date.now(); }
+          if (A.buildWeather(w)) { state.wx = w; state.wxAt = Date.now(); }   // Rohdaten; ausgewertet wird beim Anzeigen
+        }, function () {}));
+      }
+      // Regen-Hinweis aus dem Radar – wie auf dem TRMNL (Abfahrten und „Regenradar“)
+      if (settings.w && sts[0].latitude && A.inRadarRange(sts[0].latitude, sts[0].longitude) && (!state.radar || started - state.radarAt > RADAR_EVERY)) {
+        side.push(A.fetchRadar(sts[0].latitude, sts[0].longitude, Date.now()).then(function (r) {
+          if (r && Array.isArray(r.radar) && r.radar.length) { state.radar = r; state.radarAt = Date.now(); }
         }, function () {}));
       }
       Promise.all(side).then(render);   // Meldungen und Wetter kommen nach, ohne die Abfahrten aufzuhalten
@@ -266,7 +274,8 @@
   function draw() {
     var now = Date.now(), rows = $("rows"), notices = $("notices"), empty = $("empty");
     $("title").textContent = settings.h ? stationName() : "Abfahrt";
-    var w = settings.w ? state.weather : null, sub = $("sub");
+    var rainSeries = state.radar && now - state.radarAt < RADAR_STALE ? A.radarSeries(state.radar, now) : [];
+    var w = settings.w && state.wx ? A.buildWeather(state.wx, rainSeries, now, hhmm) : null, sub = $("sub");
     sub.textContent = "";
     if (w) {
       sub.appendChild(el("b", null, w.temp + "°"));
@@ -451,7 +460,7 @@
   function toggle() {
     settings = sane({ h: settings.h, w: $("wx").checked, d: $("dir").checked, m: $("msg").checked });
     if (settings.h) { writeSettings(settings); }
-    if (!settings.w) { state.weather = null; state.wxAt = 0; }
+    if (!settings.w) { state.wx = null; state.wxAt = 0; state.radar = null; state.radarAt = 0; }
     if (!settings.m) { state.messages = null; state.msgAt = 0; }
     render();
     if (settings.w || settings.m) { load(); }

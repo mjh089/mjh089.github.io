@@ -8,7 +8,12 @@
   var WEATHER_API = "https://api.open-meteo.com/v1/forecast";
   var TYPE_RANK = { UBAHN: 1, SBAHN: 2, TRAM: 3, BUS: 4, REGIONAL_BUS: 5 };
   var ALERT_LOOKAHEAD_H = 12;          // Meldungen, die gelten oder in den nächsten 12 h beginnen
-  var RAIN_MM = 0.1;                   // ab so viel Niederschlag pro 15 Min. gilt es als Regen
+  // Regen-Hinweis aus dem DWD-Radar (Bright Sky) – genau wie im TRMNL-Plugin (transform.py, rain_hint) und im
+  // Plugin „Regenradar“: ab 0,2 mm/h (Mittel aus 3 × 3 km), einzelner schwacher Wert = Rauschen, Regen vorbei
+  // nach 10 trockenen Minuten. Ohne Radar dieselben Regeln aufs Wettermodell (Open-Meteo, 15-Minuten-Werte).
+  var RADAR_API = "https://api.brightsky.dev/radar";
+  var RADAR_BOX = [46.5, 55.5, 4.5, 15.5];   // ungefähre Reichweite des DWD-Radars; außerhalb nur Nullen
+  var FRAME_MS = 5 * 60000, MMH_PER_UNIT = 0.12, WET_MMH = 0.2, DRY_FRAMES = 2;
   var DEP_LIMIT = 80;                  // so viele Abfahrten liefert die MVG je Haltestelle höchstens
   var LAST_MARGIN_MS = 2 * 3600000;    // „letzte Fahrt“ nur, wenn die Liste noch 2 h weiter reicht
   var DEST_EXTRA = { bf: 1, bahnhof: 1, west: 1, ost: 1, nord: 1, "süd": 1, sued: 1 };
@@ -287,21 +292,80 @@
     if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { return ["rain", "Regen"]; }
     return ["cloud", ""];
   }
-  function buildWeather(w) {
+  function inRadarRange(lat, lon) {
+    return lat >= RADAR_BOX[0] && lat <= RADAR_BOX[1] && lon >= RADAR_BOX[2] && lon <= RADAR_BOX[3];
+  }
+  // Bright Sky, Format „plain“ -> [[Beginn ms, mm/h]] am Ort ab viewMs (ein Bild umfasst die 5 Minuten davor)
+  function radarSeries(r, viewMs) {
+    var out = [];
+    try {
+      var cx = Math.round(+r.latlon_position.x), cy = Math.round(+r.latlon_position.y);
+      r.radar.forEach(function (f) {
+        var t = Date.parse(f && f.timestamp), g = f && f.precipitation_5, vals = [];
+        if (!(t > viewMs) || !Array.isArray(g)) { return; }
+        for (var y = cy - 1; y <= cy + 1; y++) {
+          for (var x = cx - 1; x <= cx + 1; x++) {
+            var v = Array.isArray(g[y]) ? g[y][x] : undefined;
+            if (typeof v === "number") { vals.push(v < 32768 ? v : 0); }
+          }
+        }
+        if (vals.length) { out.push([t - FRAME_MS, vals.reduce(function (a, b) { return a + b; }, 0) / vals.length * MMH_PER_UNIT]); }
+      });
+    } catch (e) {
+      return [];
+    }
+    return out.sort(byTime);
+  }
+  // Ersatz ohne Radar: 15-Minuten-Summen (Wert = die 15 Minuten davor), zwei Stunden ab viewMs
+  function modelSeries(w, viewMs) {
+    var out = [];
+    try {
+      var times = w.minutely_15.time, pr = w.minutely_15.precipitation;
+      for (var i = 0; i < times.length && out.length < 8; i++) {
+        var end = typeof times[i] === "number" ? times[i] * 1000 : Date.parse(times[i]);
+        if (end > viewMs) { out.push([end - 15 * 60000, (pr[i] || 0) * 4]); }
+      }
+    } catch (e) {
+      return [];
+    }
+    return out;
+  }
+  function wetMask(series) {
+    var raw = series.map(function (s) { return s[1] >= WET_MMH; });
+    return raw.map(function (w, i) {
+      var v = series[i][1];
+      return w && !(v < 2 * WET_MMH && !(i + 1 < raw.length && raw[i + 1]) && !(i > 0 && raw[i - 1]));
+    });
+  }
+  // „Regen bis 22:30“ / „Regen hält an“ / „Regen ab 22:05“ / null
+  function rainHint(series, word, hhmm) {
+    if (!series || !series.length) { return null; }
+    var wet = wetMask(series);
+    function dryFrom(start) {
+      for (var i = start; i < wet.length; i++) {
+        if (!wet.slice(i, i + DRY_FRAMES).some(Boolean)) { return i; }
+      }
+      return null;
+    }
+    if (wet[0]) {
+      var stop = dryFrom(0);
+      return stop === null ? word + " hält an" : word + " bis " + hhmm(series[stop][0]);
+    }
+    var first = wet.indexOf(true);
+    return first >= 0 ? word + " ab " + hhmm(series[first][0]) : null;
+  }
+  // rainSeries: Radar-Verlauf (leer/ohne: Wettermodell); viewMs + hhmm: ab wann und wie formatieren
+  function buildWeather(w, rainSeries, viewMs, hhmm) {
     try {
       var cur = w.current, k = weatherKind(Math.trunc(cur.weather_code), !!(cur.is_day === undefined ? 1 : cur.is_day));
-      var times = w.minutely_15.time, pr = w.minutely_15.precipitation, slots = [];
-      for (var i = 0; i < Math.min(13, times.length); i++) { slots.push([times[i], pr[i]]); }   // jetzt + 3 h
-      var wet = slots.map(function (s) { return (s[1] || 0) >= RAIN_MM; }), word = k[0] === "snow" ? "Schnee" : "Regen", rain = null;
-      if (wet.length && wet[0]) {
-        var dryAt = slots.find(function (s, n) { return !wet[n]; });
-        rain = dryAt ? word + " bis " + dryAt[0].slice(11, 16) : word + " hält an";
-      } else if (wet.indexOf(true) >= 0) {
-        rain = word + " ab " + slots[wet.indexOf(true)][0].slice(11, 16);
+      if (typeof cur.temperature_2m !== "number") { return null; }
+      // Radar sieht nur Niederschlag – Schnee nach Wettercode oder bei Frost
+      var word = k[0] === "snow" || cur.temperature_2m <= 0.5 ? "Schnee" : "Regen", rain = null;
+      if (hhmm && typeof viewMs === "number") {
+        rain = rainHint(rainSeries && rainSeries.length ? rainSeries : modelSeries(w, viewMs), word, hhmm);
       }
       var temps = ((w.hourly || {}).temperature_2m || []).filter(function (x) { return typeof x === "number"; });
       var lo = temps.length ? Math.round(Math.min.apply(null, temps)) : null, hi = temps.length ? Math.round(Math.max.apply(null, temps)) : null;
-      if (typeof cur.temperature_2m !== "number") { return null; }
       return { temp: Math.round(cur.temperature_2m), kind: k[0], text: k[1], rain: rain, lo: lo, hi: lo !== null && hi !== lo ? hi : null };
     } catch (e) {
       return null;
@@ -390,7 +454,13 @@
   function fetchWeather(lat, lon) {
     return getJSON(WEATHER_API, { latitude: lat, longitude: lon, timezone: "Europe/Berlin",
                                   current: "temperature_2m,weather_code,is_day", minutely_15: "precipitation",
-                                  forecast_minutely_15: 13, hourly: "temperature_2m", forecast_hours: 12 });
+                                  forecast_minutely_15: 10, hourly: "temperature_2m", forecast_hours: 12, timeformat: "unixtime" });
+  }
+  // Radar am Ort (5 × 5 km), ab dem laufenden 5-Minuten-Bild für gut zwei Stunden; „plain“ ist klein genug
+  function fetchRadar(lat, lon, nowMs) {
+    var first = nowMs - nowMs % FRAME_MS, iso = function (ms) { return new Date(ms).toISOString().slice(0, 19) + "Z"; };
+    return getJSON(RADAR_API, { lat: (+lat).toFixed(5), lon: (+lon).toFixed(5), distance: 2000, format: "plain",
+                                date: iso(first), last_date: iso(first + 125 * 60000) });
   }
   // mehrere Haltestellen zusammenführen: eine Fahrt nur einmal, innerhalb einer Haltestelle nie aussortieren
   // Ende einer Abfahrtsliste ohne einzelne Ausreißer am Ende (wie robust_horizon in transform.py): Am Karlsplatz
@@ -428,6 +498,7 @@
     shortLabel: shortLabel, stripDirection: stripDirection, resolveStation: resolveStation,
     searchStations: searchStations, fetchDepartures: fetchDepartures, fetchAhead: fetchAhead, fetchNearby: fetchNearby, locate: locate,
     directionSides: directionSides, angleToCenter: angleToCenter, distKm: distKm, fetchMessages: fetchMessages,
-    fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime, robustHorizon: robustHorizon
+    fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime, robustHorizon: robustHorizon,
+    fetchRadar: fetchRadar, inRadarRange: inRadarRange, radarSeries: radarSeries, modelSeries: modelSeries, rainHint: rainHint
   };
 })(window);
