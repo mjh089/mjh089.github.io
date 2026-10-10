@@ -83,9 +83,10 @@ Wird ein Bild ausgetauscht, muss `--ar` mitgezogen werden.
 Die Fashion-Lab-Bilder sind logofrei: Marken auf Wänden, LED-Flächen und
 Produkten sind im Quellprojekt entfernt (`mjh_ci`, `praesentation/hse24/
 portfolio/logos-entfernen.py`, erzeugt mit `portfolio-bilder.py`). Ersetzen
-nur von dort, nie aus den Original-Renderings. Der Abschnitt steht vor
-licht+spiel und zeigt die Nummer 08, trägt aber die id `p9`, damit die
-von außen verlinkten Anker `#p1` bis `#p8` gültig bleiben.
+nur von dort, nie aus den Original-Renderings. Der Abschnitt steht an
+zweiter Stelle und zeigt die Nummer 02, trägt aber die id `p9`, damit die
+von außen verlinkten Anker `#p1` bis `#p8` gültig bleiben. Die angezeigten
+Nummern folgen der Reihenfolge auf der Seite, nicht der id.
 
 ### 360-Grad-Umfahrt (Fashion Lab, noch nicht eingesetzt)
 
