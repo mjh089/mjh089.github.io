@@ -301,10 +301,13 @@
     }
 
     var dormant = [];
-    var cards = A.buildCards(state.raw, now, hhmm, { maxWaitMs: MAX_WAIT, horizonMs: state.horizon, laterN: 4, dormant: dormant });
+    var st0 = state.stations && state.stations[0];
+    var stop = st0 && typeof st0.latitude === "number" && typeof st0.longitude === "number" ? [st0.latitude, st0.longitude] : null;
+    var cards = A.buildCards(state.raw, now, hhmm, { maxWaitMs: MAX_WAIT, horizonMs: state.horizon, laterN: 4, dormant: dormant,
+                                                     stop: stop, coordsOf: coordsOf });   // Lage der Ziele: „nur bis“ nur auf dem Weg
     var night = false;
     if (!cards.length) {   // nachts: die ersten Fahrten des Morgens (wie im TRMNL-Plugin: „erste Fahrt“)
-      cards = A.buildCards(state.raw, now, hhmm, { horizonMs: state.horizon, laterN: 4 });
+      cards = A.buildCards(state.raw, now, hhmm, { horizonMs: state.horizon, laterN: 4, stop: stop, coordsOf: coordsOf });
       night = cards.length > 0 && cards.every(function (c) { return c.t - now >= 60 * 60000; });
       dormant = [];
     }

@@ -89,9 +89,20 @@
   }
 
   // ---------- Karten: eine je Linie + Richtung ----------
-  // opts: {maxWaitMs, lines (Set, klein geschrieben), horizonMs, laterN, dormant (Array zum Füllen)}
+  // opts: {maxWaitMs, lines (Set, klein geschrieben), horizonMs, laterN, dormant (Array zum Füllen),
+  //        stop ([lat, lon]), coordsOf (Ziel -> [lat, lon] | null)}
+  // Mit stop/coordsOf: „fährt nur bis X“ nur, wenn X auf dem Weg zum Hauptziel liegt; liegt X in der
+  // Gegenrichtung (Umleitung, Wendeschleife – Marathon 11. 10.: 19 „Einsteinstraße“ vom Steig Richtung
+  // Berg am Laim), bekommt X eine eigene Karte (wie im TRMNL-Plugin).
   function buildCards(deps, nowMs, fmt, opts) {
     opts = opts || {};
+    function spot(dest) {   // Lage eines Ziels – nur glaubwürdige (nicht direkt an der Haltestelle, kein Namensvetter weit weg)
+      var p = opts.stop && opts.coordsOf && dest ? opts.coordsOf(dest) : null;
+      if (!p) { return null; }
+      var km = distKm(opts.stop, p);
+      return km >= 0.2 && km <= 80 ? p : null;
+    }
+    function away(dest, main) { var g = headingGap(opts.stop, spot(dest), spot(main)); return g !== null && g > 90; }
     var laterN = opts.laterN || 3, groups = new Map();
     deps.forEach(function (d) {
       if (!d || typeof d !== "object") { return; }
@@ -132,10 +143,12 @@
         var dst = x[1].destination || "";
         clusters.find(function (c) { return c[0] === dst || sameDest(dst, c[0]); })[1].push(x);
       });
-      var big = clusters.filter(function (c) { return c[1].length >= 2 && c[1].length * 5 >= trips.length * 2; });
-      if (big.length < 2) { split.push(trips); return; }
-      clusters.forEach(function (c) { if (big.indexOf(c) < 0) { big[0][1].push.apply(big[0][1], c[1]); } });
-      big.forEach(function (c) { split.push(c[1].slice().sort(byTime)); });
+      var far = clusters.slice(1).filter(function (c) { return away(c[0], clusters[0][0]); });   // Gegenrichtung: nie „nur bis“
+      var big = clusters.filter(function (c) { return far.indexOf(c) < 0 && c[1].length >= 2 && c[1].length * 5 >= trips.length * 2; });
+      if (!big.length) { big = clusters.slice(0, 1); }
+      if (big.length + far.length < 2) { split.push(trips); return; }
+      clusters.forEach(function (c) { if (big.indexOf(c) < 0 && far.indexOf(c) < 0) { big[0][1].push.apply(big[0][1], c[1]); } });
+      big.concat(far).forEach(function (c) { split.push(c[1].slice().sort(byTime)); });
     });
 
     var cards = [];
@@ -161,7 +174,10 @@
       var texts = hintTexts(d);
       if (mainDest && d.destination && !sameDest(d.destination, mainDest) &&
           !texts.some(function (x) { return x.toLowerCase().indexOf("nur bis") >= 0; })) {
-        texts.unshift("fährt nur bis " + d.destination);
+        // „nur bis“ nur, wenn das Ziel näher auf dem Weg liegt; weiter oder seitlich: „fährt bis“
+        var p = spot(d.destination), q = spot(mainDest);
+        var beyond = !!(p && q) && (distKm(opts.stop, p) >= distKm(opts.stop, q) || (headingGap(opts.stop, p, q) || 0) > 90);
+        texts.unshift("fährt " + (beyond ? "" : "nur ") + "bis " + d.destination);
       }
       if (gone.length) { texts.unshift(gone.length === 1 ? fmt(gone[0][0]) + " fällt aus" : "Ausfälle bis " + fmt(gone[gone.length - 1][0])); }
       cards.push({
@@ -196,6 +212,13 @@
     var a = flat(dest, stop), b = flat(CENTER, stop), la = Math.hypot(a[0], a[1]), lb = Math.hypot(b[0], b[1]);
     if (!la || !lb) { return null; }
     return Math.acos(Math.max(-1, Math.min(1, (a[0] * b[0] + a[1] * b[1]) / (la * lb)))) * 180 / Math.PI;
+  }
+  // Winkel (Grad) zwischen den Richtungen stop→a und stop→b – oder null, wenn eine Lage fehlt
+  function headingGap(stop, a, b) {
+    if (!stop || !a || !b) { return null; }
+    var u = flat(a, stop), v = flat(b, stop), lu = Math.hypot(u[0], u[1]), lv = Math.hypot(v[0], v[1]);
+    if (!lu || !lv) { return null; }
+    return Math.acos(Math.max(-1, Math.min(1, (u[0] * v[0] + u[1] * v[1]) / (lu * lv)))) * 180 / Math.PI;
   }
   // cards: Karten (auch ruhende), stop: [lat, lon], coordsOf(ziel) -> [lat, lon] | null
   // Ergebnis: Map Karte -> "L" | "R"; null, wenn die Haltestelle selbst in der Innenstadt liegt
@@ -498,7 +521,7 @@
     attachHints: attachHints, buildWeather: buildWeather, sameDest: sameDest, direction: direction,
     shortLabel: shortLabel, stripDirection: stripDirection, resolveStation: resolveStation,
     searchStations: searchStations, fetchDepartures: fetchDepartures, fetchAhead: fetchAhead, fetchNearby: fetchNearby, locate: locate,
-    directionSides: directionSides, angleToCenter: angleToCenter, distKm: distKm, fetchMessages: fetchMessages,
+    directionSides: directionSides, angleToCenter: angleToCenter, headingGap: headingGap, distKm: distKm, fetchMessages: fetchMessages,
     fetchWeather: fetchWeather, mergeDepartures: mergeDepartures, depTime: depTime, robustHorizon: robustHorizon,
     fetchRadar: fetchRadar, inRadarRange: inRadarRange, radarSeries: radarSeries, modelSeries: modelSeries, rainHint: rainHint
   };
