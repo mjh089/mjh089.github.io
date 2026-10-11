@@ -19,7 +19,8 @@
 
 * { box-sizing: border-box; }
 /* Silbentrennung erst ab 4 Buchstaben je Seite – kein „we-gen“ in schmalen Karten */
-.dest, .hint { hyphenate-limit-chars: 8 4 4; -webkit-hyphenate-limit-before: 4; -webkit-hyphenate-limit-after: 4; }
+.dest { hyphenate-limit-chars: 8 4 4; -webkit-hyphenate-limit-before: 4; -webkit-hyphenate-limit-after: 4; }
+.hint { hyphenate-limit-chars: 10 5 5; -webkit-hyphenate-limit-before: 5; -webkit-hyphenate-limit-after: 5; }   /* Hinweise: erst ab 10 Buchstaben, je 5 – kein „Lini-enwege“ (wie auf dem TRMNL) */
 [hidden] { display: none !important; }
 html, body { margin: 0; }
 body { background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.35;
