@@ -2,11 +2,12 @@
 
 > Portfolio von Michael J. Hofauer, Senior Visual Marketing / Creative Ops bei Hirmer GmbH & Co. KG, München. Konzept, 3D-Visualisierung und Planung von Schaufenstern, Pop-ups und Verkaufsflächen für Mode.
 
-Statisches Ein-Seiten-Portfolio mit acht Case Studies aus Visual Merchandising und Creative Ops (Hirmer, Canada Goose, LEGO, Windsor, Fred Perry, Dressler) sowie einem eigenständigen Medienkunst-Projekt (licht+spiel, 2007–2017). Kein Blog, kein Shop, kein Kontaktformular.
+Statisches Ein-Seiten-Portfolio mit Case Studies aus Visual Merchandising, Creative Ops und Set-Design (Hirmer, Canada Goose, LEGO, Windsor, Fred Perry, Dressler, Fashion Lab) sowie einem eigenständigen Medienkunst-Projekt (licht+spiel, 2007–2017). Kein Blog, kein Shop, kein Kontaktformular.
 
 ## Case Studies
 
 - [Spring Inside](https://michaelhofauer.com/#p1): Hirmer, Frühjahr 2023 — Almwiese als Verkaufsfläche
+- [Fashion Lab](https://michaelhofauer.com/#p9): Case Study, Herbst 2026 — modulares Studio-Set für ein Fashion-Format im TV-Shopping
 - [Backstage Nature](https://michaelhofauer.com/#p2): Canada Goose Pop-up, Herbst 2023 — Fotostudio als Verkaufsfläche
 - [Tagesbar Tracht](https://michaelhofauer.com/#p3): Hirmer, Herbst 2025 — saisonale Tagesbar
 - [Freude schenken](https://michaelhofauer.com/#p4): Hirmer × LEGO, Weihnachten 2023 — Weihnachtskampagne fürs ganze Haus

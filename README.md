@@ -63,6 +63,13 @@ hinter einem Fremdbild zu verstecken.
 | `windsor-aufbau.jpg` | Sitzreihen mit Ware | 3:2 |
 | `windsor-detail.jpg` | Kinosessel als Warenträger | 4:5 |
 | `windsor-moodboard.jpg` | Moodboard, Referenz Deutsche Oper Berlin | 3:2 |
+| `fashionlab-hero.jpg` | Fashion Lab, Runway-Rendering, logofrei | 16:10 |
+| `fashionlab-layout.jpg` | Draufsicht mit den Zonen A/B/C | 1,36:1 |
+| `fashionlab-plan.jpg` | Bauzeichnung, acht LED-Flächen nummeriert | 1,10:1 |
+| `fashionlab-led.jpg` | Talk-Ecke, drei LED-Flächen vor der Rundwand | 5:3 |
+| `fashionlab-fashion.jpg` | Set mit Fashion | 5:4 |
+| `fashionlab-cosmetics.jpg` | Set mit Cosmetics | 5:4 |
+| `fashionlab-schmuck.jpg` | Set mit Schmuck, Rundbogen im Hochformat | 3:5 |
 | `lichtspiel-hero.jpg` | Projektion auf Architektur | 16:10 |
 | `lichtspiel-motiv.jpg` | Gesichtsprojektion mit Textmotiv, Text vollständig lesbar | 3:2 |
 | `lichtspiel-mapping.jpg` | Gespiegelte Projektion über die Raumecke | 4:5 |
@@ -72,6 +79,43 @@ einer Reihe teilen sich dieselbe Höhe, die Breite ergibt sich aus dem
 jeweiligen Seitenverhältnis (`--ar` am `.strip-item`, Flexbox verteilt
 proportional). Dadurch wird nichts beschnitten und es entstehen keine Ränder.
 Wird ein Bild ausgetauscht, muss `--ar` mitgezogen werden.
+
+Die Farbwelt im Fashion-Lab-Abschnitt (Reihe a) ist bewusst reiner Text mit
+Farbfeldern, ohne Material- oder Moodboard-Fotos: Die stammen aus fremden
+Quellen, und deren Rechte liegen nicht vor. Wer Fotos ergänzen will, braucht
+vorher geklärte Bildrechte.
+
+Die Fashion-Lab-Bilder sind logofrei: Marken auf Wänden, LED-Flächen und
+Produkten sind im Quellprojekt entfernt (`mjh_ci`, `praesentation/hse24/
+portfolio/logos-entfernen.py`, erzeugt mit `portfolio-bilder.py`). Ersetzen
+nur von dort, nie aus den Original-Renderings. Der Abschnitt steht an
+zweiter Stelle und zeigt die Nummer 02, trägt aber die id `p9`, damit die
+von außen verlinkten Anker `#p1` bis `#p8` gültig bleiben. Die angezeigten
+Nummern folgen der Reihenfolge auf der Seite, nicht der id.
+
+### 360-Grad-Umfahrt (Fashion Lab, noch nicht eingesetzt)
+
+CSS und Skript für den Dreh-Viewer stehen schon in `index.html`, das HTML
+fehlt bewusst: Die Einzelbilder kommen aus einem neuen Render ohne Logos.
+Sobald sie als `images/fashionlab-360/u001.jpg` bis `u120.jpg` liegen
+(erzeugt mit `umfahrt-web.py` im Quellprojekt), dieses Stück im Abschnitt
+`#p9` direkt vor `</section>` einsetzen:
+
+```html
+  <div class="strip">
+    <div class="strip-item strip-full" style="--ar:1.7778">
+      <div class="thumb umfahrt" style="background:#c9bdb1" data-pfad="images/fashionlab-360/u" data-anzahl="120"
+           tabindex="0" role="img" aria-label="360-Grad-Umfahrt durch das Set. Im Bild ziehen oder Pfeiltasten zum Drehen.">
+        <img src="images/fashionlab-360/u001.jpg" width="1280" height="720" alt="" loading="lazy">
+        <canvas width="1280" height="720" aria-hidden="true"></canvas>
+        <span class="umfahrt-hinweis" aria-hidden="true"><b>&#8596;</b><span data-i18n="p9.dreh">Im Bild ziehen</span></span>
+        <span class="umfahrt-laden" aria-hidden="true" hidden></span>
+      </div>
+      <div class="label"><span class="letter">g</span><span class="cap" data-i18n="p9.stripG">360°-Umfahrt durch alle fünf Bereiche</span></div></div>
+```
+
+Die Texte `p9.stripG` und `p9.dreh` stehen in beiden Wörterbüchern bereits.
+Der Viewer lädt erst beim ersten Anfassen (rund 7 MB), vorher nur `u001.jpg`.
 
 Zwei licht+spiel-Prozessbilder sind entfallen — es werden stattdessen zwei
 YouTube-Videos eingebunden (IDs `2O1iceiNoVI` und `4aS7LRck3JM`), über
