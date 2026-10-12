@@ -214,8 +214,10 @@
 
   // ---------- Darstellung ----------
   var firstTrip = false;   // nachts: die angezeigten Fahrten sind die ersten des Morgens
+  // Die MVG liefert nur volle Minuten: „13:15“ fährt irgendwann zwischen 13:15:00 und 13:15:59. Deshalb aufrunden –
+  // „jetzt“ ist die Abfahrtsminute selbst, 30 s vorher heißt es „in 1 Min.“ (vorher kam „jetzt“ eine Minute zu früh)
   function countdown(t, now) {
-    var m = Math.floor((t - now) / 60000);
+    var m = Math.ceil((t - now) / 60000);
     if (m < 1) { return "jetzt"; }
     if (m < 60) { return "in " + m + " Min."; }
     var h = Math.floor(m / 60), r = m % 60;
@@ -235,7 +237,7 @@
     }
     var next = el("div", "next");
     next.appendChild(el("span", "time" + (c.cancelled ? " x" : ""), hhmm(c.t)));
-    var soon = !c.cancelled && c.t - now < 3 * 60000;
+    var soon = !c.cancelled && c.t - now <= 2 * 60000;   // rot wie bisher bei „jetzt“ bis „in 2 Min.“ (aufgerundet)
     next.appendChild(el("span", "count" + (soon ? " count--soon" : ""), c.cancelled ? "fällt aus" : (firstTrip ? "erste Fahrt · " : "") + countdown(c.t, now)));
     box.appendChild(next);
     // Verspätung in Worten: die Uhrzeit ist schon die tatsächliche – „+3“ daneben liest man leicht als „3 dazurechnen“
@@ -304,10 +306,10 @@
     var st0 = state.stations && state.stations[0];
     var stop = st0 && typeof st0.latitude === "number" && typeof st0.longitude === "number" ? [st0.latitude, st0.longitude] : null;
     var cards = A.buildCards(state.raw, now, hhmm, { maxWaitMs: MAX_WAIT, horizonMs: state.horizon, laterN: 4, dormant: dormant,
-                                                     stop: stop, coordsOf: coordsOf });   // Lage der Ziele: „nur bis“ nur auf dem Weg
+                                                     stop: stop, coordsOf: coordsOf, graceMs: 60000 });   // bis Ende der Abfahrtsminute   // Lage der Ziele: „nur bis“ nur auf dem Weg
     var night = false;
     if (!cards.length) {   // nachts: die ersten Fahrten des Morgens (wie im TRMNL-Plugin: „erste Fahrt“)
-      cards = A.buildCards(state.raw, now, hhmm, { horizonMs: state.horizon, laterN: 4, stop: stop, coordsOf: coordsOf });
+      cards = A.buildCards(state.raw, now, hhmm, { horizonMs: state.horizon, laterN: 4, stop: stop, coordsOf: coordsOf, graceMs: 60000 });
       night = cards.length > 0 && cards.every(function (c) { return c.t - now >= 60 * 60000; });
       dormant = [];
     }

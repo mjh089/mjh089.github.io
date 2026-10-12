@@ -90,7 +90,8 @@
 
   // ---------- Karten: eine je Linie + Richtung ----------
   // opts: {maxWaitMs, lines (Set, klein geschrieben), horizonMs, laterN, dormant (Array zum Füllen),
-  //        stop ([lat, lon]), coordsOf (Ziel -> [lat, lon] | null)}
+  //        stop ([lat, lon]), coordsOf (Ziel -> [lat, lon] | null),
+  //        graceMs (so lange nach der angegebenen Minute bleibt eine Fahrt stehen – die MVG liefert nur volle Minuten)}
   // Mit stop/coordsOf: „fährt nur bis X“ nur, wenn X auf dem Weg zum Hauptziel liegt; liegt X in der
   // Gegenrichtung (Umleitung, Wendeschleife – Marathon 11. 10.: 19 „Einsteinstraße“ vom Steig Richtung
   // Berg am Laim), bekommt X eine eigene Karte (wie im TRMNL-Plugin).
@@ -108,7 +109,7 @@
       if (!d || typeof d !== "object") { return; }
       if (opts.lines && opts.lines.size && !opts.lines.has(String(d.label || "").toLowerCase())) { return; }
       var t = depTime(d);
-      if (t === null || t < nowMs || !d.label) { return; }
+      if (t === null || t + (opts.graceMs || 0) < nowMs || !d.label) { return; }
       var gk = groupKey(d), key = [TYPE_RANK[d.transportType] || 9, pad4(gk[0]), gk[1], gk[2]], ks = JSON.stringify(key);
       if (!groups.has(ks)) { groups.set(ks, { key: key, trips: [] }); }
       groups.get(ks).trips.push([t, d]);
