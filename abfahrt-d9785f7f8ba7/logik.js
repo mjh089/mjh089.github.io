@@ -249,8 +249,9 @@
   }
 
   // ---------- Meldungen ----------
-  function buildAlerts(messages, labels, nowMs, fmt) {
-    var horizon = nowMs + ALERT_LOOKAHEAD_H * 3600000, out = [];
+  // Meldungen zu diesen Linien, die jetzt gelten oder bis untilMs (Standard: 12 h) beginnen
+  function buildAlerts(messages, labels, nowMs, fmt, untilMs) {
+    var horizon = typeof untilMs === "number" ? untilMs : nowMs + ALERT_LOOKAHEAD_H * 3600000, out = [];
     (Array.isArray(messages) ? messages : []).forEach(function (m) {
       if (!m || typeof m !== "object") { return; }
       var ls = new Set();
@@ -303,6 +304,22 @@
       if (!used) { rest.push(a); }
     });
     return rest;
+  }
+  // Ruhende Richtungen („erst 22:51“): die Meldung zur Linie, die bis zu ihrer nächsten Fahrt beginnt (eine Stunde
+  // Spielraum – „ca. 23:00“, erste umgeleitete Fahrt 22:51). Erklärt, warum eine Linie auftaucht (13. 10.: die 21 fuhr
+  // nachts wegen Bauarbeiten über den Vogelweideplatz). Ohne den Abschnitt vorn („A <> B: …“) – der Grund zählt.
+  function attachRestHints(cards, messages, nowMs, fmt) {
+    cards.forEach(function (c) {
+      if (!c || !c.dormant || c.hint || typeof c.t !== "number") { return; }
+      var hits = buildAlerts(messages, new Set([c.line]), nowMs, fmt, c.t + 3600000);
+      for (var i = 0; i < hits.length; i++) {
+        var title = hits[i].title.toLowerCase(), named = title.indexOf(destKey(c.destination)) >= 0;
+        if (title.indexOf("richtung") >= 0 && !named) { continue; }   // gilt für die andere Richtung
+        var text = named ? stripDirection(hits[i].title, c.destination) : hits[i].title;
+        c.hint = text.replace(/^[^:<>]{2,60}<>[^:<>]{2,60}:\s*/, "") || text;
+        return;
+      }
+    });
   }
 
   // ---------- Wetter ----------
@@ -527,7 +544,7 @@
 
   root.Abfahrt = {
     API: API, buildCards: buildCards, isLeft: isLeft, parseTerms: parseTerms, buildAlerts: buildAlerts,
-    attachHints: attachHints, buildWeather: buildWeather, sameDest: sameDest, direction: direction,
+    attachHints: attachHints, attachRestHints: attachRestHints, buildWeather: buildWeather, sameDest: sameDest, direction: direction,
     shortLabel: shortLabel, stripDirection: stripDirection, resolveStation: resolveStation,
     searchStations: searchStations, fetchDepartures: fetchDepartures, fetchAhead: fetchAhead, fetchNearby: fetchNearby, locate: locate,
     directionSides: directionSides, angleToCenter: angleToCenter, headingGap: headingGap, distKm: distKm, fetchMessages: fetchMessages,

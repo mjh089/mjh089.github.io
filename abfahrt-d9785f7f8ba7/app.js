@@ -232,6 +232,7 @@
     if (c.dormant) {
       var rest = el("div", "rest", c.tomorrow ? "Heute keine Fahrt mehr" : "Nächste Fahrt");
       rest.appendChild(el("b", null, (c.tomorrow ? "morgen " : "erst ") + hhmm(c.t)));
+      if (c.hint) { box.appendChild(el("div", "hint", c.hint)); }   // z. B. Umleitung wegen Bauarbeiten
       box.appendChild(rest);
       return box;
     }
@@ -326,6 +327,7 @@
       notices.appendChild(n);
     });
 
+    if (settings.m && state.messages) { A.attachRestHints(dormant, state.messages, now, hhmm); }   // warum eine Linie (erst später) hier fährt
     // Zeilen je Linie: links stadteinwärts, rechts stadtauswärts (automatisch, siehe logik.js). Ruhende
     // Richtungen kommen dazu – „heute keine Fahrt mehr · morgen 05:56“ wie „erst 01:36“ (Nachtbus), wie im Plugin.
     var shown = cards.concat(dormant);
