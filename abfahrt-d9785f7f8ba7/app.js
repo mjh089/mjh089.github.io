@@ -277,12 +277,15 @@
     var now = Date.now(), rows = $("rows"), notices = $("notices"), empty = $("empty");
     $("title").textContent = settings.h ? stationName() : "Abfahrt";
     var rainSeries = state.radar && now - state.radarAt < RADAR_STALE ? A.radarSeries(state.radar, now) : [];
-    var w = settings.w && state.wx ? A.buildWeather(state.wx, rainSeries, now, hhmm) : null, sub = $("sub");
+    // ohne Wettermodell (Open-Meteo gestört) bleibt der Regen-Hinweis aus dem Radar
+    var w = settings.w && (state.wx || rainSeries.length) ? A.buildWeather(state.wx, rainSeries, now, hhmm) : null, sub = $("sub");
     sub.textContent = "";
     if (w) {
-      sub.appendChild(el("b", null, w.temp + "°"));
-      sub.appendChild(document.createTextNode((w.hi !== null ? " (" + w.lo + "–" + w.hi + "°)" : "") + (w.text ? " " + w.text : "")));
-      if (w.rain) { sub.appendChild(document.createTextNode(" · ")); sub.appendChild(el("b", null, w.rain)); }
+      if (w.temp !== null) {
+        sub.appendChild(el("b", null, w.temp + "°"));
+        sub.appendChild(document.createTextNode((w.hi !== null ? " (" + w.lo + "–" + w.hi + "°)" : "") + (w.text ? " " + w.text : "")));
+      }
+      if (w.rain) { if (w.temp !== null) { sub.appendChild(document.createTextNode(" · ")); } sub.appendChild(el("b", null, w.rain)); }
     } else {
       sub.textContent = "Abfahrten der MVG, live";
     }

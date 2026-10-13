@@ -381,19 +381,27 @@
   }
   // rainSeries: Radar-Verlauf (leer/ohne: Wettermodell); viewMs + hhmm: ab wann und wie formatieren
   function buildWeather(w, rainSeries, viewMs, hhmm) {
-    try {
-      var cur = w.current, k = weatherKind(Math.trunc(cur.weather_code), !!(cur.is_day === undefined ? 1 : cur.is_day));
-      if (typeof cur.temperature_2m !== "number") { return null; }
-      // Radar sieht nur Niederschlag – Schnee nach Wettercode oder bei Frost
-      var word = k[0] === "snow" || cur.temperature_2m <= 0.5 ? "Schnee" : "Regen", rain = null;
-      if (hhmm && typeof viewMs === "number") {
-        rain = rainHint(rainSeries && rainSeries.length ? rainSeries : modelSeries(w, viewMs), word, hhmm);
+    var full = fromModel();
+    if (full) { return full; }
+    // Wettermodell fehlt (Open-Meteo gestört): der Regen-Hinweis aus dem Radar gilt trotzdem – ohne Temperatur,
+    // „Regen“ (Schnee erkennt das Radar nicht). Trocken: nichts. Wie im TRMNL-Plugin.
+    var r = rainSeries && rainSeries.length && hhmm && typeof viewMs === "number" ? rainHint(rainSeries, "Regen", hhmm) : null;
+    return r ? { temp: null, kind: "rain", text: "", rain: r, lo: null, hi: null } : null;
+    function fromModel() {
+      try {
+        var cur = w.current, k = weatherKind(Math.trunc(cur.weather_code), !!(cur.is_day === undefined ? 1 : cur.is_day));
+        if (typeof cur.temperature_2m !== "number") { return null; }
+        // Radar sieht nur Niederschlag – Schnee nach Wettercode oder bei Frost
+        var word = k[0] === "snow" || cur.temperature_2m <= 0.5 ? "Schnee" : "Regen", rain = null;
+        if (hhmm && typeof viewMs === "number") {
+          rain = rainHint(rainSeries && rainSeries.length ? rainSeries : modelSeries(w, viewMs), word, hhmm);
+        }
+        var temps = ((w.hourly || {}).temperature_2m || []).filter(function (x) { return typeof x === "number"; });
+        var lo = temps.length ? Math.round(Math.min.apply(null, temps)) : null, hi = temps.length ? Math.round(Math.max.apply(null, temps)) : null;
+        return { temp: Math.round(cur.temperature_2m), kind: k[0], text: k[1], rain: rain, lo: lo, hi: lo !== null && hi !== lo ? hi : null };
+      } catch (e) {
+        return null;
       }
-      var temps = ((w.hourly || {}).temperature_2m || []).filter(function (x) { return typeof x === "number"; });
-      var lo = temps.length ? Math.round(Math.min.apply(null, temps)) : null, hi = temps.length ? Math.round(Math.max.apply(null, temps)) : null;
-      return { temp: Math.round(cur.temperature_2m), kind: k[0], text: k[1], rain: rain, lo: lo, hi: lo !== null && hi !== lo ? hi : null };
-    } catch (e) {
-      return null;
     }
   }
 
