@@ -428,14 +428,22 @@
       .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }).join("&") : "";
     var ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
     var timer = ctl ? setTimeout(function () { ctl.abort(); }, timeoutMs || 8000) : null;
-    return fetch(url + q, { headers: { Accept: "application/json" }, signal: ctl ? ctl.signal : undefined,
-                            credentials: "omit", referrerPolicy: "no-referrer", cache: "no-store" })
-      .then(function (r) {
-        if (r.status >= 400 && r.status < 500) { return { _http_error: r.status }; }
-        if (!r.ok) { throw new Error("HTTP " + r.status); }
-        return r.json();
-      })
-      .finally(function () { if (timer) { clearTimeout(timer); } });
+    // Serverfehler und Verbindungsfehler: bis zu 4 Versuche mit kurzer Pause, alle innerhalb derselben Frist
+    // (14. 10. morgens beantwortete die MVG jede zweite Abfahrten-Abfrage mit 500 – wie im TRMNL-Plugin)
+    function attempt(n) {
+      return fetch(url + q, { headers: { Accept: "application/json" }, signal: ctl ? ctl.signal : undefined,
+                              credentials: "omit", referrerPolicy: "no-referrer", cache: "no-store" })
+        .then(function (r) {
+          if (r.status >= 400 && r.status < 500) { return { _http_error: r.status }; }
+          if (!r.ok) { throw new Error("HTTP " + r.status); }
+          return r.json();
+        })
+        .catch(function (e) {
+          if (n >= 3 || (ctl && ctl.signal.aborted)) { throw e; }
+          return new Promise(function (ok) { setTimeout(ok, 150 * (n + 1)); }).then(function () { return attempt(n + 1); });
+        });
+    }
+    return attempt(0).finally(function () { if (timer) { clearTimeout(timer); } });
   }
   // Haltestelle aus Name, Adresse oder Global-ID
   function resolveStation(query) {
